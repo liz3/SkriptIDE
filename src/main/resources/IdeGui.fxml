@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="519.0" prefWidth="886.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.idegui.IdeGuiController">
+   <bottom>
+      <VBox prefHeight="145.0" prefWidth="886.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="consoleOutputTextArea" editable="false" prefHeight="153.0" prefWidth="886.0" />
+            <HBox>
+               <children>
+                  <TextField fx:id="comandSendTextField" prefHeight="25.0" prefWidth="364.0" />
+                  <Button fx:id="commandSendBtn" maxHeight="-Infinity" mnemonicParsing="false" onAction="#sendCommand" text="Send" />
+                  <Label fx:id="runningServerLabel" prefHeight="25.0" prefWidth="54.0" text="Running:" />
+                  <ComboBox fx:id="serverListComboBox" onShowing="#loadInServers" prefWidth="150.0" />
+                  <Button mnemonicParsing="false" onAction="#startServer" text="Start!" />
+                  <Button fx:id="stopServerBtn" mnemonicParsing="false" text="Stop" />
+                  <Button fx:id="restartServerBtn" mnemonicParsing="false" text="Restart" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </bottom>
+   <center>
+      <BorderPane BorderPane.alignment="CENTER">
+         <center>
+            <TabPane fx:id="codeTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+   </center>
+   <left>
+      <ListView fx:id="projectsList" onMouseClicked="#openProject" onMouseEntered="#loadInProjects" prefHeight="351.0" prefWidth="177.0" BorderPane.alignment="CENTER" />
+   </left>
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar fx:id="mainMenuMenuBar">
+               <menus>
+                  <Menu mnemonicParsing="false" text="File">
+                     <items>
+                        <MenuItem fx:id="newProjectMenuPoint" mnemonicParsing="false" onAction="#newProject" text="New Project" />
+                        <Menu fx:id="openResentMenu" mnemonicParsing="false" text="Open Recent">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Action 1" />
+                           </items>
+                        </Menu>
+                        <MenuItem fx:id="saveMenuPoint" mnemonicParsing="false" onAction="#saveOpenProjects" text="Save" />
+                        <MenuItem fx:id="saveAsMenuPoint" mnemonicParsing="false" text="Save as" />
+                        <MenuItem mnemonicParsing="false" onAction="#manageAddons" text="Versions and Scripts" />
+                        <MenuItem fx:id="closeMenuPoint" mnemonicParsing="false" text="Close" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Run">
+                     <items>
+                        <MenuItem fx:id="runPoint" mnemonicParsing="false" onAction="#runProject" text="Run" />
+                        <Menu fx:id="runMenuMenu" mnemonicParsing="false" text="Run on" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Server">
+                     <items>
+                        <MenuItem fx:id="createServerMenuPoint" mnemonicParsing="false" onAction="#newServer" text="Create Server" />
+                        <MenuItem mnemonicParsing="false" onAction="#manageServers" text="Manage Server" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Help" />
+               </menus>
+            </MenuBar>
+            <HBox>
+               <children>
+                  <Label fx:id="pathLabel" prefHeight="17.0" prefWidth="675.0" text="Path" />
+                  <Label fx:id="searchLabel" maxWidth="1.7976931348623157E308" prefHeight="24.0" prefWidth="36.0" text="Search" />
+                  <TextField fx:id="searchTxTField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="120.0" />
+                  <Button fx:id="searchTxTBtn" mnemonicParsing="false" text="Search" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+</BorderPane>
