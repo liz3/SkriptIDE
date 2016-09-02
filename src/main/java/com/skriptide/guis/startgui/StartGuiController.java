@@ -42,6 +42,10 @@ public class StartGuiController {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle("Choose Path for Projects");
         File dir = dirChooser.showDialog(fileChooserWindow);
+        if (dir == null){
+            //They didn't select a file, they hit cancel
+            return;
+        }
 
         projectsPathField.setText(dir.getAbsolutePath());
 
@@ -54,7 +58,10 @@ public class StartGuiController {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle("Choose Path for Servers");
         File dir = dirChooser.showDialog(fileChooserWindow);
-
+        if (dir == null){
+            //They didn't select a file, they hit cancel
+            return;
+        }
         serverPathField.setText(dir.getAbsolutePath());
 
 
