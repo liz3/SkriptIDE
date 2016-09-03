@@ -162,9 +162,13 @@ public class Skript {
             Profile.Section sec = cfg.get("Scripts");
 
             if(sec.getChild(path.toLowerCase()) != null) {
-                Profile.Section child = sec.getChild(path.toLowerCase());
+
 
                 sec.removeChild(path.toLowerCase());
+
+                if(sec.size() == 0) {
+                    sec.put("Placeholder", "");
+                }
             }
             cfg.store();
 

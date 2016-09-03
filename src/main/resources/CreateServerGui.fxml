@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.createserver.CreateServerGuiController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="318.0" prefWidth="545.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.createserver.CreateServerGuiController">
    <children>
       <Label layoutX="20.0" layoutY="14.0" text="Create Server:" />
       <Label layoutX="20.0" layoutY="41.0" text="Name:" />
@@ -17,24 +17,16 @@
       <ComboBox fx:id="scriptVersionComboBox" layoutX="20.0" layoutY="162.0" prefWidth="150.0" />
       <Button fx:id="customServerVersionBtn" layoutX="178.0" layoutY="111.0" mnemonicParsing="false" onAction="#chooseServerVersion" text="Custom" />
       <Button fx:id="customScriptPluginVersionBtn" layoutX="178.0" layoutY="162.0" mnemonicParsing="false" onAction="#chooseScriptVersion" text="Custom" />
-      <CheckBox fx:id="allowPvPCheckBox" layoutX="20.0" layoutY="200.0" mnemonicParsing="false" text="Allow PvP" />
-      <CheckBox fx:id="spawnMonstersCheckBox" layoutX="20.0" layoutY="225.0" mnemonicParsing="false" text="Spawn Monster" />
-      <CheckBox fx:id="spawnAnimalsCheckBox" layoutX="20.0" layoutY="250.0" mnemonicParsing="false" text="Spawn Animals" />
-      <CheckBox fx:id="spawnNPCSCheckBox" layoutX="20.0" layoutY="275.0" mnemonicParsing="false" text="Spawn NPCS" />
-      <CheckBox fx:id="spawnBuildingCheckBox" layoutX="20.0" layoutY="300.0" mnemonicParsing="false" text="Spawn Buildings" />
-      <Label layoutX="286.0" layoutY="41.0" text="Path:" />
-      <TextField fx:id="serverPathTextField" layoutX="286.0" layoutY="58.0" prefHeight="25.0" prefWidth="239.0" />
-      <Label layoutX="286.0" layoutY="94.0" text="Message of the day" />
-      <TextField fx:id="modtTextField" layoutX="286.0" layoutY="111.0" prefHeight="25.0" prefWidth="304.0" />
-      <Label layoutX="286.0" layoutY="145.0" text="Main Gamemode" />
-      <ComboBox fx:id="mainGamemodeComboBox" layoutX="286.0" layoutY="162.0" prefWidth="150.0" />
-      <Label layoutX="20.0" layoutY="325.0" text="Max Players:" />
-      <TextField fx:id="maxPlayersTextField" layoutX="20.0" layoutY="350.0" prefHeight="25.0" prefWidth="65.0" />
-      <Button fx:id="createServerBtn" layoutX="499.0" layoutY="363.0" mnemonicParsing="false" onAction="#createServer" text="Create Server" />
-      <Button fx:id="cancelBtn" layoutX="438.0" layoutY="363.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-      <Label layoutX="286.0" layoutY="200.0" text="Notes" />
-      <TextArea fx:id="notesTextArea" layoutX="286.0" layoutY="220.0" prefHeight="116.0" prefWidth="304.0" />
-      <Button layoutX="534.0" layoutY="58.0" mnemonicParsing="false" onAction="#choosePath" text="Choose" />
-      <CheckBox fx:id="createSubFolderCheckBox" layoutX="312.0" layoutY="367.0" mnemonicParsing="false" text="Create subfolder?" />
+      <Label layoutX="19.0" layoutY="203.0" text="Path:" />
+      <TextField fx:id="serverPathTextField" layoutX="19.0" layoutY="220.0" prefHeight="25.0" prefWidth="444.0" />
+      <Button fx:id="createServerBtn" layoutX="437.0" layoutY="274.0" mnemonicParsing="false" onAction="#createServer" text="Create Server" />
+      <Button fx:id="cancelBtn" layoutX="376.0" layoutY="274.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+      <Label layoutX="286.0" layoutY="94.0" text="Notes" />
+      <TextArea fx:id="notesTextArea" layoutX="286.0" layoutY="111.0" prefHeight="92.0" prefWidth="239.0" />
+      <Button layoutX="469.0" layoutY="220.0" mnemonicParsing="false" onAction="#choosePath" text="Choose" />
+      <CheckBox fx:id="createSubFolderCheckBox" layoutX="18.0" layoutY="256.0" mnemonicParsing="false" text="Create subfolder?" />
+      <Label layoutX="286.0" layoutY="41.0" text="Start parameters:" />
+      <TextField fx:id="startParameterTextField" layoutX="286.0" layoutY="58.0" prefHeight="25.0" prefWidth="239.0" />
+      <Label fx:id="infoLabel" layoutX="18.0" layoutY="291.0" prefHeight="17.0" prefWidth="336.0" text="All server settings can be change after first run" />
    </children>
 </Pane>

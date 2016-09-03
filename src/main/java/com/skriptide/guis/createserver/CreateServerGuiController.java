@@ -1,15 +1,12 @@
 package com.skriptide.guis.createserver;
 
+import com.skriptide.util.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import com.skriptide.util.Config;
-import com.skriptide.util.MCServer;
-import com.skriptide.util.ServerVersion;
-import com.skriptide.util.Skript;
 
 import java.io.File;
 
@@ -33,22 +30,6 @@ public class CreateServerGuiController {
     @FXML
     private Button customScriptPluginVersionBtn;
     @FXML
-    private CheckBox allowPvPCheckBox;
-    @FXML
-    private CheckBox spawnMonstersCheckBox;
-    @FXML
-    private CheckBox spawnAnimalsCheckBox;
-    @FXML
-    private CheckBox spawnNPCSCheckBox;
-    @FXML
-    private CheckBox spawnBuildingCheckBox;
-    @FXML
-    private TextField maxPlayersTextField;
-    @FXML
-    private TextField modtTextField;
-    @FXML
-    private ComboBox mainGamemodeComboBox;
-    @FXML
     private TextArea notesTextArea;
     @FXML
     private CheckBox createSubFolderCheckBox;
@@ -56,6 +37,11 @@ public class CreateServerGuiController {
     private Button cancelBtn;
     @FXML
     private Button createServerBtn;
+    @FXML
+    private TextField startParameterTextField;
+    @FXML
+    private Label infoLabel;
+
     File serverCustomFile = null;
     File scriptPluginVersionFile = null;
 
@@ -70,7 +56,8 @@ public class CreateServerGuiController {
 
     public void setValues() {
 
-        truePath = Config.getServersPath().substring(0, Config.getServersPath().length() -1);;
+        truePath = Config.getServersPath().substring(0, Config.getServersPath().length() - 1);
+        ;
         serverPathTextField.setText(Config.getServersPath());
         scriptVersionComboBox.getItems().clear();
         serverVersionComboBox.getItems().clear();
@@ -93,6 +80,7 @@ public class CreateServerGuiController {
     public void createServer() {
 
         boolean canGo = true;
+
         String error = "";
 
 
@@ -101,52 +89,75 @@ public class CreateServerGuiController {
 
         Skript trueSkript = null;
         ServerVersion trueVer = null;
-        for (Skript sk : skVersions.sorted()) {
+        String selectedSkript = scriptVersionComboBox.getSelectionModel().getSelectedItem();
+        if (selectedSkript == null || selectedSkript == "") {
+            canGo = false;
+            error = error + "Please choose a Skript Version! ";
+        } else {
+            for (Skript sk : skVersions.sorted()) {
 
-            String selection = scriptVersionComboBox.getSelectionModel().getSelectedItem();
-            if(selection == null || selection == "") {
-                canGo = false;
-                error = error + "Please choose a Skript Version!";
-            }
-            if (sk.getVersion().equals(selection)) {
-                trueSkript = sk;
-            }
 
+                if (sk.getVersion().equals(selectedSkript)) {
+                    trueSkript = sk;
+                }
+
+            }
         }
+        String selectedServer = serverVersionComboBox.getSelectionModel().getSelectedItem();
+        if (selectedServer == null || selectedServer == "") {
+            canGo = false;
+            error = error + "Please choose a Server Version! ";
+        } else {
 
-        for (ServerVersion srv : srvVersions.sorted()) {
+            for (ServerVersion srv : srvVersions.sorted()) {
 
-            String selection = serverVersionComboBox.getSelectionModel().getSelectedItem();
-            if(selection == null || selection == "") {
-                canGo = false;
-                error = error + "Please choose a Server Version!";
-            }
-            if (srv.getVersion().equals(selection)) {
-                trueVer = srv;
+                if (srv.getVersion().equals(selectedServer)) {
+                    trueVer = srv;
+                }
             }
         }
 
         try {
             Long.parseLong(serverPortTextField.getText());
-        }catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             canGo = false;
-            error = error + "Port has to be a number";
+            error = error + "Port has to be a number! ";
 
+        }
+        if (serverNameTextField.getText().equals("")) {
+            canGo = false;
+            error = error + "Please choose a project name! ";
+
+        }
+        for (ServerVersion pr : srvVersions.sorted()) {
+            if (pr.getName().equalsIgnoreCase(serverNameTextField.getText())) {
+
+                error = error + "Name already taken!";
+                infoLabel.setText(error);
+                canGo = false;
+                break;
+
+
+            }
         }
 
 
-      if(canGo) {
-          MCServer server = new MCServer(serverNameTextField.getText(), Long.parseLong(serverPortTextField.getText()), serverPathTextField.getText(), trueVer, trueSkript);
+        if (canGo) {
+            MCServer server = new MCServer(serverNameTextField.getText(), Long.parseLong(serverPortTextField.getText()),
+                    serverPathTextField.getText(), trueVer, trueSkript, notesTextArea.getText(),
+                    startParameterTextField.getText());
 
 
-          server.createServer();
+            server.createServer();
 
 
-          Stage stage = (Stage) createServerBtn.getScene().getWindow();
-          // do what you have to do
-          stage.close();
+            Stage stage = (Stage) createServerBtn.getScene().getWindow();
+            // do what you have to do
+            stage.close();
 
-      }
+        } else {
+            infoLabel.setText(error);
+        }
 
     }
 
@@ -177,6 +188,20 @@ public class CreateServerGuiController {
         fileChooserWindow.setTitle("Choose Path for the server File");
         serverCustomFile = fileChooser.showOpenDialog(fileChooserWindow);
 
+        ServerVersion.addServerVersion(serverCustomFile.getName(), VersionReader.getVersionOfServer(serverCustomFile), serverCustomFile);
+
+
+        ObservableList<ServerVersion> srvVersions = ServerVersion.getServerVersions();
+
+
+        for (ServerVersion srv : srvVersions.sorted()) {
+            serverVersionComboBox.getItems().add(srv.getVersion());
+            if (srv.getVersion().equals(VersionReader.getVersionOfServer(serverCustomFile))) {
+                serverVersionComboBox.getSelectionModel().select(srv.getVersion());
+            }
+        }
+
+
     }
 
     public void chooseScriptVersion() {
@@ -185,6 +210,18 @@ public class CreateServerGuiController {
         FileChooser fileChooser = new FileChooser();
         fileChooserWindow.setTitle("Choose Path for the Plugin File");
         scriptPluginVersionFile = fileChooser.showOpenDialog(fileChooserWindow);
+
+        Skript.addScript(VersionReader.getNameOfPlugin(scriptPluginVersionFile),
+                VersionReader.getVersionOfPlugin(scriptPluginVersionFile), scriptPluginVersionFile);
+        ObservableList<Skript> srvVersions = Skript.getSkriptVersions();
+
+
+        for (Skript srv : srvVersions.sorted()) {
+            scriptVersionComboBox.getItems().add(srv.getVersion());
+            if (srv.getVersion().equals(VersionReader.getVersionOfPlugin(scriptPluginVersionFile))) {
+                scriptVersionComboBox.getSelectionModel().select(srv.getVersion());
+            }
+        }
     }
 
 }
