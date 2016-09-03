@@ -199,9 +199,6 @@ public class Project {
             if (sec.containsKey(name)) {
 
                 sec.remove(name);
-                if(sec.size() == 0) {
-                    sec.put("Placeholder", "");
-                }
                 cfg.store();
             }
 

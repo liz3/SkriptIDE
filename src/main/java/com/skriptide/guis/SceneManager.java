@@ -188,7 +188,7 @@ public class SceneManager extends Application {
 
             createNewServerWindow.initOwner(mainWindow);
             createNewServerWindow.setTitle("Create new Server");
-            createNewServerWindow.setScene(new Scene(createNewServerWindowParent, 545, 318));
+            createNewServerWindow.setScene(new Scene(createNewServerWindowParent, 600, 385));
             createNewServerWindow.setResizable(false);
 
             createServerGuiController = createNewServerLoader.getController();
