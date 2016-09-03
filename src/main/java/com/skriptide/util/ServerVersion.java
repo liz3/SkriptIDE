@@ -165,6 +165,10 @@ public class ServerVersion {
                 Profile.Section child = sec.getChild(path.toLowerCase());
 
                 sec.removeChild(path.toLowerCase());
+
+                if(sec.size() == 0) {
+                    sec.put("Placeholder", "");
+                }
             }
 
             cfg.store();

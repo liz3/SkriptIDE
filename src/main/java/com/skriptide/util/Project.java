@@ -41,7 +41,7 @@ public class Project {
         File configFile = new File(current + "/Config.ini");
 
 
-            Ini cfg = null;
+        Ini cfg = null;
 
         try {
             cfg = new Ini(configFile);
@@ -199,6 +199,9 @@ public class Project {
             if (sec.containsKey(name)) {
 
                 sec.remove(name);
+                if(sec.size() == 0) {
+                    sec.put("Placeholder", "");
+                }
                 cfg.store();
             }
 
