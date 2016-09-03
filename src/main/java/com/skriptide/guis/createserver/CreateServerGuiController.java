@@ -193,7 +193,7 @@ public class CreateServerGuiController {
 
         ObservableList<ServerVersion> srvVersions = ServerVersion.getServerVersions();
 
-
+        serverVersionComboBox.getItems().clear();
         for (ServerVersion srv : srvVersions.sorted()) {
             serverVersionComboBox.getItems().add(srv.getVersion());
             if (srv.getVersion().equals(VersionReader.getVersionOfServer(serverCustomFile))) {
@@ -215,7 +215,7 @@ public class CreateServerGuiController {
                 VersionReader.getVersionOfPlugin(scriptPluginVersionFile), scriptPluginVersionFile);
         ObservableList<Skript> srvVersions = Skript.getSkriptVersions();
 
-
+        scriptVersionComboBox.getItems().clear();
         for (Skript srv : srvVersions.sorted()) {
             scriptVersionComboBox.getItems().add(srv.getVersion());
             if (srv.getVersion().equals(VersionReader.getVersionOfPlugin(scriptPluginVersionFile))) {
