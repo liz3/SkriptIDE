@@ -140,21 +140,6 @@ public class IdeGuiController {
             Stage stage = (Stage) commandSendBtn.getScene().getWindow();
 
 
-            javafx.application.Platform.runLater(() -> {
-                        int caretPosition = area.getCaretPosition();
-                        System.out.println(pos);
-                        if (0 != caretPosition) {
-                            area.positionCaret(caretPosition - 1);
-                            area.positionCaret(caretPosition);
-                        } else {
-                            area.positionCaret(caretPosition + 1);
-                            area.positionCaret(caretPosition);
-                        }
-
-
-                    }
-
-            );
             area.setPopupAlignment(PopupAlignment.CARET_BOTTOM);
             win.show(stage);
             chooseView.setVisible(true);
@@ -292,7 +277,7 @@ public class IdeGuiController {
             pos = area.getCaretPosition() - before.length();
         }
         System.out.println(pos);
-        area.positionCaret(pos);
+        area.moveTo(pos);
 
 
         if (showList) {
