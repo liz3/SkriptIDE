@@ -76,8 +76,7 @@ public class ManageAddsGuiController {
                 new FileChooser.ExtensionFilter("JAR", "*.jar")
         );
         File f = dirChooser.showOpenDialog(fileChooserWindow);
-        VersionReader.getVersionOfServer(f);
-        ServerVersion.addServerVersion(f.getName(), VersionReader.getVersionOfServer(f), f);
+        ServerVersion.addServerVersion(f.getName(), "0", f);
         refreshList();
 
     }

@@ -65,7 +65,7 @@ public class MCServer {
 
 
     public MCServer(String name, long port, String path, ServerVersion serverVersion,
-                    Skript scriptPluginVersion, String notes, String startArgs) {
+                    Skript scriptPluginVersion) {
 
         this.name = name;
         this.port = port;
@@ -73,8 +73,7 @@ public class MCServer {
         this.version = serverVersion;
         this.skript = scriptPluginVersion;
         this.plFolderPath = path + "/plugins";
-        this.notes = notes;
-        this.startArgs = startArgs;
+
     }
 
     public MCServer(String path) {
@@ -89,8 +88,6 @@ public class MCServer {
             this.version = new ServerVersion(sec.get("Version-Path"));
             this.skript = new Skript(sec.get("Skript"));
             this.plFolderPath = sec.get("Plugin-folder");
-            this.notes = sec.get("Notes");
-            this.startArgs = sec.get("StargArgs");
 
             if (Main.debugMode) {
 
@@ -489,8 +486,6 @@ public class MCServer {
             mainSec.put("mainPath", path.toLowerCase());
             mainSec.put("Skript", skript.getPath().toLowerCase());
             mainSec.put("Plugin-folder", this.plFolderPath);
-            mainSec.put("Notes", this.notes);
-            mainSec.put("StartArgs", this.startArgs);
 
             Profile.Section addons = info.add("Skript-Addons");
             addons.put("Placeholder", "");
@@ -1139,9 +1134,6 @@ public class MCServer {
 
             if (sec.getChild(path.toLowerCase()) != null) {
                 sec.removeChild(path.toLowerCase());
-                if(sec.size() == 0) {
-                    sec.put("Placeholder", "");
-                }
             }
 
             cfg.store();
