@@ -4,9 +4,12 @@ import com.skriptide.codemanage.CodeReader;
 import com.skriptide.codemanage.CodeWriter;
 import com.skriptide.codemanage.ControlMain;
 import com.skriptide.codemanage.Supers;
+import com.skriptide.util.Config;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
 import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import com.skriptide.guis.SceneManager;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -37,424 +40,448 @@ import java.util.ArrayList;
  */
 public class IdeGuiController {
 
-    SceneManager sceneManager = new SceneManager();
-
-
-    @FXML
-    public TabPane codeTabPane;
-    @FXML
-    public Label searchLabel;
-    @FXML
-    public TextArea consoleOutputTextArea;
-    @FXML
-    public Label runningServerLabel;
-    @FXML
-    public ListView<String> projectsList;
-    @FXML
-    public TextField comandSendTextField;
-    @FXML
-    public Button commandSendBtn;
-    @FXML
-    public Button stopServerBtn;
-    @FXML
-    public Button restartServerBtn;
-    @FXML
-    public ComboBox<String> serverListComboBox;
-    @FXML
-    public MenuItem runPoint;
-    private ListView<String> chooseView;
-    private boolean showList;
-    private Popup win;
-    private ArrayList<String> all = new ArrayList<>();
-    private int pos = 0;
+	SceneManager sceneManager = new SceneManager();
+
+
+	@FXML
+	public TabPane codeTabPane;
+	@FXML
+	public Label searchLabel;
+	@FXML
+	public CodeArea consoleOutputTextArea;
+	@FXML
+	public Label runningServerLabel;
+	@FXML
+	public ListView<String> projectsList;
+	@FXML
+	public TextField comandSendTextField;
+	@FXML
+	public Button commandSendBtn;
+	@FXML
+	public Button stopServerBtn;
+	@FXML
+	public Button restartServerBtn;
+	@FXML
+	public ComboBox<String> serverListComboBox;
+	@FXML
+	public MenuItem runPoint;
+	@FXML
+	public Label pathLabel;
+	private ListView<String> chooseView;
+	private boolean showList;
+	private Popup win;
+	private ArrayList<String> all = new ArrayList<>();
+	private int pos = 0;
 
-    private static SkUnityAPI skUnity = new SkUnityAPI();
+	private static SkUnityAPI skUnity = new SkUnityAPI();
 
-    private void setList() {
+	private void setList() {
 
 
-        if (win == null) {
-            win = new Popup();
-            chooseView = new ListView();
-        }
+		if (win == null) {
+			win = new Popup();
+			chooseView = new ListView();
+		}
 
-        ArrayList<ApiCondition> conditions = skUnity.getConditions();
-        ArrayList<ApiEffect> effects = skUnity.getEffects();
-        ArrayList<ApiEvent> events = skUnity.getEvents();
-        ArrayList<ApiExpression> expressions = skUnity.getExpressions();
-        ArrayList<ApiType> types = skUnity.getTypes();
-        for (int i = 1; i != conditions.size(); i++) {
-            chooseView.getItems().add(conditions.get(i).getId() + " Condition");
-        }
-        for (int i = 0; i != effects.size(); i++) {
-            chooseView.getItems().add(effects.get(i).getId() + " Effect");
-        }
-        for (int i = 0; i != events.size(); i++) {
-            chooseView.getItems().add(events.get(i).getId() + " Event");
-        }
-        for (int i = 0; i != expressions.size(); i++) {
-            chooseView.getItems().add(expressions.get(i).getId() + " Expression");
-        }
-        for (int i = 0; i != types.size(); i++) {
-            chooseView.getItems().add(types.get(i).getId() + " Type");
-        }
-
-        chooseView.getItems().addAll(new Supers().getSupervArray());
-
-        chooseView.setPrefSize(180, 200);
-        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-        CodeArea area = (CodeArea) tab.getContent();
-        win.getContent().add(chooseView);
+		ArrayList<ApiCondition> conditions = skUnity.getConditions();
+		ArrayList<ApiEffect> effects = skUnity.getEffects();
+		ArrayList<ApiEvent> events = skUnity.getEvents();
+		ArrayList<ApiExpression> expressions = skUnity.getExpressions();
+		ArrayList<ApiType> types = skUnity.getTypes();
+		for (int i = 1; i != conditions.size(); i++) {
+			chooseView.getItems().add(conditions.get(i).getId() + " Condition");
+		}
+		for (int i = 0; i != effects.size(); i++) {
+			chooseView.getItems().add(effects.get(i).getId() + " Effect");
+		}
+		for (int i = 0; i != events.size(); i++) {
+			chooseView.getItems().add(events.get(i).getId() + " Event");
+		}
+		for (int i = 0; i != expressions.size(); i++) {
+			chooseView.getItems().add(expressions.get(i).getId() + " Expression");
+		}
+		for (int i = 0; i != types.size(); i++) {
+			chooseView.getItems().add(types.get(i).getId() + " Type");
+		}
+
+		chooseView.getItems().addAll(new Supers().getSupervArray());
+
+		chooseView.setPrefSize(180, 200);
+		Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+		CodeArea area = (CodeArea) tab.getContent();
+		win.getContent().add(chooseView);
+
+		area.setPopupWindow(win);
+
+
+		area.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (showList) {
+
+					win.hide();
+					chooseView.setVisible(false);
+					showList = false;
+
+				}
+			}
+		});
+
+
+	}
+
+	public void chooseList() {
+		Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+		CodeArea area = (CodeArea) tab.getContent();
+
+		if (win == null) {
+			setList();
 
-        area.setPopupWindow(win);
-
+		}
 
-        area.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (showList) {
 
-                    win.hide();
-                    chooseView.setVisible(false);
-                    showList = false;
+		if (!win.isShowing()) {
 
-                }
-            }
-        });
+			Stage stage = (Stage) commandSendBtn.getScene().getWindow();
 
-
-    }
-
-    public void chooseList() {
-        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-        CodeArea area = (CodeArea) tab.getContent();
 
-        if (win == null) {
-            setList();
+			area.setPopupAlignment(PopupAlignment.CARET_BOTTOM);
+			win.show(stage);
+			chooseView.setVisible(true);
+			showList = true;
 
-        }
 
+		}
+		updateList();
 
-        if (!win.isShowing()) {
 
-            Stage stage = (Stage) commandSendBtn.getScene().getWindow();
+	}
 
+	public void updateList() {
 
-            area.setPopupAlignment(PopupAlignment.CARET_BOTTOM);
-            win.show(stage);
-            chooseView.setVisible(true);
-            showList = true;
+		Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+		CodeArea area = (CodeArea) tab.getContent();
 
 
-        }
-        updateList();
+		area.caretPositionProperty().addListener((obs, oldPosition, newPosition) -> {
 
+			String text = area.getText().substring(0, newPosition.intValue());
+			int index;
+			for (index = text.length() - 1; index >= 0 && !Character.isWhitespace(text.charAt(index)); index--) ;
+			String prefix = text.substring(index + 1, text.length());
 
-    }
+			if (chooseView.isVisible()) {
+				javafx.application.Platform.runLater(() -> {
 
-    public void updateList() {
 
-        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-        CodeArea area = (CodeArea) tab.getContent();
+							for (String str : chooseView.getItems().sorted()) {
 
+								if (!str.toLowerCase().contains(prefix.toLowerCase())) {
+									chooseView.getItems().remove(str);
+									all.add(str);
+									chooseView.refresh();
+								}
+							}
+							ArrayList<String> toRemove = new ArrayList<String>();
+							for (int i = 0; i != all.size(); i++) {
+								String current = all.get(i);
+								if (current.toLowerCase().contains(prefix.toLowerCase())) {
+									chooseView.getItems().add(current);
+									toRemove.add(current);
+									chooseView.refresh();
+								}
+							}
+							for (int i = 0; i != toRemove.size(); i++) {
+								String rem = toRemove.get(i);
+								if (all.contains(rem)) {
+									all.remove(rem);
+								}
+							}
 
-        area.caretPositionProperty().addListener((obs, oldPosition, newPosition) -> {
+						}
 
-            String text = area.getText().substring(0, newPosition.intValue());
-            int index;
-            for (index = text.length() - 1; index >= 0 && !Character.isWhitespace(text.charAt(index)); index--) ;
-            String prefix = text.substring(index + 1, text.length());
 
-            if (chooseView.isVisible()) {
-                javafx.application.Platform.runLater(() -> {
+				);
+			}
+			chooseView.setOnKeyPressed(new EventHandler<KeyEvent>() {
+				@Override
+				public void handle(KeyEvent event) {
+					KeyCode code = event.getCode();
 
+					if (code == KeyCode.ESCAPE) {
 
-                            for (String str : chooseView.getItems().sorted()) {
+						System.out.println("casted");
+						if (showList) {
 
-                                if (!str.toLowerCase().contains(prefix.toLowerCase())) {
-                                    chooseView.getItems().remove(str);
-                                    all.add(str);
-                                    chooseView.refresh();
-                                }
-                            }
-                            ArrayList<String> toRemove = new ArrayList<String>();
-                            for (int i = 0; i != all.size(); i++) {
-                                String current = all.get(i);
-                                if (current.toLowerCase().contains(prefix.toLowerCase())) {
-                                    chooseView.getItems().add(current);
-                                    toRemove.add(current);
-                                    chooseView.refresh();
-                                }
-                            }
-                            for (int i = 0; i != toRemove.size(); i++) {
-                                String rem = toRemove.get(i);
-                                if (all.contains(rem)) {
-                                    all.remove(rem);
-                                }
-                            }
+							win.hide();
+							chooseView.setVisible(false);
+							showList = false;
 
-                        }
+						}
+					} else if (code == KeyCode.ENTER) {
+						if (showList) {
 
+							setWord(prefix);
 
-                );
-            }
-            chooseView.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent event) {
-                    KeyCode code = event.getCode();
+						}
+					}
+				}
+			});
+			chooseView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
 
-                    if (code == KeyCode.ESCAPE) {
 
-                        System.out.println("casted");
-                        if (showList) {
+					setWord(prefix);
 
-                            win.hide();
-                            chooseView.setVisible(false);
-                            showList = false;
+				}
 
-                        }
-                    } else if (code == KeyCode.ENTER) {
-                        if (showList) {
+			});
 
-                            setWord(prefix);
+		});
 
-                        }
-                    }
-                }
-            });
-            chooseView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
 
+	}
 
-                    setWord(prefix);
+	private void setWord(String prefix) {
 
-                }
 
-            });
+		Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+		CodeArea area = (CodeArea) tab.getContent();
+		String seletion = chooseView.getSelectionModel().getSelectedItem();
+		String before = "";
+		if (seletion.contains("Event")) {
 
-        });
+			String trueT = "";
+			String[] split = seletion.split(" ");
+			String[] r = split[0].split("(?=\\p{Upper})");
+			for (int i = 0; i != r.length; i++) {
+				trueT = trueT + " " + r[i];
+			}
 
 
-    }
+			before = area.getText(area.getCaretPosition(), area.getCaretPosition() - prefix.length() + trueT.trim().length() * 2);
 
-    private void setWord(String prefix) {
 
+			area.replaceText(area.getCaretPosition() - prefix.length(), area.getCaretPosition() - prefix.length() + trueT.trim().length() * 2, trueT.trim() + ":\n        " + before);
 
-        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-        CodeArea area = (CodeArea) tab.getContent();
-        String seletion = chooseView.getSelectionModel().getSelectedItem();
-        String before = "";
-        if (seletion.contains("Event")) {
 
-            String trueT = "";
-            String[] split = seletion.split(" ");
-            String[] r = split[0].split("(?=\\p{Upper})");
-            for (int i = 0; i != r.length; i++) {
-                trueT = trueT + " " + r[i];
-            }
+			pos = area.getCaretPosition() - before.length();
 
+		} else {
+			String trueT = "";
+			String[] split = seletion.split(" ");
+			trueT = split[0];
 
-            before = area.getText(area.getCaretPosition(), area.getCaretPosition() - prefix.length() + trueT.trim().length() * 2);
 
+			before = area.getText(area.getCaretPosition(), area.getCaretPosition() - prefix.length() + trueT.trim().length() * 2);
 
-            area.replaceText(area.getCaretPosition() - prefix.length(), area.getCaretPosition() - prefix.length() + trueT.trim().length() * 2, trueT.trim() + ":\n        " + before);
+			area.replaceText(area.getCaretPosition() - prefix.length(), area.getCaretPosition() - prefix.length() + trueT.trim().length() * 2, trueT.trim() + " " + before);
 
 
-            pos = area.getCaretPosition() - before.length();
+			pos = area.getCaretPosition() - before.length();
+		}
+		System.out.println(pos);
+		area.moveTo(pos);
 
-        } else {
-            String trueT = "";
-            String[] split = seletion.split(" ");
-            trueT = split[0];
 
+		if (showList) {
+			win.hide();
+			chooseView.setVisible(false);
+			showList = false;
 
-            before = area.getText(area.getCaretPosition(), area.getCaretPosition() - prefix.length() + trueT.trim().length() * 2);
 
-            area.replaceText(area.getCaretPosition() - prefix.length(), area.getCaretPosition() - prefix.length() + trueT.trim().length() * 2, trueT.trim() + " " + before);
+		}
+	}
 
+	public void setConsoleArea() {
 
-            pos = area.getCaretPosition() - before.length();
-        }
-        System.out.println(pos);
-        area.moveTo(pos);
+		SceneManager.consoleOut = consoleOutputTextArea;
+		SceneManager.runningServerLabel = runningServerLabel;
+		SceneManager.projectsList = this.projectsList;
+		SceneManager.runninServerList = this.serverListComboBox;
 
+		codeTabPane.getSelectionModel().selectedItemProperty().addListener(
+				new ChangeListener<Tab>() {
+					@Override
+					public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+						Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+						String name = tab.getText();
 
-        if (showList) {
-            win.hide();
-            chooseView.setVisible(false);
-            showList = false;
+						ObservableList<Project> prs = Project.getProjects();
+						for (Project project : prs.sorted()) {
+							if (project.getName().equalsIgnoreCase(name)) {
 
+								pathLabel.setText(project.getSkriptPath());
+							}
+						}
 
-        }
-    }
+					}
+				}
+		);
 
-    public void setConsoleArea() {
 
-        SceneManager.consoleOut = consoleOutputTextArea;
-        SceneManager.runningServerLabel = runningServerLabel;
-    }
+	}
 
-    public void sendCommand() {
-        if (SceneManager.runningServer != null) {
-            try {
-                BufferedWriter writer = SceneManager.runningServer.getWriter();
+	public void sendCommand() {
+		if (SceneManager.runningServer != null) {
+			try {
+				BufferedWriter writer = SceneManager.runningServer.getWriter();
 
 
-                writer.write(comandSendTextField.getText());
-                writer.newLine();
-                System.out.println("wrote:" + comandSendTextField.getText());
-                writer.flush();
-                comandSendTextField.clear();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+				writer.write(comandSendTextField.getText());
+				writer.newLine();
+				System.out.println("wrote:" + comandSendTextField.getText());
+				writer.flush();
+				comandSendTextField.clear();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 
-    public void runProject() {
+	public void runProject() {
 
-        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-        String name = tab.getText();
+		Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+		String name = tab.getText();
 
-        ObservableList<Project> prs = Project.getProjects();
-        for (Project project : prs.sorted()) {
-            if (project.getName().equalsIgnoreCase(name)) {
+		ObservableList<Project> prs = Project.getProjects();
+		for (Project project : prs.sorted()) {
+			if (project.getName().equalsIgnoreCase(name)) {
 
-                serverListComboBox.getSelectionModel().select(project.getServer().getname());
-                project.runProject();
-            }
-        }
-    }
+				serverListComboBox.getSelectionModel().select(project.getServer().getname());
+				project.runProject();
+			}
+		}
+	}
 
-    public void loadInProjects() {
+	public void loadInProjects() {
 
-        ObservableList<Project> projects = Project.getProjects();
+		if (Config.checkConfig() == 0) {
+			ObservableList<Project> projects = Project.getProjects();
+			projectsList.getItems().clear();
+			for (Project project : projects.sorted()) {
+				if (project.getName() != null) {
+					projectsList.getItems().addAll(project.getName());
+				}
+			}
+		}
+	}
 
+	public void loadInServers() {
 
-        projectsList.getItems().clear();
-        for (Project project : projects.sorted()) {
-            if (project.getName() != null) {
-                projectsList.getItems().addAll(project.getName());
-            }
-        }
+		serverListComboBox.getItems().setAll();
+		ObservableList<MCServer> servers = MCServer.getAllServers();
+		for (MCServer srv : servers.sorted()) {
+			serverListComboBox.getItems().add(srv.getname());
+		}
 
-    }
+	}
 
-    public void loadInServers() {
+	public void startServer() {
 
-        serverListComboBox.getItems().setAll();
-        ObservableList<MCServer> servers = MCServer.getAllServers();
-        for (MCServer srv : servers.sorted()) {
-            serverListComboBox.getItems().add(srv.getname());
-        }
+		ObservableList<MCServer> servers = MCServer.getAllServers();
+		for (MCServer srv : servers.sorted()) {
+			if (srv.getname().equalsIgnoreCase(serverListComboBox.getSelectionModel().getSelectedItem())) {
+				srv.startServer();
+			}
+		}
+	}
 
-    }
+	public void newProject() {
 
-    public void startServer() {
+		sceneManager.openCreateProject();
 
-        ObservableList<MCServer> servers = MCServer.getAllServers();
-        for (MCServer srv : servers.sorted()) {
-            if (srv.getname().equalsIgnoreCase(serverListComboBox.getSelectionModel().getSelectedItem())) {
-                srv.startServer();
-            }
-        }
-    }
 
-    public void newProject() {
+	}
 
-        sceneManager.openCreateProject();
+	public void newServer() {
 
+		sceneManager.openCreateServer();
 
-    }
+	}
 
-    public void newServer() {
+	public void manageAddons() throws IOException {
 
-        sceneManager.openCreateServer();
+		sceneManager.openManageVersions();
 
-    }
+	}
 
-    public void manageAddons() throws IOException {
+	public void manageServers() {
 
-        sceneManager.openManageVersions();
+		sceneManager.openManageServer();
+	}
 
-    }
+	public void manageCode() {
 
-    public void manageServers() {
+		Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+		CodeArea area = (CodeArea) tab.getContent();
 
-        sceneManager.openManageServer();
-    }
 
-    public void manageCode() {
+		//  area.setText(ControlMain.controlCode(area.getText()));
+	}
 
-        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-        CodeArea area = (CodeArea) tab.getContent();
 
+	public void openProject() {
+		CodeArea area = new CodeArea();
 
-        //  area.setText(ControlMain.controlCode(area.getText()));
-    }
+		area.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
 
+				KeyCode code = event.getCode();
 
-    public void openProject() {
-        CodeArea area = new CodeArea();
 
-        area.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
+				chooseList();
 
-                KeyCode code = event.getCode();
 
+			}
+		});
 
-                chooseList();
+		String selection = projectsList.getSelectionModel().getSelectedItem();
 
 
-            }
-        });
+		if (selection != null) {
+			Project project = new Project(selection);
+			if (!SceneManager.openProjects.contains(project.getName())) {
+				Tab tab = new Tab(project.getName());
 
-        String selection = projectsList.getSelectionModel().getSelectedItem();
+				codeTabPane.getTabs().add(tab);
 
+				tab.setContent(area);
 
-        if (selection != null) {
-            Project project = new Project(selection);
-            if (!SceneManager.openProjects.contains(project.getName())) {
-                Tab tab = new Tab(project.getName());
+				File skript = new File(project.getSkriptPath().replace("/", "/"));
 
-                codeTabPane.getTabs().add(tab);
 
-                tab.setContent(area);
+				CodeReader reader = new CodeReader(skript);
 
-                File skript = new File(project.getSkriptPath().replace("/", "/"));
+				area.appendText(reader.getCode());
 
 
-                CodeReader reader = new CodeReader(skript);
+				SceneManager.openProjects.add(project.getName());
 
-                area.appendText(reader.getCode());
+				ControlMain.controlCode(area);
+			}
 
+		}
+	}
 
-                SceneManager.openProjects.add(project.getName());
+	public void saveOpenProjects() {
 
-                ControlMain.controlCode(area);
-            }
+		for (Tab tab : codeTabPane.getTabs().sorted()) {
+			StyleClassedTextArea area = (StyleClassedTextArea) tab.getContent();
 
-        }
-    }
+			Project pr = new Project(tab.getText());
 
-    public void saveOpenProjects() {
 
-        for (Tab tab : codeTabPane.getTabs().sorted()) {
-            StyleClassedTextArea area = (StyleClassedTextArea) tab.getContent();
+			CodeWriter writer = new CodeWriter(area.getText(), pr);
+			System.out.println("saver called");
+			writer.write();
 
-            Project pr = new Project(tab.getText());
 
-
-            CodeWriter writer = new CodeWriter(area.getText(), pr);
-            System.out.println("saver called");
-            writer.write();
-
-
-        }
-    }
+		}
+	}
 
 
 }

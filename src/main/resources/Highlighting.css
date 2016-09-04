@@ -55,3 +55,13 @@
 .comment {
     -fx-fill: #035003;
 }
+
+.console {
+    -fx-fill: #680780;
+    -fx-font-weight: bold;
+}
+
+.console-err {
+    -fx-fill: #800b07;
+    -fx-font-weight: bold;
+}

@@ -197,6 +197,7 @@ public class ManageServerController {
                 trueServ = server;
             }
         }
+
         trueServ.setname(nameTextField.getText());
         String selectedItem = serverVersionComboBox.getSelectionModel().getSelectedItem();
 
@@ -307,91 +308,95 @@ public class ManageServerController {
 
         for (MCServer server : servers.sorted()) {
 
-            if (server.getname().equals(serversList.getSelectionModel().getSelectedItem())) {
-                srv = server;
-            }
-        }
-        srv.loadServer();
 
-        nameTextField.setText(srv.getname());
-        portTextField.setText(String.valueOf(srv.getport()));
-
-
-        ObservableList<ServerVersion> srvVers = ServerVersion.getServerVersions();
-        for (ServerVersion ver : srvVers.sorted()) {
-            serverVersionComboBox.getItems().add(ver.getVersion());
-            if (ver.getVersion().equals(srv.getversion().getVersion())) {
-                serverVersionComboBox.getSelectionModel().select(ver.getVersion());
-            }
-        }
-
-        ObservableList<Skript> skripts = Skript.getSkriptVersions();
-        for (Skript sk : skripts.sorted()) {
-
-            scriptVersionComboBox.getItems().add(sk.getVersion());
-            if (sk.getVersion().equals(srv.getskript().getVersion())) {
-                scriptVersionComboBox.getSelectionModel().select(sk.getVersion());
-            }
-        }
-        serverPathTextField.setText(srv.getpath());
-        notesTexrArea.setText(srv.getnotes());
-
-        startArgsTextField.setText(srv.getstartArgs());
-        generatorSettingsTextField.setText(srv.getgeneratorSettings());
-        opPermissionLevelTextField.setText(String.valueOf(srv.getopPermLevel()));
-        maxWorldSizeTextField.setText(String.valueOf(srv.getmaxWorldSize()));
-        maxPlayersTextField.setText(String.valueOf(srv.getmaxPlayers()));
-        worldNameTextField.setText(srv.getworldName());
-        levelSeedTextField.setText(srv.getlevelSeed());
-        maxHeightTextField.setText(String.valueOf(srv.getmaxBuildHeight()));
-        viewdinstanceTextField.setText(String.valueOf(srv.getviewDistance()));
-        modtTextField.setText(srv.getmodt());
-
-        levelTypeComboBox.getItems().clear();
-        difficultyComboBox.getItems().clear();
-        defaultGameModeComboBox.getItems().clear();
-        String choosedLvLType = srv.getlvlType();
-        int choosedDifficulty = srv.getdifficulty();
-        int defaultGamode = srv.getdefaultGm();
-        levelTypeComboBox.getItems().addAll("DEFAULT", "SUPER_FLAT");
-        difficultyComboBox.getItems().addAll("Peaceful", "Easy", "Normal", "Hard");
-        defaultGameModeComboBox.getItems().addAll("Survival", "Creative", "Hardcore", "Spectator");
-        levelTypeComboBox.getSelectionModel().select(choosedLvLType);
-        difficultyComboBox.getSelectionModel().select(choosedDifficulty);
-        defaultGameModeComboBox.getSelectionModel().select(defaultGamode);
-
-        generateSctructureCheck.setSelected(srv.getgenerateStructure());
-        netherCheck.setSelected(srv.getallowNether());
-        queryCheck.setSelected(srv.getquery());
-        flightCheck.setSelected(srv.getallowFlight());
-        achievementsCheck.setSelected(srv.getannounceAchievemnts());
-        rconCheck.setSelected(srv.getrcon());
-        forceGmCheck.setSelected(srv.getforceGamemode());
-        whitelistCheck.setSelected(srv.getwhitelist());
-        spawnNpcsCheck.setSelected(srv.getspawnNPCS());
-        spawnAnimalsCheck.setSelected(srv.getspawnAnimals());
-        hardcoreCheck.setSelected(srv.gethardcore());
-        snooperCheck.setSelected(srv.getsnooper());
-        pvpCheck.setSelected(srv.getpvp());
-        onlineModeCheck.setSelected(srv.getonlineMode());
-        cmdBlockCheck.setSelected(srv.getallowCMD());
-        spawnMonstersCheck.setSelected(srv.getspawnMonsters());
-
-        packSHATextField.setText(srv.getpackSHA1());
-        packCheck.setText(srv.getpack());
-
-        scriptsList.getItems().clear();
-
-        SkriptAddon[] addons = srv.getSkriptAddons();
-
-
-            for (int i = 0; i != addons.length; i++) {
-                if (addons[i] != null) {
-                    SkriptAddon add = addons[i];
-                    scriptsList.getItems().add(add.getName() + "-" + add.getVersion());
+                if (server.getname().equals(serversList.getSelectionModel().getSelectedItem())) {
+                    srv = server;
                 }
             }
-        loadAddons();
+       if(srv != null) {
+           srv.loadServer();
+
+           nameTextField.setText(srv.getname());
+           portTextField.setText(String.valueOf(srv.getport()));
+
+
+           ObservableList<ServerVersion> srvVers = ServerVersion.getServerVersions();
+           for (ServerVersion ver : srvVers.sorted()) {
+               serverVersionComboBox.getItems().add(ver.getVersion());
+               if (ver.getVersion().equals(srv.getversion().getVersion())) {
+                   serverVersionComboBox.getSelectionModel().select(ver.getVersion());
+               }
+           }
+
+           ObservableList<Skript> skripts = Skript.getSkriptVersions();
+           for (Skript sk : skripts.sorted()) {
+
+               scriptVersionComboBox.getItems().add(sk.getVersion());
+               if (sk.getVersion().equals(srv.getskript().getVersion())) {
+                   scriptVersionComboBox.getSelectionModel().select(sk.getVersion());
+               }
+           }
+           serverPathTextField.setText(srv.getpath());
+           notesTexrArea.setText(srv.getnotes());
+
+           startArgsTextField.setText(srv.getstartArgs());
+           generatorSettingsTextField.setText(srv.getgeneratorSettings());
+           opPermissionLevelTextField.setText(String.valueOf(srv.getopPermLevel()));
+           maxWorldSizeTextField.setText(String.valueOf(srv.getmaxWorldSize()));
+           maxPlayersTextField.setText(String.valueOf(srv.getmaxPlayers()));
+           worldNameTextField.setText(srv.getworldName());
+           levelSeedTextField.setText(srv.getlevelSeed());
+           maxHeightTextField.setText(String.valueOf(srv.getmaxBuildHeight()));
+           viewdinstanceTextField.setText(String.valueOf(srv.getviewDistance()));
+           modtTextField.setText(srv.getmodt());
+
+           levelTypeComboBox.getItems().clear();
+           difficultyComboBox.getItems().clear();
+           defaultGameModeComboBox.getItems().clear();
+           String choosedLvLType = srv.getlvlType();
+           int choosedDifficulty = srv.getdifficulty();
+           int defaultGamode = srv.getdefaultGm();
+           levelTypeComboBox.getItems().addAll("DEFAULT", "SUPER_FLAT");
+           difficultyComboBox.getItems().addAll("Peaceful", "Easy", "Normal", "Hard");
+           defaultGameModeComboBox.getItems().addAll("Survival", "Creative", "Hardcore", "Spectator");
+           levelTypeComboBox.getSelectionModel().select(choosedLvLType);
+           difficultyComboBox.getSelectionModel().select(choosedDifficulty);
+           defaultGameModeComboBox.getSelectionModel().select(defaultGamode);
+
+           generateSctructureCheck.setSelected(srv.getgenerateStructure());
+           netherCheck.setSelected(srv.getallowNether());
+           queryCheck.setSelected(srv.getquery());
+           flightCheck.setSelected(srv.getallowFlight());
+           achievementsCheck.setSelected(srv.getannounceAchievemnts());
+           rconCheck.setSelected(srv.getrcon());
+           forceGmCheck.setSelected(srv.getforceGamemode());
+           whitelistCheck.setSelected(srv.getwhitelist());
+           spawnNpcsCheck.setSelected(srv.getspawnNPCS());
+           spawnAnimalsCheck.setSelected(srv.getspawnAnimals());
+           hardcoreCheck.setSelected(srv.gethardcore());
+           snooperCheck.setSelected(srv.getsnooper());
+           pvpCheck.setSelected(srv.getpvp());
+           onlineModeCheck.setSelected(srv.getonlineMode());
+           cmdBlockCheck.setSelected(srv.getallowCMD());
+           spawnMonstersCheck.setSelected(srv.getspawnMonsters());
+
+           packSHATextField.setText(srv.getpackSHA1());
+           packCheck.setText(srv.getpack());
+
+           scriptsList.getItems().clear();
+
+           SkriptAddon[] addons = srv.getSkriptAddons();
+
+
+           for (int i = 0; i != addons.length; i++) {
+               if (addons[i] != null) {
+                   SkriptAddon add = addons[i];
+                   scriptsList.getItems().add(add.getName() + "-" + add.getVersion());
+               }
+           }
+           loadAddons();
+       }
+
 
     }
 

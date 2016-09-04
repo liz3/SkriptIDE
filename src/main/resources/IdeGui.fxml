@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import org.fxmisc.richtext.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -9,7 +10,7 @@
    <bottom>
       <VBox prefHeight="145.0" prefWidth="886.0" BorderPane.alignment="CENTER">
          <children>
-            <TextArea fx:id="consoleOutputTextArea" editable="false" prefHeight="153.0" prefWidth="886.0" />
+            <CodeArea fx:id="consoleOutputTextArea" prefHeight="154.0" prefWidth="886.0" />
             <HBox>
                <children>
                   <TextField fx:id="comandSendTextField" prefHeight="25.0" prefWidth="364.0" />
@@ -32,7 +33,7 @@
       </BorderPane>
    </center>
    <left>
-      <ListView fx:id="projectsList" onMouseClicked="#openProject" onMouseEntered="#loadInProjects" prefHeight="351.0" prefWidth="177.0" BorderPane.alignment="CENTER" />
+      <ListView fx:id="projectsList" onMouseClicked="#openProject" prefHeight="351.0" prefWidth="177.0" BorderPane.alignment="CENTER" />
    </left>
    <top>
       <VBox BorderPane.alignment="CENTER">
@@ -48,8 +49,17 @@
                            </items>
                         </Menu>
                         <MenuItem fx:id="saveMenuPoint" mnemonicParsing="false" onAction="#saveOpenProjects" text="Save" />
-                        <MenuItem fx:id="saveAsMenuPoint" mnemonicParsing="false" text="Save as" />
+                        <MenuItem mnemonicParsing="false" text="Save as" />
+                        <Menu mnemonicParsing="false" text="Export">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Skript" />
+                              <MenuItem mnemonicParsing="false" text="Txt File" />
+                              <MenuItem mnemonicParsing="false" text="Skript to Jar" />
+                              <MenuItem mnemonicParsing="false" text="FTP/SFTP Upload" />
+                           </items>
+                        </Menu>
                         <MenuItem mnemonicParsing="false" onAction="#manageAddons" text="Versions and Scripts" />
+                        <MenuItem mnemonicParsing="false" text="IDE Settings" />
                         <MenuItem fx:id="closeMenuPoint" mnemonicParsing="false" text="Close" />
                      </items>
                   </Menu>
@@ -70,7 +80,7 @@
             </MenuBar>
             <HBox>
                <children>
-                  <Label fx:id="pathLabel" prefHeight="17.0" prefWidth="675.0" text="Path" />
+                  <Label fx:id="pathLabel" prefHeight="25.0" prefWidth="675.0" />
                   <Label fx:id="searchLabel" maxWidth="1.7976931348623157E308" prefHeight="24.0" prefWidth="36.0" text="Search" />
                   <TextField fx:id="searchTxTField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="120.0" />
                   <Button fx:id="searchTxTBtn" mnemonicParsing="false" text="Search" />

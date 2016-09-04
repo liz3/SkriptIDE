@@ -95,6 +95,17 @@ public class CreateProjectGuiController {
        if(canGo) {
            Project.createProject(projectNameTxTField.getText(), tSk, trueSRV, savePathTxTField.getText(), notesTextArea.getText());
 
+
+           if(Config.checkConfig() == 0) {
+               ObservableList<Project> projects = Project.getProjects();
+               SceneManager.projectsList.getItems().clear();
+               for (Project project : projects.sorted()) {
+                   if (project.getName() != null) {
+                       SceneManager.projectsList.getItems().addAll(project.getName());
+                   }
+               }
+           }
+
            Stage stage = (Stage) createBtn.getScene().getWindow();
            // do what you have to do
            stage.close();
@@ -134,6 +145,7 @@ public class CreateProjectGuiController {
         for(MCServer server : servers.sorted()) {
             loadOnServerComboBox.getItems().add(server.getname());
         }
+
 
 
 

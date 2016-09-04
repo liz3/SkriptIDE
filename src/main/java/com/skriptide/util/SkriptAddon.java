@@ -14,172 +14,168 @@ import java.io.IOException;
 public class SkriptAddon {
 
 
-    public String name;
-    public String version;
-    public String path;
+	public String name;
+	public String version;
+	public String path;
 
-    public String getName() {
-        return this.name;
-    }
+	public String getName() {
+		return this.name;
+	}
 
-    public String getVersion() {
-        return this.version;
-    }
+	public String getVersion() {
+		return this.version;
+	}
 
-    public String getPath() {
-        return this.path;
-    }
-
-
+	public String getPath() {
+		return this.path;
+	}
 
 
-    public SkriptAddon(String childName) {
+	public SkriptAddon(String childName) {
 
-        String current = null;
-
-
-        try {
-            current = new File(".").getCanonicalPath();
-
-            File configFile = new File(current + "/Config.ini");
+		String current = null;
 
 
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Addons");
+		try {
+			current = new File(".").getCanonicalPath();
 
-            Profile.Section child = sec.getChild(childName);
-            this.name = child.get("Name");
-            this.version = child.get("Version");
-            this.path = child.get("Path");
-
-            System.out.println(this.name);
-            System.out.println(this.version);
+			File configFile = new File(current + "/Config.ini");
 
 
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Addons");
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			Profile.Section child = sec.getChild(childName);
+			this.name = child.get("Name");
+			this.version = child.get("Version");
+			this.path = child.get("Path");
 
-
-
-    }
-    public static void compareAndSet(SkriptAddon[] adds, File plFolder) {
-
-
-
-
-    }
-    public static ObservableList<SkriptAddon> getScriptAddons() {
-        String current = null;
-
-
-        try {
-            current = new File(".").getCanonicalPath();
-
-            File configFile = new File(current + "/Config.ini");
+			System.out.println(this.name);
+			System.out.println(this.version);
 
 
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Addons");
-            ObservableList<SkriptAddon> values = FXCollections.observableArrayList();
-            for (String n : sec.childrenNames()) {
-
-                values.add(new SkriptAddon(n));
-            }
-
-            return values;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
-    public static void addAddon(String name, String version, File path) {
-
-        String current = null;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 
-        try {
-            current = new File(".").getCanonicalPath();
+	}
 
-            File configFile = new File(current + "/Config.ini");
-
-
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Addons");
-            if(sec.containsKey("Placeholder")) {
-                sec.remove("Placeholder");
-            }
-            if(sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
-
-            } else {
-                Profile.Section child = sec.addChild(path.getAbsolutePath().toLowerCase());
-
-                child.put("Name", name);
-                child.put("Version", version);
-                child.put("Path", path);
-
-            }
-
-            cfg.store();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void removeAddon(String path) {
-
-        String current = null;
+	public static void compareAndSet(SkriptAddon[] adds, File plFolder) {
 
 
-        try {
-            current = new File(".").getCanonicalPath();
+	}
 
-            File configFile = new File(current + "/Config.ini");
-
-
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Addons");
+	public static ObservableList<SkriptAddon> getScriptAddons() {
+		String current = null;
 
 
-            if(sec.getChild(path.toLowerCase()) != null) {
+		try {
+			current = new File(".").getCanonicalPath();
+
+			File configFile = new File(current + "/Config.ini");
 
 
-                sec.removeChild(path.toLowerCase());
-                if(sec.size() == 0) {
-                    sec.put("Placeholder", "");
-                }
-            }
-            cfg.store();
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Addons");
+			ObservableList<SkriptAddon> values = FXCollections.observableArrayList();
+			for (String n : sec.childrenNames()) {
+
+				values.add(new SkriptAddon(n));
+			}
+
+			return values;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
+
+	public static void addAddon(String name, String version, File path) {
+
+		String current = null;
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		try {
+			current = new File(".").getCanonicalPath();
 
-    }
+			File configFile = new File(current + "/Config.ini");
+
+
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Addons");
+			if (sec.containsKey("Placeholder")) {
+				sec.remove("Placeholder");
+			}
+			if (sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
+
+			} else {
+				Profile.Section child = sec.addChild(path.getAbsolutePath().toLowerCase());
+
+				child.put("Name", name);
+				child.put("Version", version);
+				child.put("Path", path);
+
+			}
+
+			cfg.store();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void removeAddon(String path) {
+
+		String current = null;
+
+
+		try {
+			current = new File(".").getCanonicalPath();
+
+			File configFile = new File(current + "/Config.ini");
+
+
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Addons");
+
+
+			if (sec.getChild(path.toLowerCase()) != null) {
+
+
+				sec.removeChild(path.toLowerCase());
+				if (sec.size() == 0) {
+					sec.put("Placeholder", "");
+				}
+			}
+			cfg.store();
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 }
