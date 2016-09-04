@@ -79,9 +79,9 @@ public class VersionReader {
             JarEntry entry = f.getJarEntry("net/minecraft/server/" + name + "/DedicatedServer.class");
             InputStream in = f.getInputStream(entry);
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String line = "";
+            String line;
             String trueVer = "";
-            boolean iscorrect = false;
+            boolean isCorrect = false;
             do {
                 line = reader.readLine();
                 if (line != null) {
@@ -89,12 +89,12 @@ public class VersionReader {
                     if (line.contains("Starting minecraft server version")) {
 
                         trueVer = line.split(" ")[4];
-                        while (!iscorrect) {
+                        while (!isCorrect) {
 
                             try {
                                 long t = Long.parseLong(trueVer.replace(".", ""));
                                 System.out.println(trueVer);
-                                iscorrect = true;
+                                isCorrect = true;
                                 break;
 
 

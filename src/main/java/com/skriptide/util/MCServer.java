@@ -337,7 +337,7 @@ public class MCServer {
 			mainSec.put("Plugin-folder", this.plFolderPath);
 
 			Profile.Section addons = info.get("Skript-Addons");
-
+			ArrayList<String> removes = new ArrayList<>();
 			for (String key : addons.keySet()) {
 				String entry = addons.get(key);
 				System.out.println(entry);
@@ -352,11 +352,11 @@ public class MCServer {
 
 				}
 				if (toDelete) {
-					System.out.println("To remove: key:" + key + " value:" + addons.get(key));
-					addons.remove(key);
+					removes.add(key);
 
 				}
 			}
+			removes.forEach(addons::remove);
 			if (addons.size() == 0) {
 				addons.put("Placeholder", "");
 			}
