@@ -16,6 +16,8 @@ import java.io.File;
  */
 public class CreateServerGuiController {
 
+	File serverCustomFile = null;
+	File scriptPluginVersionFile = null;
 	@FXML
 	private TextField serverNameTextField;
 	@FXML
@@ -42,10 +44,6 @@ public class CreateServerGuiController {
 	private TextField startParameterTextField;
 	@FXML
 	private Label infoLabel;
-
-	File serverCustomFile = null;
-	File scriptPluginVersionFile = null;
-
 	private String truePath;
 
 	public void updatePath() {

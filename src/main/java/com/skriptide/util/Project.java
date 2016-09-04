@@ -1,8 +1,8 @@
 package com.skriptide.util;
 
+import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import com.skriptide.main.Main;
 import org.ini4j.Ini;
 import org.ini4j.Profile;
 
@@ -72,26 +72,6 @@ public class Project {
 
 	}
 
-	public MCServer getServer() {
-		return this.server;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public String getSkriptPath() {
-		return this.skriptPath;
-	}
-
-	public Skript getSk() {
-		return this.sk;
-	}
-
-	public String getOutPath() {
-		return this.outPath;
-	}
-
 	public static ObservableList<Project> getProjects() {
 		String current = null;
 
@@ -128,28 +108,6 @@ public class Project {
 		return null;
 
 	}
-
-	public void runProject() {
-
-
-		FileInputStream jarInPut = null;
-		try {
-			jarInPut = new FileInputStream(new File(skriptPath));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		File jarOutPut = new File(outPath + "/" + name + ".sk");
-		Path path = jarOutPut.toPath();
-		try {
-			Files.copy(jarInPut, path, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		this.server.startServer();
-
-	}
-
 
 	public static void addProject(String name, File path) {
 
@@ -274,6 +232,47 @@ public class Project {
 		}
 		addProject(name, info);
 
+
+	}
+
+	public MCServer getServer() {
+		return this.server;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getSkriptPath() {
+		return this.skriptPath;
+	}
+
+	public Skript getSk() {
+		return this.sk;
+	}
+
+	public String getOutPath() {
+		return this.outPath;
+	}
+
+	public void runProject() {
+
+
+		FileInputStream jarInPut = null;
+		try {
+			jarInPut = new FileInputStream(new File(skriptPath));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		File jarOutPut = new File(outPath + "/" + name + ".sk");
+		Path path = jarOutPut.toPath();
+		try {
+			Files.copy(jarInPut, path, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		this.server.startServer();
 
 	}
 

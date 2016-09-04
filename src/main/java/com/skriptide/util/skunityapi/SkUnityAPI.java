@@ -1,14 +1,13 @@
 package com.skriptide.util.skunityapi;
 
 
+import com.skriptide.util.WebUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.skriptide.util.WebUtils;
 
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;

@@ -18,19 +18,6 @@ public class SkriptAddon {
 	public String version;
 	public String path;
 
-	public String getName() {
-		return this.name;
-	}
-
-	public String getVersion() {
-		return this.version;
-	}
-
-	public String getPath() {
-		return this.path;
-	}
-
-
 	public SkriptAddon(String childName) {
 
 		String current = null;
@@ -177,5 +164,17 @@ public class SkriptAddon {
 			e.printStackTrace();
 		}
 
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getVersion() {
+		return this.version;
+	}
+
+	public String getPath() {
+		return this.path;
 	}
 }

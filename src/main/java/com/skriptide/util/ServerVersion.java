@@ -13,169 +13,165 @@ import java.io.IOException;
  */
 public class ServerVersion {
 
-    public String name;
-    public String version;
-    public String path;
+	public String name;
+	public String version;
+	public String path;
 
-    public String getName() {
-        return this.name;
-    }
+	public ServerVersion(String childName) {
 
-    public String getVersion() {
-        return this.version;
-    }
-
-    public String getPath() {
-        return this.path;
-    }
+		String current = null;
 
 
+		try {
+			current = new File(".").getCanonicalPath();
+
+			File configFile = new File(current + "/Config.ini");
 
 
-    public ServerVersion(String childName) {
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Server-versions");
 
-        String current = null;
+			Profile.Section child = sec.getChild(childName);
+			this.name = child.get("Name");
+			this.version = child.get("Version");
+			this.path = child.get("Path");
 
-
-        try {
-            current = new File(".").getCanonicalPath();
-
-            File configFile = new File(current + "/Config.ini");
-
-
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Server-versions");
-
-            Profile.Section child = sec.getChild(childName);
-            this.name = child.get("Name");
-            this.version = child.get("Version");
-            this.path = child.get("Path");
-
-            System.out.println(this.name);
-            System.out.println(this.version);
+			System.out.println(this.name);
+			System.out.println(this.version);
 
 
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 
-    }
-    public static ObservableList<ServerVersion> getServerVersions() {
-        String current = null;
+	}
+
+	public static ObservableList<ServerVersion> getServerVersions() {
+		String current = null;
 
 
-        try {
-            current = new File(".").getCanonicalPath();
+		try {
+			current = new File(".").getCanonicalPath();
 
-            File configFile = new File(current + "/Config.ini");
-
-
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Server-versions");
-            ObservableList<ServerVersion> values = FXCollections.observableArrayList();
-            for (String n : sec.childrenNames()) {
-
-                values.add(new ServerVersion(n));
-            }
-
-            return values;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
-    public static void addServerVersion(String name, String version,  File path) {
-
-        String current = null;
+			File configFile = new File(current + "/Config.ini");
 
 
-        try {
-            current = new File(".").getCanonicalPath();
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Server-versions");
+			ObservableList<ServerVersion> values = FXCollections.observableArrayList();
+			for (String n : sec.childrenNames()) {
 
-            File configFile = new File(current + "/Config.ini");
+				values.add(new ServerVersion(n));
+			}
 
+			return values;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Server-versions");
+		return null;
 
-            if(sec.containsKey("Placeholder")) {
-                sec.remove("Placeholder");
-            }
-            if(sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
+	}
 
-            } else {
-                Profile.Section child = sec.addChild(path.getAbsolutePath().toLowerCase());
+	public static void addServerVersion(String name, String version, File path) {
 
-                child.put("Name", name);
-                child.put("Version", version);
-                child.put("Path", path.getAbsolutePath());
-
-            }
+		String current = null;
 
 
-            cfg.store();
+		try {
+			current = new File(".").getCanonicalPath();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void removeServerVersion(String path) {
-
-        String current = null;
+			File configFile = new File(current + "/Config.ini");
 
 
-        try {
-            current = new File(".").getCanonicalPath();
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Server-versions");
 
-            File configFile = new File(current + "/Config.ini");
+			if (sec.containsKey("Placeholder")) {
+				sec.remove("Placeholder");
+			}
+			if (sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
+
+			} else {
+				Profile.Section child = sec.addChild(path.getAbsolutePath().toLowerCase());
+
+				child.put("Name", name);
+				child.put("Version", version);
+				child.put("Path", path.getAbsolutePath());
+
+			}
 
 
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Server-versions");
+			cfg.store();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void removeServerVersion(String path) {
+
+		String current = null;
 
 
-            if(sec.getChild(path.toLowerCase()) != null) {
-                Profile.Section child = sec.getChild(path.toLowerCase());
+		try {
+			current = new File(".").getCanonicalPath();
 
-                sec.removeChild(path.toLowerCase());
+			File configFile = new File(current + "/Config.ini");
 
-                if(sec.size() == 0) {
-                    sec.put("Placeholder", "");
-                }
-            }
 
-            cfg.store();
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Server-versions");
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-    }
+			if (sec.getChild(path.toLowerCase()) != null) {
+				Profile.Section child = sec.getChild(path.toLowerCase());
+
+				sec.removeChild(path.toLowerCase());
+
+				if (sec.size() == 0) {
+					sec.put("Placeholder", "");
+				}
+			}
+
+			cfg.store();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getVersion() {
+		return this.version;
+	}
+
+	public String getPath() {
+		return this.path;
+	}
 }

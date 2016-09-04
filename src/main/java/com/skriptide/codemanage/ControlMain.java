@@ -1,13 +1,14 @@
 package com.skriptide.codemanage;
 
-import javafx.scene.control.TextArea;
-import org.fxmisc.richtext.*;
 import com.skriptide.util.skunityapi.*;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.StyleSpans;
+import org.fxmisc.richtext.StyleSpansBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

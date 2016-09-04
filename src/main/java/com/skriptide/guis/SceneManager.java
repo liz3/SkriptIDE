@@ -6,6 +6,9 @@ import com.skriptide.guis.idegui.IdeGuiController;
 import com.skriptide.guis.manageadds.ManageAddsGuiController;
 import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.startgui.StartGuiController;
+import com.skriptide.main.Main;
+import com.skriptide.util.Config;
+import com.skriptide.util.MCServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,13 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import com.skriptide.main.Main;
-import com.skriptide.util.Config;
-import com.skriptide.util.MCServer;
-import com.skriptide.util.skunityapi.SkUnityAPI;
 import org.fxmisc.richtext.CodeArea;
 
 import java.io.IOException;
@@ -48,6 +46,14 @@ public class SceneManager extends Application {
 	private StartGuiController startGuiController;
 	private ManageServerController manageServerController;
 
+	public static void cleanUP() {
+
+		runningServer = null;
+
+		consoleOut.clear();
+
+
+	}
 
 	public IdeGuiController getIdeGuiController() {
 		return this.ideGuiController;
@@ -119,7 +125,6 @@ public class SceneManager extends Application {
 
 	}
 
-
 	public void openWelcomeGui() {
 
 
@@ -155,7 +160,6 @@ public class SceneManager extends Application {
 		}
 
 	}
-
 
 	public void openCreateProject() {
 
@@ -255,15 +259,6 @@ public class SceneManager extends Application {
 		manageServer.show();
 
 		manageServerController.setValues();
-	}
-
-	public static void cleanUP() {
-
-		runningServer = null;
-
-		consoleOut.clear();
-
-
 	}
 
 

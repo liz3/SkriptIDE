@@ -1,7 +1,5 @@
 package com.skriptide.codemanage;
 
-import com.sun.org.apache.xerces.internal.xs.StringList;
-
 import java.util.ArrayList;
 
 /**
@@ -9,24 +7,24 @@ import java.util.ArrayList;
  */
 public class Supers {
 
-    private ArrayList<String> superV = new ArrayList<>();
-    private String[] supervArray;
+	private ArrayList<String> superV = new ArrayList<>();
+	private String[] supervArray;
 
-    public Supers() {
+	public Supers() {
 
-        String[] list = new String[]{
-                "if", "else", "loop", "trigger", "stop", "set"
-        };
-        for (int i = 0; i != list.length; i++) {
-            superV.add(i, list[i]);
-        }
-        supervArray = list;
+		String[] list = new String[]{
+				"if", "else", "loop", "trigger", "stop", "set"
+		};
+		for (int i = 0; i != list.length; i++) {
+			superV.add(i, list[i]);
+		}
+		supervArray = list;
 
-    }
+	}
 
-    public String[] getSupervArray() {
-        return this.supervArray;
-    }
+	public String[] getSupervArray() {
+		return this.supervArray;
+	}
 
 
 }

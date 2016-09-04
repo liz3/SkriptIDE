@@ -4,35 +4,29 @@ import com.skriptide.codemanage.CodeReader;
 import com.skriptide.codemanage.CodeWriter;
 import com.skriptide.codemanage.ControlMain;
 import com.skriptide.codemanage.Supers;
-import com.skriptide.util.Config;
-import com.sun.javafx.scene.control.skin.TextAreaSkin;
-import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import com.skriptide.guis.SceneManager;
+import com.skriptide.util.Config;
+import com.skriptide.util.MCServer;
+import com.skriptide.util.Project;
+import com.skriptide.util.skunityapi.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.stage.Popup;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.NavigationActions;
 import org.fxmisc.richtext.PopupAlignment;
 import org.fxmisc.richtext.StyleClassedTextArea;
-import com.skriptide.util.MCServer;
-import com.skriptide.util.Project;
-import com.skriptide.util.skunityapi.*;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -40,9 +34,7 @@ import java.util.ArrayList;
  */
 public class IdeGuiController {
 
-	SceneManager sceneManager = new SceneManager();
-
-
+	private static SkUnityAPI skUnity = new SkUnityAPI();
 	@FXML
 	public TabPane codeTabPane;
 	@FXML
@@ -67,13 +59,12 @@ public class IdeGuiController {
 	public MenuItem runPoint;
 	@FXML
 	public Label pathLabel;
+	SceneManager sceneManager = new SceneManager();
 	private ListView<String> chooseView;
 	private boolean showList;
 	private Popup win;
 	private ArrayList<String> all = new ArrayList<>();
 	private int pos = 0;
-
-	private static SkUnityAPI skUnity = new SkUnityAPI();
 
 	private void setList() {
 

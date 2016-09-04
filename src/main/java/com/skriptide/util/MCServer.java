@@ -1,14 +1,17 @@
 package com.skriptide.util;
 
 import com.skriptide.guis.SceneManager;
+import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import com.skriptide.main.Main;
 import org.ini4j.Ini;
 import org.ini4j.Profile;
 
 import java.io.*;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -119,6 +122,156 @@ public class MCServer {
 			e.printStackTrace();
 		}
 
+	}
+
+	public static ObservableList<MCServer> getAllServers() {
+		String current = null;
+
+
+		try {
+			current = new File(".").getCanonicalPath();
+
+			File configFile = new File(current + "/Config.ini");
+
+
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Servers");
+			ObservableList<MCServer> values = FXCollections.observableArrayList();
+			for (String n : sec.childrenNames()) {
+
+				values.add(new MCServer(n));
+			}
+
+			return values;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
+
+	private static void addServer(String name, String version, File path) {
+
+		String current = null;
+
+
+		try {
+			current = new File(".").getCanonicalPath();
+
+			File configFile = new File(current + "/Config.ini");
+
+
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Servers");
+			if (sec.containsKey("Placeholder")) {
+				sec.remove("Placeholder");
+			}
+
+			if (sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
+
+
+			} else {
+
+				Profile.Section newSever = sec.addChild(path.getAbsolutePath().toLowerCase());
+
+				newSever.put("Name", name);
+				newSever.put("Version", version);
+				newSever.put("Info", path + "\\ScriptIDE-Server.ini");
+			}
+
+			cfg.store();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
+	}
+
+	private static void updateServer(String name, String version, File path) {
+
+		String current = null;
+
+
+		try {
+			current = new File(".").getCanonicalPath();
+
+			File configFile = new File(current + "/Config.ini");
+
+
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Servers");
+
+			if (sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
+				Profile.Section newSever = sec.getChild(path.getAbsolutePath().toLowerCase());
+
+				newSever.put("Name", name);
+				newSever.put("Version", version);
+				newSever.put("Info", path + "\\ScriptIDE-Server.ini");
+
+				cfg.store();
+
+			} else {
+
+
+			}
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
+	}
+
+	private static String getServer(String name) {
+
+
+		String current = null;
+
+
+		try {
+			current = new File(".").getCanonicalPath();
+
+			File configFile = new File(current + "/Config.ini");
+
+
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Servers");
+
+			Profile.Section child = sec.getChild(name);
+
+			String path = child.get("Info");
+
+			return path;
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	public void loadServer() {
@@ -387,7 +540,6 @@ public class MCServer {
 
 	}
 
-
 	public void startServer() {
 
 
@@ -637,12 +789,20 @@ public class MCServer {
 		return this.plFolderPath;
 	}
 
+	public void setPlFolderPath(String value) {
+		this.plFolderPath = value;
+	}
+
 	public BufferedWriter getWriter() {
 		return this.writer;
 	}
 
 	public BufferedReader getReader() {
 		return this.reader;
+	}
+
+	public void setReader(BufferedReader reader) {
+		this.reader = reader;
 	}
 
 	public String getname() {
@@ -793,10 +953,6 @@ public class MCServer {
 		return this.spawnMonsters;
 	}
 
-	public void setReader(BufferedReader reader) {
-		this.reader = reader;
-	}
-
 	public void setname(String value) {
 		this.name = value;
 	}
@@ -945,163 +1101,8 @@ public class MCServer {
 		this.spawnMonsters = value;
 	}
 
-	public void setPlFolderPath(String value) {
-		this.plFolderPath = value;
-	}
-
 	public void setAddons(SkriptAddon[] addons) {
 		this.skriptAddons = addons;
-	}
-
-	public static ObservableList<MCServer> getAllServers() {
-		String current = null;
-
-
-		try {
-			current = new File(".").getCanonicalPath();
-
-			File configFile = new File(current + "/Config.ini");
-
-
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Servers");
-			ObservableList<MCServer> values = FXCollections.observableArrayList();
-			for (String n : sec.childrenNames()) {
-
-				values.add(new MCServer(n));
-			}
-
-			return values;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-
-	}
-
-
-	private static void addServer(String name, String version, File path) {
-
-		String current = null;
-
-
-		try {
-			current = new File(".").getCanonicalPath();
-
-			File configFile = new File(current + "/Config.ini");
-
-
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Servers");
-			if (sec.containsKey("Placeholder")) {
-				sec.remove("Placeholder");
-			}
-
-			if (sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
-
-
-			} else {
-
-				Profile.Section newSever = sec.addChild(path.getAbsolutePath().toLowerCase());
-
-				newSever.put("Name", name);
-				newSever.put("Version", version);
-				newSever.put("Info", path + "\\ScriptIDE-Server.ini");
-			}
-
-			cfg.store();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-
-	}
-
-	private static void updateServer(String name, String version, File path) {
-
-		String current = null;
-
-
-		try {
-			current = new File(".").getCanonicalPath();
-
-			File configFile = new File(current + "/Config.ini");
-
-
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Servers");
-
-			if (sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
-				Profile.Section newSever = sec.getChild(path.getAbsolutePath().toLowerCase());
-
-				newSever.put("Name", name);
-				newSever.put("Version", version);
-				newSever.put("Info", path + "\\ScriptIDE-Server.ini");
-
-				cfg.store();
-
-			} else {
-
-
-			}
-
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-
-	}
-
-	private static String getServer(String name) {
-
-
-		String current = null;
-
-
-		try {
-			current = new File(".").getCanonicalPath();
-
-			File configFile = new File(current + "/Config.ini");
-
-
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Servers");
-
-			Profile.Section child = sec.getChild(name);
-
-			String path = child.get("Info");
-
-			return path;
-
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 
 	private void removeServer(String path) {

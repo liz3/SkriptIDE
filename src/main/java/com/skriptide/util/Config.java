@@ -15,183 +15,181 @@ import java.nio.file.Paths;
  */
 public class Config {
 
-    public static int checkConfig() {
+	public static int checkConfig() {
 
 
-        try {
-            String current = new File(".").getCanonicalPath();
+		try {
+			String current = new File(".").getCanonicalPath();
 
 
-            File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.ini");
 
-            if (configFile.exists()) {
+			if (configFile.exists()) {
 
-                return 0;
-            } else {
-                return 1;
-            }
+				return 0;
+			} else {
+				return 1;
+			}
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-        return 0;
+		return 0;
 
-    }
+	}
 
-    public static boolean createConfig(String pPath, String sPath, String lang) {
+	public static boolean createConfig(String pPath, String sPath, String lang) {
 
-        String current = null;
-        try {
-            current = new File(".").getCanonicalPath();
+		String current = null;
+		try {
+			current = new File(".").getCanonicalPath();
 
-            File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.ini");
 
-            configFile.createNewFile();
+			configFile.createNewFile();
 
-            File projPath = new File(pPath);
-            File servPath = new File(sPath);
-
-
-            if (!projPath.exists()) {
-                Path pathToFile = Paths.get(pPath + "\\data.ini");
-                Files.createDirectories(pathToFile.getParent());
-                Files.createFile(pathToFile);
-                File f = new File(pathToFile.toUri());
-                f.delete();
-            }
-            if (!servPath.exists()) {
-                Path pathToFile = Paths.get(sPath + "\\data.ini");
-                Files.createDirectories(pathToFile.getParent());
-                Files.createFile(pathToFile);
-                File f = new File(pathToFile.toUri());
-                f.delete();
-            }
-            Ini cfg = new Ini(configFile);
-
-            Profile.Section generel = cfg.add("Info");
-            Profile.Section srv = cfg.add("Servers");
-            Profile.Section proj = cfg.add("Projects");
-            Profile.Section scripts = cfg.add("Scripts");
-            Profile.Section addons = cfg.add("Addons");
-            Profile.Section serverVersion = cfg.add("Server-versions");
-            Profile.Section settings = cfg.add("Settings");
-
-            generel.add("Projects-Path", pPath);
-            generel.add("Servers-Path", sPath);
-            generel.add("Lang", lang);
-            generel.add("DebugMode", "false");
-
-            srv.add("Placeholder", "");
-            proj.add("Placeholder", "");
-            scripts.add("Placeholder", "");
-            addons.add("Placeholder", "");
-            serverVersion.add("Placeholder", "");
+			File projPath = new File(pPath);
+			File servPath = new File(sPath);
 
 
+			if (!projPath.exists()) {
+				Path pathToFile = Paths.get(pPath + "\\data.ini");
+				Files.createDirectories(pathToFile.getParent());
+				Files.createFile(pathToFile);
+				File f = new File(pathToFile.toUri());
+				f.delete();
+			}
+			if (!servPath.exists()) {
+				Path pathToFile = Paths.get(sPath + "\\data.ini");
+				Files.createDirectories(pathToFile.getParent());
+				Files.createFile(pathToFile);
+				File f = new File(pathToFile.toUri());
+				f.delete();
+			}
+			Ini cfg = new Ini(configFile);
+
+			Profile.Section generel = cfg.add("Info");
+			Profile.Section srv = cfg.add("Servers");
+			Profile.Section proj = cfg.add("Projects");
+			Profile.Section scripts = cfg.add("Scripts");
+			Profile.Section addons = cfg.add("Addons");
+			Profile.Section serverVersion = cfg.add("Server-versions");
+			Profile.Section settings = cfg.add("Settings");
+
+			generel.add("Projects-Path", pPath);
+			generel.add("Servers-Path", sPath);
+			generel.add("Lang", lang);
+			generel.add("DebugMode", "false");
+
+			srv.add("Placeholder", "");
+			proj.add("Placeholder", "");
+			scripts.add("Placeholder", "");
+			addons.add("Placeholder", "");
+			serverVersion.add("Placeholder", "");
 
 
-            cfg.store();
+			cfg.store();
 
-            if(Main.debugMode) {
+			if (Main.debugMode) {
 
-                System.out.println("Config created without errors");
-            }
+				System.out.println("Config created without errors");
+			}
 
-            return true;
+			return true;
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-
-    }
-
-    public static String getProjectsPath() {
-
-        String current = null;
-
-        try {
-            current = new File(".").getCanonicalPath();
-
-            File configFile = new File(current + "/Config.ini");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 
 
-            Ini cfg = new Ini(configFile);
-            Profile.Section sec = cfg.get("Info");
+	}
 
-            String path = sec.get("Projects-Path");
+	public static String getProjectsPath() {
 
+		String current = null;
 
-            if(Main.debugMode) {
+		try {
+			current = new File(".").getCanonicalPath();
 
-                System.out.println("Projects-Path called");
-            }
-
-            return path;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			File configFile = new File(current + "/Config.ini");
 
 
-        return null;
-    }
+			Ini cfg = new Ini(configFile);
+			Profile.Section sec = cfg.get("Info");
 
-    public static String getServersPath() {
-
-        String current = null;
-
-        try {
-            current = new File(".").getCanonicalPath();
-
-            File configFile = new File(current + "/Config.ini");
+			String path = sec.get("Projects-Path");
 
 
-            Ini cfg = new Ini(configFile);
-            Profile.Section sec = cfg.get("Info");
+			if (Main.debugMode) {
 
-            String path = sec.get("Servers-Path");
-            if(Main.debugMode) {
-                System.out.println("Servers path called");
-            }
+				System.out.println("Projects-Path called");
+			}
 
-
-            return path;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			return path;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 
-        return null;
-    }
+		return null;
+	}
 
-    public static boolean isDebug() {
-        String current = null;
+	public static String getServersPath() {
 
-        try {
-            current = new File(".").getCanonicalPath();
+		String current = null;
 
-            File configFile = new File(current + "/Config.ini");
+		try {
+			current = new File(".").getCanonicalPath();
 
-
-            Ini cfg = new Ini(configFile);
-            Profile.Section sec = cfg.get("Info");
-
-            String path = sec.get("DebugMode");
-
-            if(path.equals("true")) {
-                return true;
-            } else {
-                return false;
-            }
+			File configFile = new File(current + "/Config.ini");
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			Ini cfg = new Ini(configFile);
+			Profile.Section sec = cfg.get("Info");
 
-        return false;
-    }
+			String path = sec.get("Servers-Path");
+			if (Main.debugMode) {
+				System.out.println("Servers path called");
+			}
+
+
+			return path;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
+		return null;
+	}
+
+	public static boolean isDebug() {
+		String current = null;
+
+		try {
+			current = new File(".").getCanonicalPath();
+
+			File configFile = new File(current + "/Config.ini");
+
+
+			Ini cfg = new Ini(configFile);
+			Profile.Section sec = cfg.get("Info");
+
+			String path = sec.get("DebugMode");
+
+			if (path.equals("true")) {
+				return true;
+			} else {
+				return false;
+			}
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
 
 }

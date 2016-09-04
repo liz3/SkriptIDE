@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="342.0" prefWidth="391.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.startgui.StartGuiController">
-   <children>
-      <Button fx:id="okBtn" layoutX="332.0" layoutY="303.0" mnemonicParsing="false" onAction="#proceed" prefHeight="25.0" prefWidth="56.0" text="ok" />
-      <Button fx:id="cancelBtn" layoutX="260.0" layoutY="303.0" mnemonicParsing="false" onAction="#cancelAction" prefHeight="25.0" prefWidth="56.0" text="Cancel" />
-      <Label layoutX="76.0" layoutY="14.0" text="Welcome to ScriptIDE">
-         <font>
-            <Font size="25.0" />
-         </font>
-      </Label>
-      <TextArea layoutX="16.0" layoutY="61.0" prefHeight="136.0" prefWidth="360.0" />
-      <Label layoutX="16.0" layoutY="197.0" text="Please choose the Folder Were you want to Save Projects!" />
-      <TextField fx:id="projectsPathField" layoutX="16.0" layoutY="214.0" prefHeight="25.0" prefWidth="305.0" promptText="Choose path" />
-      <Button fx:id="projectsPathBtn" layoutX="332.0" layoutY="214.0" mnemonicParsing="false" onAction="#openProjectPathChooser" text="Choose" />
-      <Label layoutX="16.0" layoutY="239.0" prefHeight="17.0" prefWidth="360.0" text="Please choose a Path, were you want to save the Test-Servers" />
-      <Button fx:id="serverPathBtn" layoutX="332.0" layoutY="256.0" mnemonicParsing="false" onAction="#openServersPathChooser" text="Choose" />
-      <TextField fx:id="serverPathField" layoutX="16.0" layoutY="256.0" prefHeight="25.0" prefWidth="305.0" promptText="Choose Path" />
-      <ComboBox fx:id="langComboBox" layoutX="76.0" layoutY="303.0" prefWidth="150.0" />
-      <Label layoutX="14.0" layoutY="307.0" text="Language" />
-   </children>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity"
+      prefHeight="342.0" prefWidth="391.0" xmlns="http://javafx.com/javafx/8"
+      fx:controller="com.skriptide.guis.startgui.StartGuiController">
+    <children>
+        <Button fx:id="okBtn" layoutX="332.0" layoutY="303.0" mnemonicParsing="false" onAction="#proceed"
+                prefHeight="25.0" prefWidth="56.0" text="ok"/>
+        <Button fx:id="cancelBtn" layoutX="260.0" layoutY="303.0" mnemonicParsing="false" onAction="#cancelAction"
+                prefHeight="25.0" prefWidth="56.0" text="Cancel"/>
+        <Label layoutX="76.0" layoutY="14.0" text="Welcome to ScriptIDE">
+            <font>
+                <Font size="25.0"/>
+            </font>
+        </Label>
+        <TextArea layoutX="16.0" layoutY="61.0" prefHeight="136.0" prefWidth="360.0"/>
+        <Label layoutX="16.0" layoutY="197.0" text="Please choose the Folder Were you want to Save Projects!"/>
+        <TextField fx:id="projectsPathField" layoutX="16.0" layoutY="214.0" prefHeight="25.0" prefWidth="305.0"
+                   promptText="Choose path"/>
+        <Button fx:id="projectsPathBtn" layoutX="332.0" layoutY="214.0" mnemonicParsing="false"
+                onAction="#openProjectPathChooser" text="Choose"/>
+        <Label layoutX="16.0" layoutY="239.0" prefHeight="17.0" prefWidth="360.0"
+               text="Please choose a Path, were you want to save the Test-Servers"/>
+        <Button fx:id="serverPathBtn" layoutX="332.0" layoutY="256.0" mnemonicParsing="false"
+                onAction="#openServersPathChooser" text="Choose"/>
+        <TextField fx:id="serverPathField" layoutX="16.0" layoutY="256.0" prefHeight="25.0" prefWidth="305.0"
+                   promptText="Choose Path"/>
+        <ComboBox fx:id="langComboBox" layoutX="76.0" layoutY="303.0" prefWidth="150.0"/>
+        <Label layoutX="14.0" layoutY="307.0" text="Language"/>
+    </children>
 </Pane>

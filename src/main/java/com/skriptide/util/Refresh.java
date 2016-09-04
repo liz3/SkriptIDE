@@ -6,7 +6,6 @@ package com.skriptide.util;
 public class Refresh {
 
 
-
 }
 
 

@@ -14,167 +14,162 @@ import java.io.IOException;
 public class Skript {
 
 
-    public String name;
-    public String version;
-    public String path;
+	public String name;
+	public String version;
+	public String path;
 
-    public String getName() {
-        return this.name;
-    }
+	public Skript(String childName) {
 
-    public String getVersion() {
-        return this.version;
-    }
-
-    public String getPath() {
-        return this.path;
-    }
+		String current = null;
 
 
+		try {
+			current = new File(".").getCanonicalPath();
+
+			File configFile = new File(current + "/Config.ini");
 
 
-    public Skript(String childName) {
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Scripts");
 
-        String current = null;
+			Profile.Section child = sec.getChild(childName);
+			this.name = child.get("Name");
+			this.version = child.get("Version");
+			this.path = child.get("Path");
 
-
-        try {
-            current = new File(".").getCanonicalPath();
-
-            File configFile = new File(current + "/Config.ini");
-
-
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Scripts");
-
-            Profile.Section child = sec.getChild(childName);
-            this.name = child.get("Name");
-            this.version = child.get("Version");
-            this.path = child.get("Path");
-
-            System.out.println(this.name);
-            System.out.println(this.version);
+			System.out.println(this.name);
+			System.out.println(this.version);
 
 
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 
-    }
-    public static ObservableList<Skript> getSkriptVersions() {
-        String current = null;
+	}
+
+	public static ObservableList<Skript> getSkriptVersions() {
+		String current = null;
 
 
-        try {
-            current = new File(".").getCanonicalPath();
+		try {
+			current = new File(".").getCanonicalPath();
 
-            File configFile = new File(current + "/Config.ini");
-
-
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Scripts");
-            ObservableList<Skript> values = FXCollections.observableArrayList();
-            for (String n : sec.childrenNames()) {
-
-                values.add(new Skript(n));
-            }
-
-            return values;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
-    public static void addScript(String name, String version, File path) {
-
-        String current = null;
+			File configFile = new File(current + "/Config.ini");
 
 
-        try {
-            current = new File(".").getCanonicalPath();
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Scripts");
+			ObservableList<Skript> values = FXCollections.observableArrayList();
+			for (String n : sec.childrenNames()) {
 
-            File configFile = new File(current + "/Config.ini");
+				values.add(new Skript(n));
+			}
 
+			return values;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Scripts");
-            if(sec.containsKey("Placeholder")) {
-                sec.remove("Placeholder");
-            }
-            if(sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
+		return null;
 
+	}
 
+	public static void addScript(String name, String version, File path) {
 
-            } else {
-                Profile.Section child = sec.addChild(path.getAbsolutePath().toLowerCase());
-
-                child.put("Name", name);
-                child.put("Version", version);
-                child.put("Path", path);
-
-            }
-
-            cfg.store();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void removeScript(String path) {
-
-        String current = null;
+		String current = null;
 
 
-        try {
-            current = new File(".").getCanonicalPath();
+		try {
+			current = new File(".").getCanonicalPath();
 
-            File configFile = new File(current + "/Config.ini");
-
-
-            Ini cfg = null;
-            try {
-                cfg = new Ini(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Profile.Section sec = cfg.get("Scripts");
-
-            if(sec.getChild(path.toLowerCase()) != null) {
+			File configFile = new File(current + "/Config.ini");
 
 
-                sec.removeChild(path.toLowerCase());
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Scripts");
+			if (sec.containsKey("Placeholder")) {
+				sec.remove("Placeholder");
+			}
+			if (sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
 
-                if(sec.size() == 0) {
-                    sec.put("Placeholder", "");
-                }
-            }
-            cfg.store();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			} else {
+				Profile.Section child = sec.addChild(path.getAbsolutePath().toLowerCase());
 
-    }
+				child.put("Name", name);
+				child.put("Version", version);
+				child.put("Path", path);
+
+			}
+
+			cfg.store();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void removeScript(String path) {
+
+		String current = null;
+
+
+		try {
+			current = new File(".").getCanonicalPath();
+
+			File configFile = new File(current + "/Config.ini");
+
+
+			Ini cfg = null;
+			try {
+				cfg = new Ini(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Profile.Section sec = cfg.get("Scripts");
+
+			if (sec.getChild(path.toLowerCase()) != null) {
+
+
+				sec.removeChild(path.toLowerCase());
+
+				if (sec.size() == 0) {
+					sec.put("Placeholder", "");
+				}
+			}
+			cfg.store();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getVersion() {
+		return this.version;
+	}
+
+	public String getPath() {
+		return this.path;
+	}
 }

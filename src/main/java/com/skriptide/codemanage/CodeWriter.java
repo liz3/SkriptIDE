@@ -13,38 +13,37 @@ import java.io.IOException;
 public class CodeWriter {
 
 
-    private Project pr;
-    private String inputCode;
+	private Project pr;
+	private String inputCode;
 
-    public CodeWriter(String code, Project pr) {
-            this.inputCode = code;
-        this.pr = pr;
+	public CodeWriter(String code, Project pr) {
+		this.inputCode = code;
+		this.pr = pr;
 
 
+	}
 
-    }
+	public void write() {
 
-    public void write() {
+		File projFile = new File(pr.getSkriptPath());
 
-        File projFile = new File(pr.getSkriptPath());
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(projFile.getAbsoluteFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		BufferedWriter bw = new BufferedWriter(fw);
+		try {
 
-        FileWriter fw = null;
-        try {
-            fw = new FileWriter(projFile.getAbsoluteFile());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BufferedWriter bw = new BufferedWriter(fw);
-        try {
-
-            bw.write(inputCode);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+			bw.write(inputCode);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
