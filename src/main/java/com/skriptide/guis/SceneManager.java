@@ -12,12 +12,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import com.skriptide.main.Main;
 import com.skriptide.util.Config;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.skunityapi.SkUnityAPI;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -73,6 +73,7 @@ public class SceneManager extends Application {
         Scene mainScene = new Scene(mainParent, 900, 530);
         mainScene.getStylesheets().add("Highlighting.css");
         mainWindow.setTitle("ScriptIDE");
+        mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
         mainWindow.setScene(mainScene);
         mainWindow.setMinHeight(520);
         mainWindow.setMinWidth(885);
