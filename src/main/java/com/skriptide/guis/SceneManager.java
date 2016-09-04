@@ -41,7 +41,7 @@ public class SceneManager extends Application {
     private ManageAddsGuiController manageAddsGuiController;
     private StartGuiController startGuiController;
     private ManageServerController manageServerController;
-    SkUnityAPI skUnityAPI;
+
 
 
     public IdeGuiController getIdeGuiController() {
@@ -71,6 +71,7 @@ public class SceneManager extends Application {
 
 
         Scene mainScene = new Scene(mainParent, 900, 530);
+
         mainScene.getStylesheets().add("Highlighting.css");
         mainWindow.setTitle("ScriptIDE");
         mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
@@ -132,6 +133,7 @@ public class SceneManager extends Application {
         welcomeWindow.setResizable(false);
         welcomeWindow.centerOnScreen();
         welcomeWindow.show();
+
         if (Main.debugMode) {
             System.out.println("Welcome scrren open");
         }
