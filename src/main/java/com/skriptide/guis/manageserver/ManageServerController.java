@@ -1,5 +1,6 @@
 package com.skriptide.guis.manageserver;
 
+import com.skriptide.main.Main;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.ServerVersion;
 import com.skriptide.util.Skript;
@@ -161,7 +162,10 @@ public class ManageServerController {
 		for (MCServer server : servers.sorted()) {
 			serversList.getItems().add(server.getname());
 		}
+		if (Main.debugMode) {
 
+			System.out.println("set values");
+		}
 
 	}
 
@@ -170,6 +174,10 @@ public class ManageServerController {
 		Stage stage = (Stage) confirmBtn.getScene().getWindow();
 		// do what you have to do
 		stage.close();
+		if (Main.debugMode) {
+
+			System.out.println("proceed ");
+		}
 	}
 
 	public void loadAddons() {
@@ -182,6 +190,9 @@ public class ManageServerController {
 			}
 		}
 
+		if (Main.debugMode) {
+			System.out.println("load addons");
+		}
 	}
 
 	public void saveChangesToServer() {
@@ -266,6 +277,9 @@ public class ManageServerController {
 		trueServ.updateServer();
 
 		setValues();
+		if (Main.debugMode) {
+			System.out.println("saved changes to server");
+		}
 
 
 	}
@@ -281,6 +295,10 @@ public class ManageServerController {
 				serversList.getItems().remove(selection);
 			}
 		}
+		if (Main.debugMode) {
+
+			System.out.println("delete server");
+		}
 
 	}
 
@@ -292,6 +310,10 @@ public class ManageServerController {
 		chooseScriptAddonComboBox.getItems().remove(selectedItem);
 
 
+		if (Main.debugMode) {
+			System.out.println("added " + selectedItem);
+		}
+
 	}
 
 	public void remAddon() {
@@ -299,7 +321,9 @@ public class ManageServerController {
 		String selected = scriptsList.getSelectionModel().getSelectedItem();
 		scriptsList.getItems().remove(selected);
 		chooseScriptAddonComboBox.getItems().add(selected);
-
+		if(Main.debugMode) {
+			System.out.println("removed: " + selected);
+		}
 
 	}
 
@@ -397,9 +421,14 @@ public class ManageServerController {
 				}
 			}
 			loadAddons();
+
+
 		}
 
+		if(Main.debugMode) {
 
+			System.out.println("loaded server");
+		}
 	}
 
 

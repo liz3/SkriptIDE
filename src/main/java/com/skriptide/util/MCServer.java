@@ -79,6 +79,10 @@ public class MCServer {
 		this.plFolderPath = path + "/plugins";
 		this.notes = notes;
 		this.startArgs = startArgs;
+
+		if(Main.debugMode) {
+			System.out.println("Server values set");
+		}
 	}
 
 	public MCServer(String path) {
@@ -122,6 +126,10 @@ public class MCServer {
 			e.printStackTrace();
 		}
 
+		if(Main.debugMode) {
+			System.out.println("Loaded settings from server");
+		}
+
 	}
 
 	public static ObservableList<MCServer> getAllServers() {
@@ -146,7 +154,9 @@ public class MCServer {
 
 				values.add(new MCServer(n));
 			}
-
+			if(Main.debugMode) {
+				System.out.println("Returning all servers");
+			}
 			return values;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -195,7 +205,9 @@ public class MCServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		if(Main.debugMode) {
+			System.out.println("Added server");
+		}
 
 	}
 
@@ -264,6 +276,9 @@ public class MCServer {
 
 			String path = child.get("Info");
 
+			if(Main.debugMode) {
+				System.out.println("returning server path");
+			}
 			return path;
 
 
@@ -533,6 +548,9 @@ public class MCServer {
 			updateServer(this.name, this.version.getVersion(), new File(this.path));
 			SkriptAddon.compareAndSet(skriptAddons, new File(this.plFolderPath));
 
+			if(Main.debugMode) {
+				System.out.println("uptaded server" + this.getname());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -557,7 +575,9 @@ public class MCServer {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
+			if(Main.debugMode) {
+				System.out.println("Server Process started");
+			}
 			SceneManager.runningServer = MCServer.this;
 			Process finalP = p;
 			Thread writer = new Thread(() -> MCServer.this.writer = new BufferedWriter(new OutputStreamWriter(finalP.getOutputStream())));
@@ -753,6 +773,9 @@ public class MCServer {
 
 		startServer();
 		addServer(this.name, this.version.getVersion(), new File(this.path));
+		if(Main.debugMode) {
+			System.out.println("Server created: " + this.getname());
+		}
 	}
 
 	public void deleteServer() {
@@ -760,6 +783,9 @@ public class MCServer {
 		System.out.println(path);
 		deleteDirectory(folder);
 		removeServer(this.path.toLowerCase().replace("/", "\\"));
+		if(Main.debugMode) {
+			System.out.println("Deleted server!");
+		}
 	}
 
 	private boolean deleteDirectory(File directory) {
@@ -775,6 +801,7 @@ public class MCServer {
 				}
 			}
 		}
+
 		return (directory.delete());
 	}
 
@@ -1137,6 +1164,9 @@ public class MCServer {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		if(Main.debugMode) {
+			System.out.println("Removed server from config");
 		}
 	}
 

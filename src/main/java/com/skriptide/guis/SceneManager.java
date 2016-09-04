@@ -8,6 +8,8 @@ import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.startgui.StartGuiController;
 import com.skriptide.main.Main;
 import com.skriptide.util.Config;
+import com.skriptide.util.IDEPrintWriter;
+import com.skriptide.util.IDESystemErr;
 import com.skriptide.util.MCServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
@@ -34,17 +37,19 @@ public class SceneManager extends Application {
 	public static Label runningServerLabel;
 	public static ListView projectsList;
 	public static ComboBox<String> runninServerList;
+	public static TextArea debugArea;
 
 
-	public Stage mainWindow, welcomeWindow, createNewProjectWindow, createNewServerWindow, addsManager, manageServer;
-	private FXMLLoader mainLoader = new FXMLLoader(), welcomeLoader = new FXMLLoader(), createNewProjectLoader = new FXMLLoader(), createNewServerLoader = new FXMLLoader(), addManagerLoader = new FXMLLoader(), manageServerLoader = new FXMLLoader();
-	private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null, createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null;
+	public Stage mainWindow, welcomeWindow, createNewProjectWindow, createNewServerWindow, addsManager, manageServer, debugger;
+	private FXMLLoader mainLoader = new FXMLLoader(), welcomeLoader = new FXMLLoader(), createNewProjectLoader = new FXMLLoader(), createNewServerLoader = new FXMLLoader(), addManagerLoader = new FXMLLoader(), manageServerLoader = new FXMLLoader(), debuggerLoader = new FXMLLoader();
+	private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null, createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null, debuggerParent = null;
 	private CreateProjectGuiController createProjectGuiController;
 	private CreateServerGuiController createServerGuiController;
 	private IdeGuiController ideGuiController;
 	private ManageAddsGuiController manageAddsGuiController;
 	private StartGuiController startGuiController;
 	private ManageServerController manageServerController;
+	private DebuggerController debuggerController;
 
 	public static void cleanUP() {
 
@@ -53,14 +58,6 @@ public class SceneManager extends Application {
 		consoleOut.clear();
 
 
-	}
-
-	public IdeGuiController getIdeGuiController() {
-		return this.ideGuiController;
-	}
-
-	public SceneManager getSceneManager() {
-		return this;
 	}
 
 	public void runMain() {
@@ -91,6 +88,7 @@ public class SceneManager extends Application {
 		mainWindow.setMinWidth(885);
 		mainWindow.centerOnScreen();
 		mainWindow.show();
+		openDebugger();
 		ideGuiController = mainLoader.getController();
 
 		if (Main.debugMode) {
@@ -125,12 +123,46 @@ public class SceneManager extends Application {
 
 	}
 
+	public void openDebugger() {
+
+
+		if (debuggerParent == null) {
+			debugger = new Stage();
+			try {
+				debuggerParent = debuggerLoader.load(getClass().getResourceAsStream("/DebuggerGui.fxml"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Scene debuggerSc = new Scene(debuggerParent, 800, 600);
+			debuggerSc.getStylesheets().add("Debugger.css");
+			debugger.setScene(debuggerSc);
+
+			debugger.setTitle("Skript IDE Debugger");
+
+			debugger.centerOnScreen();
+
+
+
+
+		}
+		System.setOut(new IDEPrintWriter(System.out));
+		System.setErr(new IDESystemErr(System.err));
+		debuggerController = debuggerLoader.getController();
+		debuggerController.setOut();
+		debugger.show();
+
+
+		if (Main.debugMode) {
+			System.out.println("loaded debugger window");
+		}
+
+	}
+
 	public void openWelcomeGui() {
 
 
 		welcomeWindow = new Stage();
 
-		System.out.println("stage change");
 
 		try {
 			welcomeWindowParent = welcomeLoader.load(getClass().getResourceAsStream("/StartGui.fxml"));
@@ -142,7 +174,9 @@ public class SceneManager extends Application {
 		welcomeWindow.setResizable(false);
 		welcomeWindow.centerOnScreen();
 		welcomeWindow.show();
-
+		if (Main.debugMode) {
+			System.out.println("loaded welcome screen");
+		}
 		if (Main.debugMode) {
 			System.out.println("Welcome scrren open");
 		}
@@ -158,6 +192,7 @@ public class SceneManager extends Application {
 
 			System.out.println("Set preset pathes");
 		}
+
 
 	}
 
@@ -180,7 +215,9 @@ public class SceneManager extends Application {
 		}
 
 		createNewProjectWindow.show();
-
+		if (Main.debugMode) {
+			System.out.println("open create project");
+		}
 
 		createProjectGuiController.setValues();
 
@@ -207,6 +244,10 @@ public class SceneManager extends Application {
 
 
 		createNewServerWindow.show();
+
+		if (Main.debugMode) {
+			System.out.println("create server window open");
+		}
 		createServerGuiController.setValues();
 
 
@@ -229,6 +270,9 @@ public class SceneManager extends Application {
 
 
 		addsManager.show();
+		if (Main.debugMode) {
+			System.out.println("Manage adds window open");
+		}
 
 
 	}
@@ -257,7 +301,9 @@ public class SceneManager extends Application {
 
 
 		manageServer.show();
-
+		if (Main.debugMode) {
+			System.out.println("open manage server!");
+		}
 		manageServerController.setValues();
 	}
 

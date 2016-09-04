@@ -1,5 +1,7 @@
 package com.skriptide.codemanage;
 
+import com.skriptide.main.Main;
+
 import java.util.ArrayList;
 
 /**
@@ -19,6 +21,10 @@ public class Supers {
 			superV.add(i, list[i]);
 		}
 		supervArray = list;
+
+		if(Main.debugMode) {
+			System.out.println("Loaded supers!");
+		}
 
 	}
 

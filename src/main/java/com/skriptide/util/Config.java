@@ -25,17 +25,23 @@ public class Config {
 			File configFile = new File(current + "/Config.ini");
 
 			if (configFile.exists()) {
-
+				if(Main.debugMode) {
+					System.out.println("Config exists");
+				}
 				return 0;
 			} else {
+				if(Main.debugMode) {
+					System.out.println("Config does not exists");
+				}
 				return 1;
+
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		return 0;
+		return 2;
 
 	}
 

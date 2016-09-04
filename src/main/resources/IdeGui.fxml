@@ -77,7 +77,10 @@
                         <MenuItem mnemonicParsing="false" onAction="#manageServers" text="Manage Server" />
                      </items>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Help" />
+                  <Menu mnemonicParsing="false" text="Help">
+                     <items>
+                        <MenuItem fx:id="debuggingPoint" mnemonicParsing="false" onAction="#triggerDebugger" text="Debugging" />
+                     </items></Menu>
                </menus>
             </MenuBar>
             <HBox>

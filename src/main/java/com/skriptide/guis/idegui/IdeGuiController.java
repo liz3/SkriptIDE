@@ -5,6 +5,7 @@ import com.skriptide.codemanage.CodeWriter;
 import com.skriptide.codemanage.ControlMain;
 import com.skriptide.codemanage.Supers;
 import com.skriptide.guis.SceneManager;
+import com.skriptide.main.Main;
 import com.skriptide.util.Config;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.Project;
@@ -59,7 +60,10 @@ public class IdeGuiController {
 	public MenuItem runPoint;
 	@FXML
 	public Label pathLabel;
-	SceneManager sceneManager = new SceneManager();
+	@FXML
+	public MenuItem debuggingPoint;
+
+	private SceneManager sceneManager = new SceneManager();
 	private ListView<String> chooseView;
 	private boolean showList;
 	private Popup win;
@@ -118,7 +122,9 @@ public class IdeGuiController {
 			}
 		});
 
-
+		if(Main.debugMode) {
+			System.out.println("loaded list");
+		}
 	}
 
 	public void chooseList() {
@@ -140,7 +146,9 @@ public class IdeGuiController {
 			win.show(stage);
 			chooseView.setVisible(true);
 			showList = true;
-
+			if(Main.debugMode) {
+				System.out.println("showed list");
+			}
 
 		}
 		updateList();
@@ -231,7 +239,9 @@ public class IdeGuiController {
 
 		});
 
-
+		if(Main.debugMode) {
+			System.out.println("Updatet list");
+		}
 	}
 
 	private void setWord(String prefix) {
@@ -283,6 +293,9 @@ public class IdeGuiController {
 
 
 		}
+		if(Main.debugMode) {
+			System.out.println("set word: " + prefix);
+		}
 	}
 
 	public void setConsoleArea() {
@@ -320,7 +333,9 @@ public class IdeGuiController {
 				}
 		);
 
-
+		if(Main.debugMode) {
+			System.out.println("Loaded window");
+		}
 	}
 
 	public void sendCommand() {
@@ -338,6 +353,9 @@ public class IdeGuiController {
 				e.printStackTrace();
 			}
 		}
+		if(Main.debugMode) {
+			System.out.println("sendet command");
+		}
 	}
 
 
@@ -354,6 +372,10 @@ public class IdeGuiController {
 				project.runProject();
 			}
 		}
+		if(Main.debugMode) {
+
+			System.out.println("started project");
+		}
 	}
 
 	public void loadInProjects() {
@@ -367,14 +389,24 @@ public class IdeGuiController {
 				}
 			}
 		}
+		if(Main.debugMode) {
+			System.out.println("Loaded projects");
+		}
 	}
 
+	public void triggerDebugger() {
+		sceneManager.openDebugger();
+	}
 	public void loadInServers() {
 
 		serverListComboBox.getItems().setAll();
 		ObservableList<MCServer> servers = MCServer.getAllServers();
 		for (MCServer srv : servers.sorted()) {
 			serverListComboBox.getItems().add(srv.getname());
+		}
+
+		if(Main.debugMode) {
+			System.out.println("Loaded servers");
 		}
 
 	}
@@ -387,40 +419,48 @@ public class IdeGuiController {
 				srv.startServer();
 			}
 		}
+		if(Main.debugMode) {
+
+			System.out.println("start server");
+		}
 	}
 
 	public void newProject() {
 
 		sceneManager.openCreateProject();
 
+		if(Main.debugMode) {
+			System.out.println("open new project");
+		}
 
 	}
 
 	public void newServer() {
 
 		sceneManager.openCreateServer();
-
+		if(Main.debugMode) {
+			System.out.println("open new server");
+		}
 	}
 
 	public void manageAddons() throws IOException {
 
 		sceneManager.openManageVersions();
+		if(Main.debugMode) {
+
+			System.out.println("open manage addons");
+		}
 
 	}
 
 	public void manageServers() {
 
 		sceneManager.openManageServer();
+		if(Main.debugMode) {
+			System.out.println("open manage server");
+		}
 	}
 
-	public void manageCode() {
-
-		Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-		CodeArea area = (CodeArea) tab.getContent();
-
-
-		//  area.setText(ControlMain.controlCode(area.getText()));
-	}
 
 
 	public void openProject() {
@@ -465,6 +505,9 @@ public class IdeGuiController {
 			}
 
 		}
+		if(Main.debugMode) {
+			System.out.println("Open project");
+		}
 	}
 
 	public void saveOpenProjects() {
@@ -480,6 +523,9 @@ public class IdeGuiController {
 			writer.write();
 
 
+		}
+		if(Main.debugMode) {
+			System.out.println("Saved open projects!");
 		}
 	}
 

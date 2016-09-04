@@ -1,5 +1,6 @@
 package com.skriptide.util;
 
+import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.ini4j.Ini;
@@ -42,8 +43,9 @@ public class Skript {
 			this.version = child.get("Version");
 			this.path = child.get("Path");
 
-			System.out.println(this.name);
-			System.out.println(this.version);
+			if(Main.debugMode) {
+				System.out.println("loaded Skript version");
+			}
 
 
 		} catch (IOException e) {
@@ -75,7 +77,9 @@ public class Skript {
 
 				values.add(new Skript(n));
 			}
-
+			if(Main.debugMode) {
+				System.out.println("returning skript versions");
+			}
 			return values;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -119,7 +123,9 @@ public class Skript {
 			}
 
 			cfg.store();
-
+			if(Main.debugMode) {
+				System.out.println("added skript version");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -154,7 +160,9 @@ public class Skript {
 				}
 			}
 			cfg.store();
-
+			if(Main.debugMode) {
+				System.out.println("removed skript version");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

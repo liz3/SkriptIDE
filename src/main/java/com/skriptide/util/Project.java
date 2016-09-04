@@ -69,7 +69,9 @@ public class Project {
 			System.out.println("no project found");
 		}
 
-
+		if(Main.debugMode) {
+			System.out.println("Loaded project");
+		}
 	}
 
 	public static ObservableList<Project> getProjects() {
@@ -99,6 +101,9 @@ public class Project {
 				System.out.println("project list called");
 			}
 
+			if(Main.debugMode) {
+				System.out.println("returning projects");
+			}
 			return values;
 
 		} catch (IOException e) {
@@ -172,7 +177,9 @@ public class Project {
 				}
 				cfg.store();
 			}
-
+			if(Main.debugMode) {
+				System.out.println("Removed project");
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -232,6 +239,9 @@ public class Project {
 		}
 		addProject(name, info);
 
+		if(Main.debugMode) {
+			System.out.println("crated project");
+		}
 
 	}
 
@@ -270,6 +280,9 @@ public class Project {
 			Files.copy(jarInPut, path, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		if(Main.debugMode) {
+			System.out.println("starting");
 		}
 
 		this.server.startServer();

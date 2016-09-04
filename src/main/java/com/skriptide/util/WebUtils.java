@@ -1,5 +1,7 @@
 package com.skriptide.util;
 
+import com.skriptide.main.Main;
+
 import java.awt.*;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -22,6 +24,9 @@ public class WebUtils {
 			result.append(line);
 		}
 		rd.close();
+		if(Main.debugMode) {
+			System.out.println("Rode website");
+		}
 		return result.toString();
 	}
 
@@ -33,6 +38,9 @@ public class WebUtils {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		if(Main.debugMode) {
+			System.out.println("Opened website");
 		}
 	}
 
@@ -55,5 +63,8 @@ public class WebUtils {
 
 		fis.close();
 		bis.close();
+		if(Main.debugMode) {
+			System.out.println("Downloaded file");
+		}
 	}
 }

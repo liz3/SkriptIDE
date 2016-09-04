@@ -1,5 +1,6 @@
 package com.skriptide.util;
 
+import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.ini4j.Ini;
@@ -37,16 +38,17 @@ public class SkriptAddon {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			Profile.Section sec = cfg.get("Addons");
+			Profile.Section sec = cfg != null ? cfg.get("Addons") : null;
 
-			Profile.Section child = sec.getChild(childName);
-			this.name = child.get("Name");
-			this.version = child.get("Version");
-			this.path = child.get("Path");
+			Profile.Section child = sec != null ? sec.getChild(childName) : null;
+			this.name = child != null ? child.get("Name") : null;
+			this.version = child != null ? child.get("Version") : null;
+			this.path = child != null ? child.get("Path") : null;
 
-			System.out.println(this.name);
-			System.out.println(this.version);
 
+			if (Main.debugMode) {
+				System.out.println("loaded skript addon");
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -60,16 +62,16 @@ public class SkriptAddon {
 
 		for (File f : plFolder.listFiles()) {
 
-				if (f.getAbsolutePath().endsWith(".jar") && !f.getName().contains("Skript")) {
+			if (f.getAbsolutePath().endsWith(".jar") && !f.getName().contains("Skript")) {
 
-					f.delete();
+				f.delete();
 
 
 			}
 
 
 		}
-		for(SkriptAddon addon : adds) {
+		for (SkriptAddon addon : adds) {
 
 			File from = new File(addon.getPath());
 			try {
@@ -79,7 +81,9 @@ public class SkriptAddon {
 			}
 		}
 
-
+		if (Main.debugMode) {
+			System.out.println("compared and loaded addons");
+		}
 	}
 
 	public static ObservableList<SkriptAddon> getScriptAddons() {
@@ -105,6 +109,9 @@ public class SkriptAddon {
 				values.add(new SkriptAddon(n));
 			}
 
+			if (Main.debugMode) {
+				System.out.println("compared and loaded addons");
+			}
 			return values;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -131,7 +138,10 @@ public class SkriptAddon {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			Profile.Section sec = cfg.get("Addons");
+			Profile.Section sec = null;
+			if (cfg != null) {
+				sec = cfg.get("Addons");
+			}
 			if (sec.containsKey("Placeholder")) {
 				sec.remove("Placeholder");
 			}
@@ -144,6 +154,9 @@ public class SkriptAddon {
 				child.put("Version", version);
 				child.put("Path", path);
 
+			}
+			if(Main.debugMode) {
+				System.out.println("added Addon");
 			}
 
 			cfg.store();
@@ -182,7 +195,9 @@ public class SkriptAddon {
 				}
 			}
 			cfg.store();
-
+			if(Main.debugMode) {
+				System.out.println("Removed addon");
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();

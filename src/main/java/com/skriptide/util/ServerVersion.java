@@ -1,5 +1,6 @@
 package com.skriptide.util;
 
+import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.ini4j.Ini;
@@ -41,8 +42,10 @@ public class ServerVersion {
 			this.version = child.get("Version");
 			this.path = child.get("Path");
 
-			System.out.println(this.name);
-			System.out.println(this.version);
+			if(Main.debugMode) {
+				System.out.println("Server version test");
+			}
+
 
 
 		} catch (IOException e) {
@@ -74,7 +77,9 @@ public class ServerVersion {
 
 				values.add(new ServerVersion(n));
 			}
-
+			if(Main.debugMode) {
+				System.out.println("returing server versions");
+			}
 			return values;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -119,7 +124,9 @@ public class ServerVersion {
 
 
 			cfg.store();
-
+			if(Main.debugMode) {
+				System.out.println("Added versions");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -154,7 +161,9 @@ public class ServerVersion {
 					sec.put("Placeholder", "");
 				}
 			}
-
+			if(Main.debugMode) {
+				System.out.println("removed server version");
+			}
 			cfg.store();
 
 		} catch (IOException e) {

@@ -1,5 +1,8 @@
 package com.skriptide.codemanage;
 
+import com.skriptide.guis.SceneManager;
+import com.skriptide.main.Main;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
@@ -38,6 +41,9 @@ public class CodeReader {
 				}
 				while (line != null);
 
+				if(Main.debugMode) {
+					System.out.println("Open code: " + mainF.getAbsolutePath());
+				}
 				reader.close();
 				input.close();
 				stream.close();

@@ -1,6 +1,7 @@
 package com.skriptide.util.skunityapi;
 
 
+import com.skriptide.main.Main;
 import com.skriptide.util.WebUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,7 +50,9 @@ public class SkUnityAPI {
 		} else {
 			downloadAPI();
 		}
-
+			if(Main.debugMode) {
+				System.out.println("SK api created");
+			}
 
 	}
 
@@ -70,7 +73,9 @@ public class SkUnityAPI {
 		try {
 			WebUtils.downloadFile(new URL("http://nfell2009.uk/skunity/api/zip/skunity.zip"), new File(folder.getAbsolutePath() + "/api.zip"));
 			unZip(new File(folder.getAbsolutePath() + "/api.zip").getAbsolutePath(), folder.getAbsolutePath() + "/output");
-
+			if(Main.debugMode) {
+				System.out.println("Downloaded api");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -90,7 +95,9 @@ public class SkUnityAPI {
 
 
 		File folder = new File(current + "/SkUnity");
-
+		if(Main.debugMode) {
+			System.out.println("scheck skunity api");
+		}
 		if (folder.exists()) {
 			return true;
 		}
@@ -147,7 +154,9 @@ public class SkUnityAPI {
 			events = new File(outputFolder + File.separator + "/events.json");
 			expressions = new File(outputFolder + File.separator + "/expressions.json");
 			types = new File(outputFolder + File.separator + "/types.json");
-
+			if(Main.debugMode) {
+				System.out.println("unzipped files");
+			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -214,7 +223,9 @@ public class SkUnityAPI {
 			values.add(new ApiCondition(id, feature, addon, pattern, description, example, requirements));
 		}
 
-
+		if(Main.debugMode) {
+			System.out.println("returning conditions");
+		}
 		return values;
 
 	}
@@ -278,7 +289,9 @@ public class SkUnityAPI {
 			values.add(new ApiEffect(id, feature, addon, pattern, description, example, requirements));
 		}
 
-
+		if(Main.debugMode) {
+			System.out.println("returning Api Effects");
+		}
 		return values;
 	}
 
@@ -340,7 +353,9 @@ public class SkUnityAPI {
 
 			values.add(new ApiEvent(id, feature, addon, pattern, description, example, requirements));
 		}
-
+		if(Main.debugMode) {
+			System.out.println("returning Api Events");
+		}
 
 		return values;
 
@@ -405,7 +420,9 @@ public class SkUnityAPI {
 
 			values.add(new ApiExpression(id, feature, addon, pattern, description, example, requirements));
 		}
-
+		if(Main.debugMode) {
+			System.out.println("returning Api Expressions");
+		}
 
 		return values;
 
@@ -469,6 +486,9 @@ public class SkUnityAPI {
 			}
 
 			values.add(new ApiType(id, feature, addon, pattern, description, example, requirements));
+		}
+		if(Main.debugMode) {
+			System.out.println("returning Api Types");
 		}
 
 

@@ -1,5 +1,6 @@
 package com.skriptide.codemanage;
 
+import com.skriptide.main.Main;
 import com.skriptide.util.skunityapi.*;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -36,7 +37,9 @@ public class ControlMain {
 					code.setStyleSpans(0, computeHighlighting(code.getText()));
 				});
 		code.replaceText(0, 0, saver);
-
+		if(Main.debugMode) {
+			System.out.println("Highlighted : " + code.getText());
+		}
 	}
 
 
