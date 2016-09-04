@@ -287,10 +287,19 @@ public class IdeGuiController {
 
 	public void setConsoleArea() {
 
+		comandSendTextField.setOnKeyPressed(event -> {
+
+			KeyCode code = event.getCode();
+
+			if(code == KeyCode.ENTER) {
+				sendCommand();
+			}
+		});
 		SceneManager.consoleOut = consoleOutputTextArea;
 		SceneManager.runningServerLabel = runningServerLabel;
 		SceneManager.projectsList = this.projectsList;
 		SceneManager.runninServerList = this.serverListComboBox;
+
 
 		codeTabPane.getSelectionModel().selectedItemProperty().addListener(
 				new ChangeListener<Tab>() {

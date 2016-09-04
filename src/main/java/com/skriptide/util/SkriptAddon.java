@@ -7,6 +7,8 @@ import org.ini4j.Profile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Created by Liz3ga on 23.08.2016.
@@ -54,6 +56,28 @@ public class SkriptAddon {
 	}
 
 	public static void compareAndSet(SkriptAddon[] adds, File plFolder) {
+
+
+		for (File f : plFolder.listFiles()) {
+
+				if (f.getAbsolutePath().endsWith(".jar") && !f.getName().contains("Skript")) {
+
+					f.delete();
+
+
+			}
+
+
+		}
+		for(SkriptAddon addon : adds) {
+
+			File from = new File(addon.getPath());
+			try {
+				Files.copy(from.toPath(), new File(plFolder, addon.getName() + "-" + addon.getVersion() + ".jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 
 
 	}
