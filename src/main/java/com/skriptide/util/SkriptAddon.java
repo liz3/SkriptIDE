@@ -69,6 +69,12 @@ public class SkriptAddon {
 
 
     }
+    public static void compareAndSet(SkriptAddon[] adds, File plFolder) {
+
+
+
+
+    }
     public static ObservableList<SkriptAddon> getScriptAddons() {
         String current = null;
 

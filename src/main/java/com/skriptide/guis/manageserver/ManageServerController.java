@@ -1,5 +1,6 @@
 package com.skriptide.guis.manageserver;
 
+import com.skriptide.util.SkriptAddon;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -23,13 +24,13 @@ public class ManageServerController {
     public Button deleteServerBtn;
 
     @FXML
-    public ListView scriptsList;
+    public ListView<String> scriptsList;
 
     @FXML
     public Button addScriptAddonBtn;
 
     @FXML
-    public ComboBox chooseScriptAddonComboBox;
+    public ComboBox<String> chooseScriptAddonComboBox;
 
     @FXML
     public Button remScriptAddonBtn;
@@ -152,35 +153,47 @@ public class ManageServerController {
     public Button confirmBtn;
 
 
-
     public void setValues() {
 
         serversList.getItems().clear();
 
         ObservableList<MCServer> servers = MCServer.getAllServers();
-        for(MCServer server : servers.sorted()) {
+        for (MCServer server : servers.sorted()) {
             serversList.getItems().add(server.getname());
         }
 
 
 
     }
+
     public void proceed() {
 
         Stage stage = (Stage) confirmBtn.getScene().getWindow();
         // do what you have to do
         stage.close();
     }
-    public void saveChanngesToServer() {
+
+    public void loadAddons() {
+
+        chooseScriptAddonComboBox.getItems().clear();
+        ObservableList<SkriptAddon> addons = SkriptAddon.getScriptAddons();
+        for(SkriptAddon current : addons.sorted()) {
+            if(!scriptsList.getItems().contains(current.getName()) && !scriptsList.getItems().contains(current.getVersion())) {
+                chooseScriptAddonComboBox.getItems().add(current.getName() + "-" + current.getVersion());
+            }
+        }
+
+    }
+    public void saveChangesToServer() {
 
         String selection = serversList.getSelectionModel().getSelectedItem();
 
         ObservableList<MCServer> servers = MCServer.getAllServers();
 
         MCServer trueServ = null;
-        for(MCServer server : servers.sorted()) {
+        for (MCServer server : servers.sorted()) {
 
-            if(server.getname().equals(selection)) {
+            if (server.getname().equals(selection)) {
                 trueServ = server;
             }
         }
@@ -188,15 +201,15 @@ public class ManageServerController {
         String selectedItem = serverVersionComboBox.getSelectionModel().getSelectedItem();
 
         ObservableList<ServerVersion> vers = ServerVersion.getServerVersions();
-        for(ServerVersion srv : vers.sorted()) {
-            if(srv.getVersion().equals(selectedItem)) {
+        for (ServerVersion srv : vers.sorted()) {
+            if (srv.getVersion().equals(selectedItem)) {
                 trueServ.setversion(srv);
             }
         }
         String selctSK = scriptVersionComboBox.getSelectionModel().getSelectedItem();
         ObservableList<Skript> skripts = Skript.getSkriptVersions();
-        for(Skript sk : skripts.sorted()) {
-            if(sk.getVersion().equals(selctSK)) {
+        for (Skript sk : skripts.sorted()) {
+            if (sk.getVersion().equals(selctSK)) {
                 trueServ.setskript(sk);
             }
         }
@@ -233,21 +246,35 @@ public class ManageServerController {
         trueServ.setgenerateStructure(generateSctructureCheck.isSelected());
         trueServ.setviewDistance(Integer.parseInt(viewdinstanceTextField.getText()));
         trueServ.setmodt(modtTextField.getText());
+        ObservableList<SkriptAddon> addons = SkriptAddon.getScriptAddons();
+        SkriptAddon[] allAdds = new SkriptAddon[scriptsList.getItems().size()];
+        int t = 0;
+        for (int i = 0; i != addons.size(); i++) {
+
+            SkriptAddon skriptAddon = addons.get(i);
+
+            for (String str : scriptsList.getItems().sorted()) {
+                if (str.contains(skriptAddon.getName()) && str.contains(skriptAddon.getVersion())) {
+                    allAdds[t] = skriptAddon;
+                    t++;
+                }
+            }
+        }
+        trueServ.setAddons(allAdds);
 
         trueServ.updateServer();
 
         setValues();
 
 
-
-
     }
+
     public void deleteServer() {
         String selection = serversList.getSelectionModel().getSelectedItem();
 
         ObservableList<MCServer> servers = MCServer.getAllServers();
-        for(MCServer server : servers.sorted()) {
-            if(server.getname().equalsIgnoreCase(selection)) {
+        for (MCServer server : servers.sorted()) {
+            if (server.getname().equalsIgnoreCase(selection)) {
 
                 server.deleteServer();
                 serversList.getItems().remove(selection);
@@ -256,14 +283,31 @@ public class ManageServerController {
 
     }
 
+    public void addAddon() {
+
+        String selectedItem = chooseScriptAddonComboBox.getSelectionModel().getSelectedItem();
+        scriptsList.getItems().add(selectedItem);
+        chooseScriptAddonComboBox.getSelectionModel().clearSelection();
+        chooseScriptAddonComboBox.getItems().remove(selectedItem);
+
+
+    }
+    public void remAddon() {
+
+        String selected = scriptsList.getSelectionModel().getSelectedItem();
+        scriptsList.getItems().remove(selected);
+        chooseScriptAddonComboBox.getItems().add(selected);
+
+
+    }
     public void loadSettings() {
 
         MCServer srv = null;
         ObservableList<MCServer> servers = MCServer.getAllServers();
 
-        for(MCServer server : servers.sorted()) {
+        for (MCServer server : servers.sorted()) {
 
-            if(server.getname().equals(serversList.getSelectionModel().getSelectedItem())) {
+            if (server.getname().equals(serversList.getSelectionModel().getSelectedItem())) {
                 srv = server;
             }
         }
@@ -274,18 +318,18 @@ public class ManageServerController {
 
 
         ObservableList<ServerVersion> srvVers = ServerVersion.getServerVersions();
-        for(ServerVersion ver : srvVers.sorted()) {
+        for (ServerVersion ver : srvVers.sorted()) {
             serverVersionComboBox.getItems().add(ver.getVersion());
-            if(ver.getVersion().equals(srv.getversion().getVersion())) {
+            if (ver.getVersion().equals(srv.getversion().getVersion())) {
                 serverVersionComboBox.getSelectionModel().select(ver.getVersion());
             }
         }
 
         ObservableList<Skript> skripts = Skript.getSkriptVersions();
-        for(Skript sk : skripts.sorted()) {
+        for (Skript sk : skripts.sorted()) {
 
             scriptVersionComboBox.getItems().add(sk.getVersion());
-            if(sk.getVersion().equals(srv.getskript().getVersion())) {
+            if (sk.getVersion().equals(srv.getskript().getVersion())) {
                 scriptVersionComboBox.getSelectionModel().select(sk.getVersion());
             }
         }
@@ -336,10 +380,20 @@ public class ManageServerController {
         packSHATextField.setText(srv.getpackSHA1());
         packCheck.setText(srv.getpack());
 
+        scriptsList.getItems().clear();
+
+        SkriptAddon[] addons = srv.getSkriptAddons();
+
+
+            for (int i = 0; i != addons.length; i++) {
+                if (addons[i] != null) {
+                    SkriptAddon add = addons[i];
+                    scriptsList.getItems().add(add.getName() + "-" + add.getVersion());
+                }
+            }
+        loadAddons();
 
     }
-
-
 
 
 }

@@ -27,7 +27,7 @@ public class MCServer {
     private ServerVersion version;
     private Skript skript;
     private String notes;
-    private SkriptAddon[] addons;
+    private SkriptAddon[] skriptAddons;
 
     private String startArgs;
     private String generatorSettings;
@@ -91,6 +91,23 @@ public class MCServer {
             this.plFolderPath = sec.get("Plugin-folder");
             this.notes = sec.get("Notes");
             this.startArgs = sec.get("StargArgs");
+
+
+            Profile.Section adds = ini.get("Skript-Addons");
+            int addonsSize = adds.size();
+           skriptAddons=  new SkriptAddon[addonsSize];
+            int i = 0;
+            for (String str : adds.values()) {
+
+
+                if (!str.equals(null) && !str.equals("")) {
+
+
+                    skriptAddons[i] = new SkriptAddon(str.toLowerCase());
+                    i++;
+                }
+            }
+
 
             if (Main.debugMode) {
 
@@ -311,19 +328,53 @@ public class MCServer {
 
             Ini info = new Ini(infoFile);
 
-            Profile.Section mainSec = info.add("Info");
+            Profile.Section mainSec = info.get("Info");
             mainSec.put("Server-name", name);
             mainSec.put("Version-Path", version.getPath().toLowerCase());
             mainSec.put("mainPath", path.toLowerCase());
             mainSec.put("Skript", skript.getPath().toLowerCase());
             mainSec.put("Plugin-folder", this.plFolderPath);
 
-            Profile.Section addons = info.add("Skript-Addons");
-            addons.put("Placeholder", "");
+            Profile.Section addons = info.get("Skript-Addons");
+
+            for(String key : addons.keySet()) {
+                String entry = addons.get(key);
+                System.out.println(entry);
+                boolean toDelete = true;
+                for(int i = 0; i != skriptAddons.length; i++) {
+
+                    String path = skriptAddons[i].getPath().toLowerCase();
+                    System.out.println(path);
+                    if(entry.equalsIgnoreCase(path)) {
+                        toDelete = false;
+                    }
+
+                }
+                if(toDelete) {
+                    addons.remove(entry);
+                    info.store();
+                    System.out.println("lol---");
+                }
+            }
+
+            if(this.skriptAddons.length != 0) {
+
+                for (int i = 0; i != skriptAddons.length; i++) {
+                    if (skriptAddons.length > 0) {
+                        if (addons.containsKey("Placeholder")) {
+                            addons.remove("Placeholder");
+                        }
+                    }
+                    if(skriptAddons[i] != null) {
+                        addons.put(skriptAddons[i].getName() + "-" + skriptAddons[i].getVersion(), skriptAddons[i].getPath());
+                    }
+                }
+            }
 
             info.store();
 
             updateServer(this.name, this.version.getVersion(), new File(this.path));
+            SkriptAddon.compareAndSet(skriptAddons, new File(this.plFolderPath));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -331,6 +382,7 @@ public class MCServer {
 
 
     }
+
 
     public void startServer() {
 
@@ -352,12 +404,7 @@ public class MCServer {
 
             SceneManager.runningServer = MCServer.this;
             Process finalP = p;
-            Thread writer = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    MCServer.this.writer = new BufferedWriter(new OutputStreamWriter(finalP.getOutputStream()));
-                }
-            });
+            Thread writer = new Thread(() -> MCServer.this.writer = new BufferedWriter(new OutputStreamWriter(finalP.getOutputStream())));
             writer.start();
 
 
@@ -371,27 +418,23 @@ public class MCServer {
                 while ((line = MCServer.this.reader.readLine()) != null) {
                     String finalLine = line;
 
-                    Thread sender = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
+                    Thread sender = new Thread(() -> {
 
-                            if(finalLine != "" && finalLine != null) {
-                                javafx.application.Platform.runLater( () -> SceneManager.consoleOut.appendText(finalLine + System.getProperty("line.separator")) );
+                        if (finalLine != "" && finalLine != null) {
+                            javafx.application.Platform.runLater(() -> SceneManager.consoleOut.appendText(finalLine + System.getProperty("line.separator")));
 
 
-                            } else {
-
-                            }
-
-
-
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
+                        } else {
+                            System.out.println("");
                         }
+
+
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
                     });
                     sender.start();
 
@@ -585,14 +628,13 @@ public class MCServer {
                         @Override
                         public void run() {
 
-                            if(finalLine != "" && finalLine != null) {
-                                javafx.application.Platform.runLater( () -> SceneManager.consoleOut.appendText(finalLine + System.getProperty("line.separator")) );
+                            if (finalLine != "" && finalLine != null) {
+                                javafx.application.Platform.runLater(() -> SceneManager.consoleOut.appendText(finalLine + System.getProperty("line.separator")));
 
 
                             } else {
 
                             }
-
 
 
                             try {
@@ -648,6 +690,13 @@ public class MCServer {
             }
         }
         return (directory.delete());
+    }
+
+    public SkriptAddon[] getSkriptAddons() {
+        if(this.skriptAddons != null) {
+            return this.skriptAddons;
+        }
+       return null;
     }
 
     public String getPlFolderPath() {
@@ -966,6 +1015,10 @@ public class MCServer {
         this.plFolderPath = value;
     }
 
+    public void setAddons(SkriptAddon[] addons) {
+        this.skriptAddons = addons;
+    }
+
     public static ObservableList<MCServer> getAllServers() {
         String current = null;
 
@@ -1139,7 +1192,7 @@ public class MCServer {
 
             if (sec.getChild(path.toLowerCase()) != null) {
                 sec.removeChild(path.toLowerCase());
-                if(sec.size() == 0) {
+                if (sec.size() == 0) {
                     sec.put("Placeholder", "");
                 }
             }

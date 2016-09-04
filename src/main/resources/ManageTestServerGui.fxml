@@ -10,11 +10,11 @@
       <Button fx:id="createServerBtn" layoutX="14.0" layoutY="198.0" mnemonicParsing="false" text="Create new Server" />
       <Button fx:id="deleteServerBtn" layoutX="132.0" layoutY="198.0" mnemonicParsing="false" onAction="#deleteServer" text="Delete" />
       <ListView fx:id="scriptsList" layoutX="530.0" layoutY="39.0" prefHeight="158.0" prefWidth="276.0" />
-      <Button fx:id="addScriptAddonBtn" layoutX="689.0" layoutY="198.0" mnemonicParsing="false" text="Add" />
+      <Button fx:id="addScriptAddonBtn" layoutX="689.0" layoutY="198.0" mnemonicParsing="false" onAction="#addAddon" text="Add" />
       <Label layoutX="14.0" layoutY="14.0" text="Server:" />
       <Label layoutX="541.0" layoutY="14.0" text="Script-Addons" />
       <ComboBox fx:id="chooseScriptAddonComboBox" layoutX="530.0" layoutY="198.0" prefWidth="150.0" />
-      <Button fx:id="remScriptAddonBtn" layoutX="747.0" layoutY="198.0" mnemonicParsing="false" text="Remove" />
+      <Button fx:id="remScriptAddonBtn" layoutX="747.0" layoutY="198.0" mnemonicParsing="false" onAction="#remAddon" text="Remove" />
       <Button fx:id="confirmBtn" layoutX="776.0" layoutY="512.0" mnemonicParsing="false" onAction="#proceed" text="Ok" />
       <Label layoutX="290.0" layoutY="23.0" text="Main-Settings" />
       <Label layoutX="290.0" layoutY="40.0" text="Name" />
@@ -29,7 +29,7 @@
       <TextArea fx:id="notesTexrArea" layoutX="618.0" layoutY="381.0" prefHeight="96.0" prefWidth="190.0" />
       <Label layoutX="618.0" layoutY="359.0" text="Notes" />
       <Label layoutX="287.0" layoutY="155.0" text="Path" />
-      <Button fx:id="saveChangesBtn" layoutX="189.0" layoutY="198.0" mnemonicParsing="false" onAction="#saveChanngesToServer" text="Save Changes" />
+      <Button fx:id="saveChangesBtn" layoutX="189.0" layoutY="198.0" mnemonicParsing="false" onAction="#saveChangesToServer" text="Save Changes" />
       <Label layoutX="14.0" layoutY="231.0" text="Start parameters" />
       <TextField fx:id="startArgsTextField" layoutX="14.0" layoutY="248.0" prefHeight="25.0" prefWidth="265.0" />
       <TextField fx:id="generatorSettingsTextField" layoutX="14.0" layoutY="296.0" prefHeight="25.0" prefWidth="265.0" />

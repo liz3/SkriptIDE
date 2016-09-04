@@ -415,26 +415,27 @@ public class IdeGuiController {
         String selection = projectsList.getSelectionModel().getSelectedItem();
 
 
-        Project project = new Project(selection);
-        if (!SceneManager.openProjects.contains(project.getName())) {
-            Tab tab = new Tab(project.getName());
+        if (selection != null) {
+            Project project = new Project(selection);
+            if (!SceneManager.openProjects.contains(project.getName())) {
+                Tab tab = new Tab(project.getName());
 
-            codeTabPane.getTabs().add(tab);
+                codeTabPane.getTabs().add(tab);
 
-            tab.setContent(area);
+                tab.setContent(area);
 
-            File skript = new File(project.getSkriptPath().replace("/", "/"));
-
-
-            CodeReader reader = new CodeReader(skript);
-
-            area.appendText(reader.getCode());
+                File skript = new File(project.getSkriptPath().replace("/", "/"));
 
 
-            SceneManager.openProjects.add(project.getName());
+                CodeReader reader = new CodeReader(skript);
 
-            ControlMain.controlCode(area);
+                area.appendText(reader.getCode());
 
+
+                SceneManager.openProjects.add(project.getName());
+
+                ControlMain.controlCode(area);
+            }
 
         }
     }
