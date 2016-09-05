@@ -79,7 +79,9 @@ public class SceneManager extends Application {
 
 		Scene mainScene = new Scene(mainParent, 900, 530);
 
+		/*For dark theme.
 		ThemeCreator.setTheme(mainScene, new Dark());
+		*/
 
 		mainScene.getStylesheets().add("Highlighting.css");
 		mainWindow.setTitle("ScriptIDE");
