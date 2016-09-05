@@ -7,9 +7,8 @@ import com.skriptide.guis.manageadds.ManageAddsGuiController;
 import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.startgui.StartGuiController;
 import com.skriptide.main.Main;
-import com.skriptide.theme.ThemeCreator;
-import com.skriptide.theme.themes.Dark;
 import com.skriptide.util.Config;
+import com.skriptide.util.IDEPrintWriter;
 import com.skriptide.util.MCServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -49,6 +48,7 @@ public class SceneManager extends Application {
 	private ManageAddsGuiController manageAddsGuiController;
 	private StartGuiController startGuiController;
 	private ManageServerController manageServerController;
+	DebuggerController debuggerController;
 
 	public static void cleanUP() {
 
@@ -93,7 +93,7 @@ public class SceneManager extends Application {
 
 		mainWindow.show();
 		ideGuiController = mainLoader.getController();
-
+		openDebugger();
 		if (Main.debugMode) {
 			System.out.println("Main Gui loading finished");
 		}
@@ -143,13 +143,14 @@ public class SceneManager extends Application {
 			debugger.setTitle("Skript IDE Debugger");
 
 			debugger.centerOnScreen();
-
-
+			debuggerController = debuggerLoader.getController();
 
 
 		}
-		debugger.show();
 
+		debugger.show();
+		debuggerController.setOut();
+		System.setOut(new IDEPrintWriter(System.out));
 
 		if (Main.debugMode) {
 			System.out.println("loaded debugger window");
