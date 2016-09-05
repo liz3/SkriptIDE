@@ -1,8 +1,6 @@
 package com.lapiz.config;
 
 import com.google.common.io.Files;
-import com.lapiz.Lapiz;
-import com.lapiz.utils.logger.Log;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
@@ -41,8 +39,7 @@ public abstract class BaseConfig {
             }
 
         } catch (FileNotFoundException e) {
-            Lapiz.LOGGER.log(Log.SEVERE, "An error occured loading config: " + getConfFile().getName());
-
+            e.printStackTrace();
         }
 
     }
@@ -56,7 +53,7 @@ public abstract class BaseConfig {
             }
 
         } catch (IOException e) {
-            Lapiz.LOGGER.log(Log.SEVERE, "An error occured creating config: " + getConfFile().getName());
+            e.printStackTrace();
 
         }
     }
@@ -65,7 +62,7 @@ public abstract class BaseConfig {
         try {
             yaml.dump(getValues(), new BufferedWriter(new FileWriter(getConfFile())));
         } catch (IOException e) {
-            Lapiz.LOGGER.log(Log.SEVERE, "An error occured saving config: " + getConfFile().getName());
+            e.printStackTrace();
         }
     }
 
