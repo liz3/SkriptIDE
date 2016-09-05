@@ -7,9 +7,9 @@ import com.skriptide.guis.manageadds.ManageAddsGuiController;
 import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.startgui.StartGuiController;
 import com.skriptide.main.Main;
+import com.skriptide.theme.ThemeCreator;
+import com.skriptide.theme.themes.Dark;
 import com.skriptide.util.Config;
-import com.skriptide.util.IDEPrintWriter;
-import com.skriptide.util.IDESystemErr;
 import com.skriptide.util.MCServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -49,7 +49,6 @@ public class SceneManager extends Application {
 	private ManageAddsGuiController manageAddsGuiController;
 	private StartGuiController startGuiController;
 	private ManageServerController manageServerController;
-	private DebuggerController debuggerController;
 
 	public static void cleanUP() {
 
@@ -80,6 +79,8 @@ public class SceneManager extends Application {
 
 		Scene mainScene = new Scene(mainParent, 900, 530);
 
+		ThemeCreator.setTheme(mainScene, new Dark());
+
 		mainScene.getStylesheets().add("Highlighting.css");
 		mainWindow.setTitle("ScriptIDE");
 		mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
@@ -87,8 +88,8 @@ public class SceneManager extends Application {
 		mainWindow.setMinHeight(520);
 		mainWindow.setMinWidth(885);
 		mainWindow.centerOnScreen();
+
 		mainWindow.show();
-		openDebugger();
 		ideGuiController = mainLoader.getController();
 
 		if (Main.debugMode) {
@@ -145,10 +146,6 @@ public class SceneManager extends Application {
 
 
 		}
-		System.setOut(new IDEPrintWriter(System.out));
-		System.setErr(new IDESystemErr(System.err));
-		debuggerController = debuggerLoader.getController();
-		debuggerController.setOut();
 		debugger.show();
 
 

@@ -5,5 +5,5 @@ public interface Theme {
     String getName();
 
     String getThemeCss();
-
+    
 }
