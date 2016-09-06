@@ -3,6 +3,7 @@ package com.skriptide.guis;
 import com.skriptide.guis.createprojectgui.CreateProjectGuiController;
 import com.skriptide.guis.createserver.CreateServerGuiController;
 import com.skriptide.guis.idegui.IdeGuiController;
+import com.skriptide.guis.info.InfoGuiController;
 import com.skriptide.guis.manageadds.ManageAddsGuiController;
 import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.startgui.StartGuiController;
@@ -14,16 +15,14 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * Created by Liz3ga on 27.07.2016.
@@ -37,17 +36,19 @@ public class SceneManager extends Application {
 	public static ListView projectsList;
 	public static ComboBox<String> runninServerList;
 	public static TextArea debugArea;
+	public static ProgressBar procBar;
 
 
-	public Stage mainWindow, welcomeWindow, createNewProjectWindow, createNewServerWindow, addsManager, manageServer, debugger;
-	private FXMLLoader mainLoader = new FXMLLoader(), welcomeLoader = new FXMLLoader(), createNewProjectLoader = new FXMLLoader(), createNewServerLoader = new FXMLLoader(), addManagerLoader = new FXMLLoader(), manageServerLoader = new FXMLLoader(), debuggerLoader = new FXMLLoader();
-	private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null, createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null, debuggerParent = null;
+	public Stage mainWindow, welcomeWindow, createNewProjectWindow, createNewServerWindow, addsManager, manageServer, debugger, info;
+	private FXMLLoader mainLoader = new FXMLLoader(), welcomeLoader = new FXMLLoader(), createNewProjectLoader = new FXMLLoader(), createNewServerLoader = new FXMLLoader(), addManagerLoader = new FXMLLoader(), manageServerLoader = new FXMLLoader(), debuggerLoader = new FXMLLoader(), infoLoader = new FXMLLoader();
+	private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null, createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null, debuggerParent = null, infoParent = null;
 	private CreateProjectGuiController createProjectGuiController;
 	private CreateServerGuiController createServerGuiController;
 	private IdeGuiController ideGuiController;
 	private ManageAddsGuiController manageAddsGuiController;
 	private StartGuiController startGuiController;
 	private ManageServerController manageServerController;
+	private InfoGuiController infoGuiController;
 	DebuggerController debuggerController;
 
 	public static void cleanUP() {
@@ -124,6 +125,25 @@ public class SceneManager extends Application {
 		}
 
 
+	}
+
+	public boolean infoCheck(String title, String header, String body) {
+
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+		alert.setTitle(title);
+		alert.setHeaderText(header);
+		alert.setContentText(body);
+		alert.setResizable(false);
+		alert.setGraphic(null);
+
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public void openDebugger() {
@@ -224,6 +244,7 @@ public class SceneManager extends Application {
 
 	}
 
+
 	public void openCreateServer() {
 
 		if (createNewServerWindow == null) {
@@ -261,6 +282,7 @@ public class SceneManager extends Application {
 			addsManager = new Stage();
 
 			addsManagerParent = addManagerLoader.load(getClass().getResourceAsStream("/ManageAddsGui.fxml"));
+			addsManager.initOwner(mainWindow);
 			addsManager.setTitle("Manage Addons");
 			addsManager.setScene(new Scene(addsManagerParent, 670, 455));
 			addsManager.setResizable(false);
@@ -280,6 +302,7 @@ public class SceneManager extends Application {
 	public void openManageServer() {
 
 		if (manageServerParent == null) {
+
 			manageServer = new Stage();
 
 			try {
@@ -290,7 +313,7 @@ public class SceneManager extends Application {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
+			manageServer.initOwner(mainWindow);
 			manageServer.setTitle("Manage Servers");
 			manageServer.setScene(new Scene(manageServerParent, 820, 550));
 

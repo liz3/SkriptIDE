@@ -21,7 +21,7 @@
                   <Button mnemonicParsing="false" onAction="#startServer" text="Start!" />
                   <Button fx:id="stopServerBtn" mnemonicParsing="false" text="Stop" />
                   <Button fx:id="restartServerBtn" mnemonicParsing="false" text="Restart" />
-                  <ProgressBar prefHeight="18.0" prefWidth="120.0" progress="0.0" />
+                  <ProgressBar fx:id="mainProcessBar" prefHeight="18.0" prefWidth="136.0" progress="0.0" />
                </children>
             </HBox>
          </children>
@@ -30,12 +30,12 @@
    <center>
       <BorderPane BorderPane.alignment="CENTER">
          <center>
-            <TabPane fx:id="codeTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+            <TabPane fx:id="codeTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
    </center>
    <left>
-      <ListView fx:id="projectsList" onMouseClicked="#openProject" prefHeight="351.0" prefWidth="177.0" BorderPane.alignment="CENTER" />
+      <ListView fx:id="projectsList" prefHeight="351.0" prefWidth="177.0" BorderPane.alignment="CENTER" />
    </left>
    <top>
       <VBox BorderPane.alignment="CENTER">

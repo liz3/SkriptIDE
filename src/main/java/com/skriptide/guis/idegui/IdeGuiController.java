@@ -13,11 +13,13 @@ import com.skriptide.util.skunityapi.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -28,6 +30,7 @@ import org.fxmisc.richtext.StyleClassedTextArea;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.security.Key;
 import java.util.ArrayList;
 
 /**
@@ -62,6 +65,8 @@ public class IdeGuiController {
 	public Label pathLabel;
 	@FXML
 	public MenuItem debuggingPoint;
+	@FXML
+	public ProgressBar mainProcessBar;
 
 	private SceneManager sceneManager = new SceneManager();
 	private ListView<String> chooseView;
@@ -69,6 +74,7 @@ public class IdeGuiController {
 	private Popup win;
 	private ArrayList<String> all = new ArrayList<>();
 	private int pos = 0;
+	private ContextMenu menu;
 
 	private void setList() {
 
@@ -122,7 +128,7 @@ public class IdeGuiController {
 			}
 		});
 
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("loaded list");
 		}
 	}
@@ -146,7 +152,7 @@ public class IdeGuiController {
 			win.show(stage);
 			chooseView.setVisible(true);
 			showList = true;
-			if(Main.debugMode) {
+			if (Main.debugMode) {
 				System.out.println("showed list");
 			}
 
@@ -155,6 +161,7 @@ public class IdeGuiController {
 
 
 	}
+
 
 	public void updateList() {
 
@@ -169,18 +176,17 @@ public class IdeGuiController {
 			for (index = text.length() - 1; index >= 0 && !Character.isWhitespace(text.charAt(index)); index--) ;
 			String prefix = text.substring(index + 1, text.length());
 
+			System.out.println(prefix);
 			if (chooseView.isVisible()) {
 				javafx.application.Platform.runLater(() -> {
 
 
-							for (String str : chooseView.getItems().sorted()) {
+					chooseView.getItems().sorted().stream().filter(str -> !str.toLowerCase().contains(prefix.toLowerCase())).forEach(str -> {
+						chooseView.getItems().remove(str);
+						all.add(str);
+						chooseView.refresh();
+					});
 
-								if (!str.toLowerCase().contains(prefix.toLowerCase())) {
-									chooseView.getItems().remove(str);
-									all.add(str);
-									chooseView.refresh();
-								}
-							}
 							ArrayList<String> toRemove = new ArrayList<String>();
 							for (int i = 0; i != all.size(); i++) {
 								String current = all.get(i);
@@ -239,7 +245,7 @@ public class IdeGuiController {
 
 		});
 
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("Updatet list");
 		}
 	}
@@ -293,7 +299,7 @@ public class IdeGuiController {
 
 
 		}
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("set word: " + prefix);
 		}
 	}
@@ -304,10 +310,11 @@ public class IdeGuiController {
 
 			KeyCode code = event.getCode();
 
-			if(code == KeyCode.ENTER) {
+			if (code == KeyCode.ENTER) {
 				sendCommand();
 			}
 		});
+		SceneManager.procBar = this.mainProcessBar;
 		SceneManager.consoleOut = consoleOutputTextArea;
 		SceneManager.runningServerLabel = runningServerLabel;
 		SceneManager.projectsList = this.projectsList;
@@ -319,21 +326,23 @@ public class IdeGuiController {
 					@Override
 					public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
 						Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-						String name = tab.getText();
 
-						ObservableList<Project> prs = Project.getProjects();
-						for (Project project : prs.sorted()) {
-							if (project.getName().equalsIgnoreCase(name)) {
 
-								pathLabel.setText(project.getSkriptPath());
+						if (tab != null) {
+							String name = tab.getText();
+							ObservableList<Project> prs = Project.getProjects();
+							for (Project project : prs.sorted()) {
+								if (project.getName().equalsIgnoreCase(name)) {
+
+									pathLabel.setText(project.getSkriptPath());
+								}
 							}
 						}
-
 					}
 				}
 		);
 
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("Loaded window");
 		}
 	}
@@ -353,7 +362,7 @@ public class IdeGuiController {
 				e.printStackTrace();
 			}
 		}
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("sendet command");
 		}
 	}
@@ -372,13 +381,14 @@ public class IdeGuiController {
 				project.runProject();
 			}
 		}
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 
 			System.out.println("started project");
 		}
 	}
 
 	public void loadInProjects() {
+
 
 		if (Config.checkConfig() == 0) {
 			ObservableList<Project> projects = Project.getProjects();
@@ -389,14 +399,113 @@ public class IdeGuiController {
 				}
 			}
 		}
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("Loaded projects");
 		}
+
+		projectsList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+
+				MouseButton btn = event.getButton();
+
+				if (btn == MouseButton.SECONDARY) {
+					if (menu == null || !menu.isShowing()) {
+						menu = new ContextMenu();
+						MenuItem item = new MenuItem("Delete");
+						MenuItem item1 = new MenuItem("Rename");
+						MenuItem item2 = new MenuItem("Move");
+						Menu serverList = new Menu("Change server");
+						item.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								ObservableList<Project> prs = Project.getProjects();
+								for (Project pr : prs) {
+									if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
+										pr.deleteProject();
+									}
+								}
+							}
+						});
+						item1.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								ObservableList<Project> prs = Project.getProjects();
+								for (Project pr : prs) {
+									if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
+										pr.reNameProject();
+									}
+								}
+							}
+						});
+						item2.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								ObservableList<Project> prs = Project.getProjects();
+								for (Project pr : prs) {
+									if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
+										pr.moveProject();
+									}
+								}
+							}
+						});
+						for (MenuItem selected : serverList.getItems()) {
+
+							selected.setOnAction(new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent event) {
+									ObservableList<Project> prs = Project.getProjects();
+									for (Project pr : prs) {
+										if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
+											pr.changeServer(selected.getText());
+										}
+									}
+								}
+							});
+						}
+
+
+						ObservableList<MCServer> servers = MCServer.getAllServers();
+						ObservableList<Project> prs = Project.getProjects();
+						for (MCServer srv : servers.sorted()) {
+							for (Project pr : prs.sorted()) {
+								if (pr.getName().equalsIgnoreCase(projectsList.getSelectionModel().getSelectedItem())) {
+									if (pr.getServer().getname().equalsIgnoreCase(srv.getname())) {
+										MenuItem srvItem = new MenuItem(srv.getname() + " (Current)");
+										serverList.getItems().add(srvItem);
+									} else {
+										MenuItem srvItem = new MenuItem(srv.getname());
+										serverList.getItems().add(srvItem);
+									}
+								}
+							}
+						}
+						menu.getItems().clear();
+						menu.getItems().addAll(item, item1, item2, serverList);
+
+
+						menu.show(projectsList, event.getScreenX(), event.getScreenY());
+					}
+
+
+				} else if (btn == MouseButton.PRIMARY) {
+
+					if (menu == null || !menu.isShowing()) {
+						openProject();
+					} else {
+						if (menu.isShowing() && menu != null) {
+							menu.hide();
+						}
+					}
+				}
+			}
+		});
 	}
 
 	public void triggerDebugger() {
 		sceneManager.openDebugger();
 	}
+
 	public void loadInServers() {
 
 		serverListComboBox.getItems().setAll();
@@ -405,7 +514,7 @@ public class IdeGuiController {
 			serverListComboBox.getItems().add(srv.getname());
 		}
 
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("Loaded servers");
 		}
 
@@ -419,7 +528,7 @@ public class IdeGuiController {
 				srv.startServer();
 			}
 		}
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 
 			System.out.println("start server");
 		}
@@ -429,7 +538,7 @@ public class IdeGuiController {
 
 		sceneManager.openCreateProject();
 
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("open new project");
 		}
 
@@ -438,7 +547,7 @@ public class IdeGuiController {
 	public void newServer() {
 
 		sceneManager.openCreateServer();
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("open new server");
 		}
 	}
@@ -446,7 +555,7 @@ public class IdeGuiController {
 	public void manageAddons() throws IOException {
 
 		sceneManager.openManageVersions();
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 
 			System.out.println("open manage addons");
 		}
@@ -456,11 +565,10 @@ public class IdeGuiController {
 	public void manageServers() {
 
 		sceneManager.openManageServer();
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("open manage server");
 		}
 	}
-
 
 
 	public void openProject() {
@@ -471,9 +579,11 @@ public class IdeGuiController {
 			public void handle(KeyEvent event) {
 
 				KeyCode code = event.getCode();
+				if(event.isControlDown() && code == KeyCode.SPACE) {
+					chooseList();
+					updateList();
 
-
-				chooseList();
+				}
 
 
 			}
@@ -505,7 +615,7 @@ public class IdeGuiController {
 			}
 
 		}
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("Open project");
 		}
 	}
@@ -524,7 +634,7 @@ public class IdeGuiController {
 
 
 		}
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("Saved open projects!");
 		}
 	}

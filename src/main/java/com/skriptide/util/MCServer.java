@@ -80,7 +80,7 @@ public class MCServer {
 		this.notes = notes;
 		this.startArgs = startArgs;
 
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("Server values set");
 		}
 	}
@@ -126,7 +126,7 @@ public class MCServer {
 			e.printStackTrace();
 		}
 
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("Loaded settings from server");
 		}
 
@@ -154,7 +154,7 @@ public class MCServer {
 
 				values.add(new MCServer(n));
 			}
-			if(Main.debugMode) {
+			if (Main.debugMode) {
 				System.out.println("Returning all servers");
 			}
 			return values;
@@ -205,7 +205,7 @@ public class MCServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("Added server");
 		}
 
@@ -276,7 +276,7 @@ public class MCServer {
 
 			String path = child.get("Info");
 
-			if(Main.debugMode) {
+			if (Main.debugMode) {
 				System.out.println("returning server path");
 			}
 			return path;
@@ -548,7 +548,7 @@ public class MCServer {
 			updateServer(this.name, this.version.getVersion(), new File(this.path));
 			SkriptAddon.compareAndSet(skriptAddons, new File(this.plFolderPath));
 
-			if(Main.debugMode) {
+			if (Main.debugMode) {
 				System.out.println("uptaded server" + this.getname());
 			}
 		} catch (IOException e) {
@@ -575,7 +575,7 @@ public class MCServer {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if(Main.debugMode) {
+			if (Main.debugMode) {
 				System.out.println("Server Process started");
 			}
 			SceneManager.runningServer = MCServer.this;
@@ -773,19 +773,47 @@ public class MCServer {
 
 		startServer();
 		addServer(this.name, this.version.getVersion(), new File(this.path));
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("Server created: " + this.getname());
 		}
 	}
 
 	public void deleteServer() {
-		File folder = new File(this.path.replace("\\", "/"));
-		System.out.println(path);
-		deleteDirectory(folder);
-		removeServer(this.path.toLowerCase().replace("/", "\\"));
-		if(Main.debugMode) {
-			System.out.println("Deleted server!");
+
+		ObservableList<Project> projects = Project.getProjects();
+		int t = 0;
+		for (Project pr : projects) {
+			if (pr.getServer().getname().equalsIgnoreCase(this.getname())) {
+				t++;
+			}
 		}
+		if (t != 0) {
+			boolean isToDelete = new SceneManager().infoCheck("Delete Server", "Delete Server: " + this.getname(), "This server is bounded to: " + t
+					+ " Projects, you will have to change the Server manually to another?");
+
+			if (isToDelete) {
+				File folder = new File(this.path.replace("\\", "/"));
+				System.out.println(path);
+
+				deleteDirectory(folder);
+				removeServer(this.path.toLowerCase().replace("/", "\\"));
+				if (Main.debugMode) {
+					System.out.println("Deleted server!");
+				}
+			} else {
+
+			}
+		} else {
+			File folder = new File(this.path.replace("\\", "/"));
+			System.out.println(path);
+
+			deleteDirectory(folder);
+			removeServer(this.path.toLowerCase().replace("/", "\\"));
+			if (Main.debugMode) {
+				System.out.println("Deleted server!");
+			}
+		}
+
 	}
 
 	private boolean deleteDirectory(File directory) {
@@ -1154,18 +1182,19 @@ public class MCServer {
 
 			if (sec.getChild(path.toLowerCase()) != null) {
 				sec.removeChild(path.toLowerCase());
-				if (sec.size() == 0) {
-					sec.put("Placeholder", "");
-				}
+
 			}
 
+			if (sec.size() == 0) {
+				sec.put("Placeholder", "");
+			}
 			cfg.store();
 
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("Removed server from config");
 		}
 	}
