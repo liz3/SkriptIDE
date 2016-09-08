@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="82.0" prefWidth="432.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.info.InfoGuiController">
+   <children>
+      <Button fx:id="okBtn" layoutX="370.0" layoutY="46.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Ok" />
+      <Button fx:id="cancelBtn" layoutX="311.0" layoutY="46.0" mnemonicParsing="false" text="Cancel" />
+      <Label fx:id="label" alignment="CENTER" layoutX="14.0" layoutY="21.0" prefHeight="17.0" prefWidth="407.0" text="Label" />
+   </children>
+</Pane>
