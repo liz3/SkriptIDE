@@ -15,7 +15,7 @@ public abstract class BaseConfig {
     private Map<String, Object> values;
 
     public BaseConfig(String path) {
-        confFile = new File("config/" + path);
+        confFile = new File(path);
 
         create();
         load();
