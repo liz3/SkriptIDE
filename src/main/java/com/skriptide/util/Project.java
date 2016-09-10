@@ -104,7 +104,10 @@ public class Project {
 			ObservableList<Project> values = FXCollections.observableArrayList();
 
 
-			values.addAll(sec.keySet().stream().map(Project::new).collect(Collectors.toList()));
+			for (String n : sec.childrenNames()) {
+
+				values.add(new Project(n));
+			}
 			if (Main.debugMode) {
 				System.out.println("project list called");
 			}

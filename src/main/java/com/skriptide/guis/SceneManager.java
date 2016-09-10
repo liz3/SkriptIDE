@@ -12,12 +12,15 @@ import com.skriptide.util.Config;
 import com.skriptide.util.IDEPrintWriter;
 import com.skriptide.util.MCServer;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.fxmisc.richtext.CodeArea;
 
 import java.io.IOException;
@@ -98,6 +101,47 @@ public class SceneManager extends Application {
 		if (Main.debugMode) {
 			System.out.println("Main Gui loading finished");
 		}
+		mainScene.getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent ev) {
+
+					if(ideGuiController.codeTabPane.getTabs().size() != 0) {
+						boolean save = infoCheck("Save", "Save Projects", "Do you want to save: " + ideGuiController.codeTabPane.getTabs().size() + " projects before close?");
+						if(save) {
+							ideGuiController.saveOpenProjects();
+						}
+					}
+					if(runningServer != null) {
+						boolean save = infoCheck("Stop Server" , "Stop running Server" , "The server: " + runningServer.getname() + " is running, stop the server? Otherwise the process will be killed!");
+						if(save) {
+							ideGuiController.comandSendTextField.setText("stop");
+							ideGuiController.sendCommand();
+							Thread t = new Thread(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										Thread.currentThread().sleep(10000);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
+									Platform.exit();
+									System.exit(0);
+								}
+							});
+							t.start();
+						} else {
+							runningServer = null;
+							Platform.exit();
+							System.exit(0);
+						}
+					} else {
+						Platform.exit();
+						System.exit(0);
+					}
+
+
+				}
+
+		});
 
 
 		ideGuiController.setConsoleArea();

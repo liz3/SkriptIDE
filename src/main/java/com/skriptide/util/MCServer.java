@@ -15,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by Liz3ga on 28.07.2016.
@@ -135,7 +136,6 @@ public class MCServer {
 	public static ObservableList<MCServer> getAllServers() {
 		String current = null;
 
-
 		try {
 			current = new File(".").getCanonicalPath();
 
@@ -147,6 +147,7 @@ public class MCServer {
 				cfg = new Ini(configFile);
 			} catch (IOException e) {
 				e.printStackTrace();
+				return null;
 			}
 			Profile.Section sec = cfg.get("Servers");
 			ObservableList<MCServer> values = FXCollections.observableArrayList();
@@ -622,6 +623,7 @@ public class MCServer {
 
 				}
 				System.out.println("Server stopped?");
+				SceneManager.runningServer = null;
 			} catch (IOException e) {
 
 				try {
