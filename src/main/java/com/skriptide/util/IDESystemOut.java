@@ -11,10 +11,10 @@ import java.util.Calendar;
 /**
  * Created by Liz3ga on 04.09.2016.
  */
-public class IDEPrintWriter extends PrintStream {
+public class IDESystemOut extends PrintStream {
 
 
-	public IDEPrintWriter(PrintStream out) {
+	public IDESystemOut(PrintStream out) {
 		super(out);
 	}
 

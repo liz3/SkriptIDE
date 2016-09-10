@@ -12,7 +12,7 @@ public class Main {
 	public static SceneManager sceneManager;
 	public static boolean debugMode;
 
-	public static void main(String[] args) {
+	public static void main(String[] args)  throws Exception {
 
 
 		try {
@@ -20,6 +20,7 @@ public class Main {
 		} catch (Exception e) {
 			System.err.println("First run?");
 		}
+
 		sceneManager = new SceneManager();
 		sceneManager.runMain();
 

@@ -9,7 +9,7 @@ import java.util.Calendar;
 /**
  * Created by Liz3ga on 04.09.2016.
  */
-public class IDESystemErr  extends PrintStream {
+public class IDESystemErr extends PrintStream {
 
 
 	public IDESystemErr(PrintStream err) {
@@ -22,8 +22,8 @@ public class IDESystemErr  extends PrintStream {
 		SimpleDateFormat sdf = new SimpleDateFormat("d.M.Y HH:mm:ss");
 		if (!msg.startsWith("["))
 			msg = " " + msg;
-		String f = "[" + sdf.format(cal.getTime()) + " | INFO]" + msg;
-		if(SceneManager.debugArea != null) {
+		String f = "[" + sdf.format(cal.getTime()) + " | ERROR]" + msg;
+		if (SceneManager.debugArea != null) {
 			SceneManager.debugArea.appendText(f + System.getProperty("line.separator"));
 		}
 
@@ -31,5 +31,12 @@ public class IDESystemErr  extends PrintStream {
 
 	}
 
+	@Override
+	public void println(Object msg) {
+		if (msg instanceof String)
+			println((String) msg);
+		else
+			super.println(msg);
+	}
 
 }

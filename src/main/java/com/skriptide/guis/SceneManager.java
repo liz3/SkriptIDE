@@ -7,9 +7,9 @@ import com.skriptide.guis.info.InfoGuiController;
 import com.skriptide.guis.manageadds.ManageAddsGuiController;
 import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.startgui.StartGuiController;
-import com.skriptide.main.Main;
 import com.skriptide.util.Config;
-import com.skriptide.util.IDEPrintWriter;
+import com.skriptide.util.IDESystemOut;
+import com.skriptide.util.IDESystemErr;
 import com.skriptide.util.MCServer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -26,6 +26,8 @@ import org.fxmisc.richtext.CodeArea;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
+
+import static com.skriptide.main.Main.debugMode;
 
 /**
  * Created by Liz3ga on 27.07.2016.
@@ -97,49 +99,50 @@ public class SceneManager extends Application {
 
 		mainWindow.show();
 		ideGuiController = mainLoader.getController();
-		openDebugger();
-		if (Main.debugMode) {
+
+		if (debugMode) {
+			openDebugger();
 			System.out.println("Main Gui loading finished");
 		}
 		mainScene.getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent ev) {
 
-					if(ideGuiController.codeTabPane.getTabs().size() != 0) {
-						boolean save = infoCheck("Save", "Save Projects", "Do you want to save: " + ideGuiController.codeTabPane.getTabs().size() + " projects before close?");
-						if(save) {
-							ideGuiController.saveOpenProjects();
-						}
+				if (ideGuiController.codeTabPane.getTabs().size() != 0) {
+					boolean save = infoCheck("Save", "Save Projects", "Do you want to save: " + ideGuiController.codeTabPane.getTabs().size() + " projects before close?");
+					if (save) {
+						ideGuiController.saveOpenProjects();
 					}
-					if(runningServer != null) {
-						boolean save = infoCheck("Stop Server" , "Stop running Server" , "The server: " + runningServer.getname() + " is running, stop the server? Otherwise the process will be killed!");
-						if(save) {
-							ideGuiController.comandSendTextField.setText("stop");
-							ideGuiController.sendCommand();
-							Thread t = new Thread(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										Thread.currentThread().sleep(10000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-									Platform.exit();
-									System.exit(0);
+				}
+				if (runningServer != null) {
+					boolean save = infoCheck("Stop Server", "Stop running Server", "The server: " + runningServer.getname() + " is running, stop the server? Otherwise the process will be killed!");
+					if (save) {
+						ideGuiController.comandSendTextField.setText("stop");
+						ideGuiController.sendCommand();
+						Thread t = new Thread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									Thread.currentThread().sleep(10000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
 								}
-							});
-							t.start();
-						} else {
-							runningServer = null;
-							Platform.exit();
-							System.exit(0);
-						}
+								Platform.exit();
+								System.exit(0);
+							}
+						});
+						t.start();
 					} else {
+						runningServer = null;
 						Platform.exit();
 						System.exit(0);
 					}
-
-
+				} else {
+					Platform.exit();
+					System.exit(0);
 				}
+
+
+			}
 
 		});
 
@@ -150,7 +153,7 @@ public class SceneManager extends Application {
 
 		if (configState == 0) {
 
-			if (Main.debugMode) {
+			if (debugMode) {
 				System.out.println("Trying to loading projects to mainGui");
 			}
 
@@ -159,7 +162,7 @@ public class SceneManager extends Application {
 
 		} else if (configState == 1) {
 
-			if (Main.debugMode) {
+			if (debugMode) {
 				System.out.println("Opening Welcome Screen");
 			}
 
@@ -214,9 +217,10 @@ public class SceneManager extends Application {
 
 		debugger.show();
 		debuggerController.setOut();
-		System.setOut(new IDEPrintWriter(System.out));
+		System.setOut(new IDESystemOut(System.out));
+		System.setErr(new IDESystemErr(System.err));
 
-		if (Main.debugMode) {
+		if (debugMode) {
 			System.out.println("loaded debugger window");
 		}
 
@@ -238,10 +242,10 @@ public class SceneManager extends Application {
 		welcomeWindow.setResizable(false);
 		welcomeWindow.centerOnScreen();
 		welcomeWindow.show();
-		if (Main.debugMode) {
+		if (debugMode) {
 			System.out.println("loaded welcome screen");
 		}
-		if (Main.debugMode) {
+		if (debugMode) {
 			System.out.println("Welcome scrren open");
 		}
 
@@ -252,7 +256,7 @@ public class SceneManager extends Application {
 		startGuiController.projectsPathField.setText("C:\\Users\\" + username + "\\Documents\\ScriptIDE\\Projects\\");
 
 		startGuiController.serverPathField.setText("C:\\Users\\" + username + "\\Documents\\ScriptIDE\\Servers\\");
-		if (Main.debugMode) {
+		if (debugMode) {
 
 			System.out.println("Set preset pathes");
 		}
@@ -279,7 +283,7 @@ public class SceneManager extends Application {
 		}
 
 		createNewProjectWindow.show();
-		if (Main.debugMode) {
+		if (debugMode) {
 			System.out.println("open create project");
 		}
 
@@ -310,7 +314,7 @@ public class SceneManager extends Application {
 
 		createNewServerWindow.show();
 
-		if (Main.debugMode) {
+		if (debugMode) {
 			System.out.println("create server window open");
 		}
 		createServerGuiController.setValues();
@@ -336,7 +340,7 @@ public class SceneManager extends Application {
 
 
 		addsManager.show();
-		if (Main.debugMode) {
+		if (debugMode) {
 			System.out.println("Manage adds window open");
 		}
 
@@ -368,7 +372,7 @@ public class SceneManager extends Application {
 
 
 		manageServer.show();
-		if (Main.debugMode) {
+		if (debugMode) {
 			System.out.println("open manage server!");
 		}
 		manageServerController.setValues();
