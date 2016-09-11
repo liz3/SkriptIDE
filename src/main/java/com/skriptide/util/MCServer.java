@@ -565,7 +565,7 @@ public class MCServer {
 
 		Thread t = new Thread(() -> {
 
-			SceneManager.cleanUP();
+
 			ProcessBuilder pb = new ProcessBuilder(System.getProperty("java.home") + "\\bin\\java.exe", "-jar", this.path + "/spigot.jar");
 			pb.directory(new File(path));
 
@@ -623,6 +623,10 @@ public class MCServer {
 				}
 				System.out.println("Server stopped?");
 				SceneManager.runningServer = null;
+				this.writer.close();
+				this.reader.close();
+				p.destroy();
+				Thread.currentThread().interrupt();
 			} catch (IOException e) {
 
 				try {

@@ -147,7 +147,7 @@ public class SceneManager extends Application {
 		});
 
 
-		ideGuiController.setConsoleArea();
+		ideGuiController.setUpWin();
 
 		int configState = Config.checkConfig();
 

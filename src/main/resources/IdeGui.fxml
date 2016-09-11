@@ -9,26 +9,41 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="519.0" prefWidth="886.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.idegui.IdeGuiController">
    <bottom>
-      <VBox prefHeight="145.0" prefWidth="886.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="lowerBox" prefHeight="168.0" prefWidth="886.0" BorderPane.alignment="CENTER">
          <children>
-            <CodeArea fx:id="consoleOutputTextArea" prefHeight="154.0" prefWidth="886.0" />
-            <HBox>
-               <children>
-                  <TextField fx:id="comandSendTextField" prefHeight="25.0" prefWidth="364.0" />
-                  <Button fx:id="commandSendBtn" maxHeight="-Infinity" mnemonicParsing="false" onAction="#sendCommand" text="Send" />
-                  <Label fx:id="runningServerLabel" prefHeight="25.0" prefWidth="54.0" text="Running:" />
-                  <ComboBox fx:id="serverListComboBox" onShowing="#loadInServers" prefWidth="150.0" />
-                  <Button mnemonicParsing="false" onAction="#startServer" text="Start!" />
-                  <Button fx:id="stopServerBtn" mnemonicParsing="false" text="Stop" />
-                  <Button fx:id="restartServerBtn" mnemonicParsing="false" text="Restart" />
-                  <ProgressBar fx:id="mainProcessBar" prefHeight="18.0" prefWidth="136.0" progress="0.0" />
-               </children>
-            </HBox>
+            <TabPane fx:id="lowerTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Project" />
+                <Tab text="Server">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <center>
+                              <CodeArea fx:id="consoleOutputTextArea" prefHeight="154.0" prefWidth="886.0" BorderPane.alignment="CENTER" />
+                           </center>
+                           <bottom>
+                              <HBox BorderPane.alignment="CENTER">
+                                 <children>
+                                    <TextField fx:id="comandSendTextField" prefHeight="25.0" prefWidth="364.0" />
+                                    <Button fx:id="commandSendBtn" maxHeight="-Infinity" mnemonicParsing="false" onAction="#sendCommand" text="Send" />
+                                    <Label fx:id="runningServerLabel" prefHeight="25.0" prefWidth="54.0" text="Running:" />
+                                    <ComboBox fx:id="serverListComboBox" onShowing="#loadInServers" prefWidth="150.0" />
+                                    <Button mnemonicParsing="false" onAction="#startServer" text="Start!" />
+                                    <Button fx:id="stopServerBtn" mnemonicParsing="false" text="Stop" />
+                                    <Button fx:id="restartServerBtn" mnemonicParsing="false" text="Restart" />
+                                    <ProgressBar fx:id="mainProcessBar" prefHeight="18.0" prefWidth="136.0" progress="0.0" />
+                                 </children>
+                              </HBox>
+                           </bottom>
+                        </BorderPane>
+                     </content>
+                </Tab>
+              </tabs>
+            </TabPane>
          </children>
       </VBox>
    </bottom>
    <center>
-      <BorderPane BorderPane.alignment="CENTER">
+      <BorderPane fx:id="mainBorderPane" BorderPane.alignment="CENTER">
          <center>
             <TabPane fx:id="codeTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER" />
          </center>
@@ -38,9 +53,9 @@
       <ListView fx:id="projectsList" prefHeight="351.0" prefWidth="177.0" BorderPane.alignment="CENTER" />
    </left>
    <top>
-      <VBox BorderPane.alignment="CENTER">
-         <children>
-            <MenuBar fx:id="mainMenuMenuBar">
+      <BorderPane prefHeight="53.0" prefWidth="886.0" BorderPane.alignment="CENTER">
+         <top>
+            <MenuBar fx:id="mainMenuMenuBar" BorderPane.alignment="CENTER">
                <menus>
                   <Menu mnemonicParsing="false" text="File">
                      <items>
@@ -56,7 +71,7 @@
                               <MenuItem mnemonicParsing="false" text="FTP/SFTP Upload" />
                            </items>
                         </Menu>
-                        <MenuItem mnemonicParsing="false" onAction="#manageAddons" text="Versions and Scripts" />
+                        <MenuItem mnemonicParsing="false" onAction="#manageAddons" text="Versions" />
                         <MenuItem mnemonicParsing="false" text="IDE Settings" />
                         <MenuItem fx:id="closeMenuPoint" mnemonicParsing="false" text="Close" />
                      </items>
@@ -76,21 +91,23 @@
                   <Menu mnemonicParsing="false" text="Help">
                      <items>
                         <MenuItem fx:id="debuggingPoint" mnemonicParsing="false" onAction="#triggerDebugger" text="Debugging" />
-                     </items></Menu>
+                     </items>
+                  </Menu>
                </menus>
             </MenuBar>
-            <HBox>
+         </top>
+         <right>
+            <HBox prefHeight="28.0" prefWidth="234.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="pathLabel" prefHeight="25.0" prefWidth="676.0">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin></Label>
-                  <Label fx:id="searchLabel" maxWidth="1.7976931348623157E308" prefHeight="24.0" prefWidth="36.0" text="Search" />
-                  <TextField fx:id="searchTxTField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="120.0" />
+                  <Label fx:id="searchLabel" maxWidth="1.7976931348623157E308" prefHeight="24.0" prefWidth="48.0" text="Search" />
+                  <TextField fx:id="searchTxTField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="133.0" />
                   <Button fx:id="searchTxTBtn" mnemonicParsing="false" text="Search" />
                </children>
             </HBox>
-         </children>
-      </VBox>
+         </right>
+         <center>
+            <Label fx:id="pathLabel" prefHeight="25.0" prefWidth="676.0" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
    </top>
 </BorderPane>

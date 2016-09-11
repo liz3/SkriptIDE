@@ -7,6 +7,7 @@ import com.skriptide.codemanage.Supers;
 import com.skriptide.guis.SceneManager;
 import com.skriptide.main.Main;
 import com.skriptide.util.Config;
+import com.skriptide.util.DragResizer;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.Project;
 import com.skriptide.util.skunityapi.*;
@@ -22,6 +23,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
@@ -67,6 +70,12 @@ public class IdeGuiController {
 	public MenuItem debuggingPoint;
 	@FXML
 	public ProgressBar mainProcessBar;
+	@FXML
+	public BorderPane mainBorderPane;
+	@FXML
+	public VBox lowerBox;
+	@FXML
+	public TabPane lowerTabPane;
 
 	private SceneManager sceneManager = new SceneManager();
 	private ListView<String> chooseView;
@@ -75,6 +84,7 @@ public class IdeGuiController {
 	private ArrayList<String> all = new ArrayList<>();
 	private int pos = 0;
 	private ContextMenu menu;
+	private double y;
 
 	private void setList() {
 
@@ -304,7 +314,10 @@ public class IdeGuiController {
 		}
 	}
 
-	public void setConsoleArea() {
+	public void setUpWin() {
+
+		DragResizer.makeResizable(lowerTabPane);
+
 
 		comandSendTextField.setOnKeyPressed(event -> {
 
@@ -606,9 +619,8 @@ public class IdeGuiController {
 					public void handle(Event event) {
 
 
-
-						boolean toSave = new SceneManager().infoCheck("Save project?" , tab.getText(), "Save the project: " + tab.getText());
-						if(toSave) {
+						boolean toSave = new SceneManager().infoCheck("Save project?", tab.getText(), "Save the project: " + tab.getText());
+						if (toSave) {
 							CodeWriter writer = new CodeWriter(area.getText(), project);
 							System.out.println("saver called");
 							writer.write();
