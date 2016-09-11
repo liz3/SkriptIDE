@@ -125,6 +125,9 @@ public class VersionReader {
 
 		try {
 			URL url = new URL("jar:file:" + file.getAbsolutePath() + "!/plugin.yml");
+			if(url == null) {
+				return null;
+			}
 			try {
 				InputStream is = url.openStream();
 				BufferedReader input = new BufferedReader(new InputStreamReader(is));

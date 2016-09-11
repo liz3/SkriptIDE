@@ -14,6 +14,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -30,7 +31,6 @@ import org.fxmisc.richtext.StyleClassedTextArea;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.security.Key;
 import java.util.ArrayList;
 
 /**
@@ -181,11 +181,11 @@ public class IdeGuiController {
 				javafx.application.Platform.runLater(() -> {
 
 
-					chooseView.getItems().sorted().stream().filter(str -> !str.toLowerCase().contains(prefix.toLowerCase())).forEach(str -> {
-						chooseView.getItems().remove(str);
-						all.add(str);
-						chooseView.refresh();
-					});
+							chooseView.getItems().sorted().stream().filter(str -> !str.toLowerCase().contains(prefix.toLowerCase())).forEach(str -> {
+								chooseView.getItems().remove(str);
+								all.add(str);
+								chooseView.refresh();
+							});
 
 							ArrayList<String> toRemove = new ArrayList<String>();
 							for (int i = 0; i != all.size(); i++) {
@@ -392,14 +392,16 @@ public class IdeGuiController {
 
 		if (Config.checkConfig() == 0) {
 			ObservableList<Project> projects = Project.getProjects();
+			System.out.println(projects.size());
 			projectsList.getItems().clear();
 			for (Project project : projects.sorted()) {
 				if (project.getName() != null) {
-					projectsList.getItems().addAll(project.getName());
+					projectsList.getItems().add(project.getName());
 				}
 			}
 		}
 		if (Main.debugMode) {
+
 			System.out.println("Loaded projects");
 		}
 
@@ -409,95 +411,95 @@ public class IdeGuiController {
 
 				MouseButton btn = event.getButton();
 
-			if(	projectsList.getSelectionModel().getSelectedItem() != null) {
-				if (btn == MouseButton.SECONDARY) {
-					if (menu == null || !menu.isShowing()) {
-						menu = new ContextMenu();
-						MenuItem item = new MenuItem("Delete");
-						MenuItem item1 = new MenuItem("Rename");
-						MenuItem item2 = new MenuItem("Move");
-						Menu serverList = new Menu("Change server");
-						item.setOnAction(new EventHandler<ActionEvent>() {
-							@Override
-							public void handle(ActionEvent event) {
-								ObservableList<Project> prs = Project.getProjects();
-								for (Project pr : prs) {
-									if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
-										pr.deleteProject();
-									}
-								}
-							}
-						});
-						item1.setOnAction(new EventHandler<ActionEvent>() {
-							@Override
-							public void handle(ActionEvent event) {
-								ObservableList<Project> prs = Project.getProjects();
-								for (Project pr : prs) {
-									if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
-										pr.reNameProject();
-									}
-								}
-							}
-						});
-						item2.setOnAction(new EventHandler<ActionEvent>() {
-							@Override
-							public void handle(ActionEvent event) {
-								ObservableList<Project> prs = Project.getProjects();
-								for (Project pr : prs) {
-									if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
-										pr.moveProject();
-									}
-								}
-							}
-						});
-						for (MenuItem selected : serverList.getItems()) {
-
-							selected.setOnAction(new EventHandler<ActionEvent>() {
+				if (projectsList.getSelectionModel().getSelectedItem() != null) {
+					if (btn == MouseButton.SECONDARY) {
+						if (menu == null || !menu.isShowing()) {
+							menu = new ContextMenu();
+							MenuItem item = new MenuItem("Delete");
+							MenuItem item1 = new MenuItem("Rename");
+							MenuItem item2 = new MenuItem("Move");
+							Menu serverList = new Menu("Change server");
+							item.setOnAction(new EventHandler<ActionEvent>() {
 								@Override
 								public void handle(ActionEvent event) {
 									ObservableList<Project> prs = Project.getProjects();
 									for (Project pr : prs) {
 										if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
-											pr.changeServer(selected.getText());
+											pr.deleteProject();
 										}
 									}
 								}
 							});
-						}
+							item1.setOnAction(new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent event) {
+									ObservableList<Project> prs = Project.getProjects();
+									for (Project pr : prs) {
+										if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
+											pr.reNameProject();
+										}
+									}
+								}
+							});
+							item2.setOnAction(new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent event) {
+									ObservableList<Project> prs = Project.getProjects();
+									for (Project pr : prs) {
+										if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
+											pr.moveProject();
+										}
+									}
+								}
+							});
+							for (MenuItem selected : serverList.getItems()) {
+
+								selected.setOnAction(new EventHandler<ActionEvent>() {
+									@Override
+									public void handle(ActionEvent event) {
+										ObservableList<Project> prs = Project.getProjects();
+										for (Project pr : prs) {
+											if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
+												pr.changeServer(selected.getText());
+											}
+										}
+									}
+								});
+							}
 
 
-						ObservableList<MCServer> servers = MCServer.getAllServers();
-						ObservableList<Project> prs = Project.getProjects();
-						for (MCServer srv : servers.sorted()) {
-							for (Project pr : prs.sorted()) {
-								if (pr.getName().equalsIgnoreCase(projectsList.getSelectionModel().getSelectedItem())) {
-									if (pr.getServer().getname().equalsIgnoreCase(srv.getname())) {
-										MenuItem srvItem = new MenuItem(srv.getname() + " (Current)");
-										serverList.getItems().add(srvItem);
-									} else {
-										MenuItem srvItem = new MenuItem(srv.getname());
-										serverList.getItems().add(srvItem);
+							ObservableList<MCServer> servers = MCServer.getAllServers();
+							ObservableList<Project> prs = Project.getProjects();
+							for (MCServer srv : servers.sorted()) {
+								for (Project pr : prs.sorted()) {
+									if (pr.getName().equalsIgnoreCase(projectsList.getSelectionModel().getSelectedItem())) {
+										if (pr.getServer().getname().equalsIgnoreCase(srv.getname())) {
+											MenuItem srvItem = new MenuItem(srv.getname() + " (Current)");
+											serverList.getItems().add(srvItem);
+										} else {
+											MenuItem srvItem = new MenuItem(srv.getname());
+											serverList.getItems().add(srvItem);
+										}
 									}
 								}
 							}
+							menu.getItems().clear();
+							menu.getItems().addAll(item, item1, item2, serverList);
+
+
+							menu.show(projectsList, event.getScreenX(), event.getScreenY());
 						}
-						menu.getItems().clear();
-						menu.getItems().addAll(item, item1, item2, serverList);
+					} else if (btn == MouseButton.PRIMARY) {
 
-
-						menu.show(projectsList, event.getScreenX(), event.getScreenY());
-					}
-				}
-
-				} else if (btn == MouseButton.PRIMARY) {
-
-					if (menu == null || !menu.isShowing()) {
-						openProject();
-					} else {
-						if (menu.isShowing() && menu != null) {
-							menu.hide();
+						if (menu == null || !menu.isShowing()) {
+							openProject();
+						} else {
+							if (menu.isShowing() && menu != null) {
+								menu.hide();
+							}
 						}
 					}
+
 				}
 			}
 		});
@@ -575,12 +577,13 @@ public class IdeGuiController {
 	public void openProject() {
 		CodeArea area = new CodeArea();
 
+
 		area.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
 
 				KeyCode code = event.getCode();
-				if(event.isControlDown() && code == KeyCode.SPACE) {
+				if (event.isControlDown() && code == KeyCode.SPACE) {
 					chooseList();
 					updateList();
 
@@ -598,6 +601,22 @@ public class IdeGuiController {
 			if (!SceneManager.openProjects.contains(project.getName())) {
 				Tab tab = new Tab(project.getName());
 
+				tab.setOnCloseRequest(new EventHandler<Event>() {
+					@Override
+					public void handle(Event event) {
+
+
+
+						boolean toSave = new SceneManager().infoCheck("Save project?" , tab.getText(), "Save the project: " + tab.getText());
+						if(toSave) {
+							CodeWriter writer = new CodeWriter(area.getText(), project);
+							System.out.println("saver called");
+							writer.write();
+						}
+
+						SceneManager.openProjects.remove(project.getName());
+					}
+				});
 				codeTabPane.getTabs().add(tab);
 
 				tab.setContent(area);
@@ -613,6 +632,7 @@ public class IdeGuiController {
 				SceneManager.openProjects.add(project.getName());
 
 				ControlMain.controlCode(area);
+				System.out.println("project open?");
 			}
 
 		}
@@ -620,6 +640,7 @@ public class IdeGuiController {
 			System.out.println("Open project");
 		}
 	}
+
 
 	public void saveOpenProjects() {
 

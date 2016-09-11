@@ -65,13 +65,14 @@ public class ManageAddsGuiController {
 		);
 		File f = dirChooser.showOpenDialog(fileChooserWindow);
 
-		Skript.addScript(VersionReader.getNameOfPlugin(f), VersionReader.getVersionOfPlugin(f), f);
-		refreshList();
+		if (f != null) {
+			Skript.addScript(VersionReader.getNameOfPlugin(f), VersionReader.getVersionOfPlugin(f), f);
+			refreshList();
 
-		if(Main.debugMode) {
-			System.out.println("Added Skript!");
+			if (Main.debugMode) {
+				System.out.println("Added Skript!");
+			}
 		}
-
 	}
 
 	public void addServer() {
@@ -83,11 +84,14 @@ public class ManageAddsGuiController {
 				new FileChooser.ExtensionFilter("JAR", "*.jar")
 		);
 		File f = dirChooser.showOpenDialog(fileChooserWindow);
-		VersionReader.getVersionOfServer(f);
-		ServerVersion.addServerVersion(f.getName(), VersionReader.getVersionOfServer(f), f);
-		refreshList();
-		if(Main.debugMode) {
-			System.out.println("added Bukkit/spigot version");
+
+		if (f != null) {
+			VersionReader.getVersionOfServer(f);
+			ServerVersion.addServerVersion(f.getName(), VersionReader.getVersionOfServer(f), f);
+			refreshList();
+			if (Main.debugMode) {
+				System.out.println("added Bukkit/spigot version");
+			}
 		}
 	}
 
@@ -100,13 +104,14 @@ public class ManageAddsGuiController {
 				new FileChooser.ExtensionFilter("JAR", "*.jar")
 		);
 		File f = dirChooser.showOpenDialog(fileChooserWindow);
-		SkriptAddon.addAddon(VersionReader.getNameOfPlugin(f), VersionReader.getVersionOfPlugin(f), f);
-		refreshList();
-		if(Main.debugMode) {
+		if (f != null) {
+			SkriptAddon.addAddon(VersionReader.getNameOfPlugin(f), VersionReader.getVersionOfPlugin(f), f);
+			refreshList();
+			if (Main.debugMode) {
 
-			System.out.println("added addon");
+				System.out.println("added addon");
+			}
 		}
-
 
 	}
 
@@ -123,7 +128,7 @@ public class ManageAddsGuiController {
 			Skript.removeScript(path);
 		}
 		selected.forEach(all::remove);
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("removed skripts versions");
 		}
 	}
@@ -142,7 +147,7 @@ public class ManageAddsGuiController {
 			ServerVersion.removeServerVersion(path);
 		}
 		selected.forEach(all::remove);
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("removed bukkit/spigot versions");
 		}
 
@@ -161,7 +166,7 @@ public class ManageAddsGuiController {
 			SkriptAddon.removeAddon(path);
 		}
 		selected.forEach(all::remove);
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("removed addons");
 		}
 	}
@@ -185,7 +190,7 @@ public class ManageAddsGuiController {
 
 		serverTable.setItems(ServerVersion.getServerVersions());
 		serverTable.getColumns().addAll(nameColum, versionColum, pathColum);
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("set server versions ");
 		}
 
@@ -210,7 +215,7 @@ public class ManageAddsGuiController {
 		scriptTable.setItems(Skript.getSkriptVersions());
 		scriptTable.getColumns().addAll(nameColum, versionColum, pathColum);
 
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 			System.out.println("set skript versions");
 		}
 
@@ -234,7 +239,7 @@ public class ManageAddsGuiController {
 
 		addonsTable.setItems(SkriptAddon.getScriptAddons());
 		addonsTable.getColumns().addAll(nameColum, versionColum, pathColum);
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 
 			System.out.println("set skript addons");
 		}
@@ -262,7 +267,7 @@ public class ManageAddsGuiController {
 		scriptTable.setItems(Skript.getSkriptVersions());
 		addonsTable.setItems(SkriptAddon.getScriptAddons());
 
-		if(Main.debugMode) {
+		if (Main.debugMode) {
 
 			System.out.println("refreshed list");
 		}

@@ -102,9 +102,9 @@ public class Project {
 
 			Profile.Section sec = cfg.get("Projects");
 			ObservableList<Project> values = FXCollections.observableArrayList();
+			System.out.println(sec.size());
 
-
-			for (String n : sec.childrenNames()) {
+			for (String n : sec.keySet()) {
 
 				values.add(new Project(n));
 			}
