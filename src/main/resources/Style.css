@@ -1,0 +1,8 @@
+.root {
+    -fx-font-family: Arial;
+    -fx-font-size: 11px;
+}
+
+.code-area {
+    -fx-font-size: 13px;
+}

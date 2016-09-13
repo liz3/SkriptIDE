@@ -83,18 +83,19 @@ public class SceneManager extends Application {
 		}
 
 
-		Scene mainScene = new Scene(mainParent, 900, 530);
+		Scene mainScene = new Scene(mainParent, 980, 550);
 
 		/*For dark theme.
 		ThemeCreator.setTheme(mainScene, new Dark());
 		*/
 
 		mainScene.getStylesheets().add("Highlighting.css");
+		mainScene.getStylesheets().add("Style.css");
 		mainWindow.setTitle("ScriptIDE");
 		mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
 		mainWindow.setScene(mainScene);
-		mainWindow.setMinHeight(520);
-		mainWindow.setMinWidth(885);
+		mainWindow.setMinWidth(980);
+		mainWindow.setMinHeight(550);
 		mainWindow.centerOnScreen();
 
 		mainWindow.show();

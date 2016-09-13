@@ -73,9 +73,20 @@ public class IdeGuiController {
 	@FXML
 	public BorderPane mainBorderPane;
 	@FXML
-	public VBox lowerBox;
-	@FXML
 	public TabPane lowerTabPane;
+	@FXML
+	public VBox secBox;
+	@FXML
+	public Label prNameLbl;
+	@FXML
+	public Label prSkVersionLbl;
+	@FXML
+	public Label prServerLbl;
+	@FXML
+	public TextArea prNotesArea;
+	@FXML
+	public ListView<String> prDependList;
+
 
 	private SceneManager sceneManager = new SceneManager();
 	private ListView<String> chooseView;
@@ -100,24 +111,26 @@ public class IdeGuiController {
 		ArrayList<ApiExpression> expressions = skUnity.getExpressions();
 		ArrayList<ApiType> types = skUnity.getTypes();
 		for (int i = 1; i != conditions.size(); i++) {
-			chooseView.getItems().add(conditions.get(i).getId() + " Condition");
+
+			chooseView.getItems().add(conditions.get(i).getId() + " Condition\n" + conditions.get(i).getAddon());
 		}
 		for (int i = 0; i != effects.size(); i++) {
-			chooseView.getItems().add(effects.get(i).getId() + " Effect");
+			chooseView.getItems().add(effects.get(i).getId() + " Effect\n" + effects.get(i).getAddon());
 		}
 		for (int i = 0; i != events.size(); i++) {
-			chooseView.getItems().add(events.get(i).getId() + " Event");
+			chooseView.getItems().add(events.get(i).getId() + " Event\n" + events.get(i).getAddon());
 		}
 		for (int i = 0; i != expressions.size(); i++) {
-			chooseView.getItems().add(expressions.get(i).getId() + " Expression");
+			chooseView.getItems().add(expressions.get(i).getId() + " Expression\n" + expressions.get(i).getAddon());
 		}
 		for (int i = 0; i != types.size(); i++) {
-			chooseView.getItems().add(types.get(i).getId() + " Type");
+			chooseView.getItems().add(types.get(i).getId() + " Type\n" + types.get(i).getAddon());
 		}
 
 		chooseView.getItems().addAll(new Supers().getSupervArray());
 
 		chooseView.setPrefSize(180, 200);
+
 		Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
 		CodeArea area = (CodeArea) tab.getContent();
 		win.getContent().add(chooseView);
@@ -172,7 +185,6 @@ public class IdeGuiController {
 
 	}
 
-
 	public void updateList() {
 
 		Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
@@ -187,7 +199,15 @@ public class IdeGuiController {
 			String prefix = text.substring(index + 1, text.length());
 
 			System.out.println(prefix);
-			if (chooseView.isVisible()) {
+			if (prefix.equals("(")) {
+				setPattern("()");
+			} else if (prefix.equals("[")) {
+				setPattern("[]");
+			} else if (prefix.equals("\"")) {
+				setPattern("\"\"");
+			} else if (prefix.equals("{")) {
+				setPattern("{}");
+			} else if (chooseView.isVisible()) {
 				javafx.application.Platform.runLater(() -> {
 
 
@@ -293,7 +313,7 @@ public class IdeGuiController {
 
 			before = area.getText(area.getCaretPosition(), area.getCaretPosition() - prefix.length() + trueT.trim().length() * 2);
 
-			area.replaceText(area.getCaretPosition() - prefix.length(), area.getCaretPosition() - prefix.length() + trueT.trim().length() * 2, trueT.trim() + " " + before);
+			area.replaceText(area.getCaretPosition() - prefix.length(), area.getCaretPosition() - prefix.length() + trueT.trim().length() * 2, trueT.trim() + ": " + before);
 
 
 			pos = area.getCaretPosition() - before.length();
@@ -314,11 +334,38 @@ public class IdeGuiController {
 		}
 	}
 
+	public void setPattern(String prefix) {
+
+		String before = "";
+		Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+		CodeArea area = (CodeArea) tab.getContent();
+		before = area.getText(area.getCaretPosition(), area.getCaretPosition() - prefix.length() + prefix.trim().length());
+
+		area.replaceText(area.getCaretPosition() - prefix.length(), area.getCaretPosition() - prefix.length() + prefix.trim().length(), prefix.trim() + " " + before);
+
+
+		pos = area.getCaretPosition() - before.length() - 2;
+
+		System.out.println(pos);
+		area.moveTo(pos);
+
+
+		if (showList) {
+			win.hide();
+			chooseView.setVisible(false);
+			showList = false;
+
+
+		}
+		if (Main.debugMode) {
+			System.out.println("set word: " + prefix);
+		}
+	}
+
 	public void setUpWin() {
 
-		DragResizer.makeResizable(lowerTabPane);
 
-
+		DragResizer.makeResizable(secBox);
 		comandSendTextField.setOnKeyPressed(event -> {
 
 			KeyCode code = event.getCode();
@@ -348,6 +395,10 @@ public class IdeGuiController {
 								if (project.getName().equalsIgnoreCase(name)) {
 
 									pathLabel.setText(project.getSkriptPath());
+									prNameLbl.setText("Name: " + project.getName());
+									prServerLbl.setText("Server: " + project.getServer().getname());
+									prSkVersionLbl.setText("Skript version: " + project.getSk().getVersion());
+									prNotesArea.setText(project.getNotes());
 								}
 							}
 						}
@@ -379,7 +430,6 @@ public class IdeGuiController {
 			System.out.println("sendet command");
 		}
 	}
-
 
 	public void runProject() {
 
@@ -596,7 +646,7 @@ public class IdeGuiController {
 			public void handle(KeyEvent event) {
 
 				KeyCode code = event.getCode();
-				if (event.isControlDown() && code == KeyCode.SPACE) {
+				if (code == KeyCode.SPACE) {
 					chooseList();
 					updateList();
 
@@ -641,10 +691,14 @@ public class IdeGuiController {
 				area.appendText(reader.getCode());
 
 
+				prNameLbl.setText("Name: " + project.getName());
+				prServerLbl.setText("Server: " + project.getServer().getname());
+				prSkVersionLbl.setText("Skript version: " + project.getSk().getVersion());
+				prNotesArea.setText(project.getNotes());
 				SceneManager.openProjects.add(project.getName());
 
 				ControlMain.controlCode(area);
-				System.out.println("project open?");
+
 			}
 
 		}

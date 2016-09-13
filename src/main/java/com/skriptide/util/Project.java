@@ -316,6 +316,8 @@ public class Project {
 		return this.folder;
 	}
 
+	public String getNotes() { return this.notes; }
+
 	public void runProject() {
 
 
