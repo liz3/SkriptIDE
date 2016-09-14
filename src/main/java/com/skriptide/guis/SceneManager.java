@@ -93,8 +93,8 @@ public class SceneManager extends Application {
 		splash.centerOnScreen();
 		splash.setScene(new Scene(splashParent, 600, 300));
 		splashController = splashLoader.getController();
-		Image image = new Image(getClass().getResource("pics/splash.png").toExternalForm());
-			splashController.img.setImage(image);
+	//	Image image = new Image(getClass().getResource("pics/splash.png").toExternalForm());
+	//		splashController.img.setImage(image);
 
 
 
