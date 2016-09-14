@@ -36,9 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by Liz3ga on 27.07.2016.
- */
+
 public class IdeGuiController {
 
 	private static SkUnityAPI skUnity = new SkUnityAPI();
@@ -95,7 +93,7 @@ public class IdeGuiController {
 	private ArrayList<String> all = new ArrayList<>();
 	private int pos = 0;
 	private ContextMenu menu;
-	private double y;
+
 
 	private void setList() {
 

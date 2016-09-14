@@ -12,14 +12,12 @@ public class Main {
 	public static SceneManager sceneManager;
 	public static boolean debugMode;
 
+
 	public static void main(String[] args)  throws Exception {
 
 
-		try {
-			debugMode = Config.isDebug();
-		} catch (Exception e) {
-			System.err.println("First run?");
-		}
+
+
 
 		sceneManager = new SceneManager();
 		sceneManager.runMain();

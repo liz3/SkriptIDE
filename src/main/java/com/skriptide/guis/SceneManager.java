@@ -8,8 +8,8 @@ import com.skriptide.guis.manageadds.ManageAddsGuiController;
 import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.startgui.StartGuiController;
 import com.skriptide.util.Config;
-import com.skriptide.util.IDESystemOut;
 import com.skriptide.util.IDESystemErr;
+import com.skriptide.util.IDESystemOut;
 import com.skriptide.util.MCServer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -20,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import org.fxmisc.richtext.CodeArea;
 
@@ -44,9 +45,9 @@ public class SceneManager extends Application {
 	public static ProgressBar procBar;
 
 
-	public Stage mainWindow, welcomeWindow, createNewProjectWindow, createNewServerWindow, addsManager, manageServer, debugger, info;
-	private FXMLLoader mainLoader = new FXMLLoader(), welcomeLoader = new FXMLLoader(), createNewProjectLoader = new FXMLLoader(), createNewServerLoader = new FXMLLoader(), addManagerLoader = new FXMLLoader(), manageServerLoader = new FXMLLoader(), debuggerLoader = new FXMLLoader(), infoLoader = new FXMLLoader();
-	private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null, createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null, debuggerParent = null, infoParent = null;
+	public Stage mainWindow, welcomeWindow, createNewProjectWindow, createNewServerWindow, addsManager, manageServer, debugger, info, splash;
+	private FXMLLoader mainLoader = new FXMLLoader(), welcomeLoader = new FXMLLoader(), createNewProjectLoader = new FXMLLoader(), createNewServerLoader = new FXMLLoader(), addManagerLoader = new FXMLLoader(), manageServerLoader = new FXMLLoader(), debuggerLoader = new FXMLLoader(), splashLoader = new FXMLLoader();
+	private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null, createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null, debuggerParent = null, splashParent = null;
 	private CreateProjectGuiController createProjectGuiController;
 	private CreateServerGuiController createServerGuiController;
 	private IdeGuiController ideGuiController;
@@ -55,6 +56,7 @@ public class SceneManager extends Application {
 	private ManageServerController manageServerController;
 	private InfoGuiController infoGuiController;
 	DebuggerController debuggerController;
+	SplashController splashController;
 
 	public static void cleanUP() {
 
@@ -65,15 +67,42 @@ public class SceneManager extends Application {
 
 	}
 
+
+
 	public void runMain() {
+
 
 		launch();
 	}
 
 	@Override
-	public void start(Stage stage) throws Exception {
+	public void start(Stage stage) {
 
-		mainWindow = stage;
+
+		splash = stage;
+
+		try {
+			splashParent = splashLoader.load(getClass().getResourceAsStream("/SplashGui.fxml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
+		splash.initStyle(StageStyle.UNDECORATED);
+		splash.setResizable(false);
+		splash.centerOnScreen();
+		splash.setScene(new Scene(splashParent, 600, 300));
+		splashController = splashLoader.getController();
+		Image image = new Image(getClass().getResource("pics/splash.png").toExternalForm());
+			splashController.img.setImage(image);
+
+
+
+
+		splash.show();
+
+
+		mainWindow = new Stage();
 
 		try {
 			mainParent = mainLoader
@@ -97,8 +126,8 @@ public class SceneManager extends Application {
 		mainWindow.setMinWidth(980);
 		mainWindow.setMinHeight(550);
 		mainWindow.centerOnScreen();
+		splashController.setValue(20);
 
-		mainWindow.show();
 		ideGuiController = mainLoader.getController();
 
 		if (debugMode) {
@@ -171,6 +200,7 @@ public class SceneManager extends Application {
 
 
 		}
+		mainWindow.show();
 
 
 	}
