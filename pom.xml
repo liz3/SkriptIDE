@@ -103,7 +103,7 @@
         <!-- https://mvnrepository.com/artifact/org.fxmisc.richtext/richtextfx -->
         <dependency>
             <groupId>org.fxmisc.richtext</groupId>
-            <artifactId>richtextfx-demos</artifactId>
+            <artifactId>CodeApi</artifactId>
             <version>0.6.10</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.json/json -->
