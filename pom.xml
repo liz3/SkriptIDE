@@ -101,11 +101,18 @@
             <version>0.5.4</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.fxmisc.richtext/richtextfx -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.fxmisc.richtext</groupId>
             <artifactId>richtextfx-demos</artifactId>
             <version>0.6.10</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.fxmisc.richtext</groupId>
+            <artifactId>richtextfx</artifactId>
+            <version>0.6.10</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
