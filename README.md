@@ -3,10 +3,10 @@ An IDE for Skript written in Java.
 ## FEATURES
 - Syntax Highlighting
 
-##Compiled JARs
+## Compiled JARs
 [TeamCity CI](https://ci.scrumplex.ovh/)
 
-##How to compile
+## How to compile
 ```
 mvn clean compile package assembly:single
 ```
