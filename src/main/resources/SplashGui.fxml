@@ -9,5 +9,6 @@
    <children>
       <ImageView fx:id="img" fitHeight="300.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
       <ProgressBar fx:id="bar" layoutX="271.0" layoutY="188.0" prefHeight="18.0" prefWidth="322.0" progress="0.0" />
+      <Label fx:id="lbl" layoutX="271.0" layoutY="206.0" prefHeight="17.0" prefWidth="322.0" text="Label" />
    </children>
 </Pane>

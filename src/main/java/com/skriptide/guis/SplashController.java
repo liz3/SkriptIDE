@@ -1,15 +1,11 @@
 package com.skriptide.guis;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -21,13 +17,25 @@ public class SplashController {
 	private ProgressBar bar;
 
 	@FXML
-	public ImageView img;
+	private ImageView img;
+
+	@FXML
+	private Label lbl;
 
 
 
-	public void setValue(int value) {
+
+	public void setValue(double value, String v) {
 		bar.setProgress(value);
+		lbl.setText(v);
 	}
 
+	public void setImg() {
+
+
+		img.setImage(new Image("file:C:\\Users\\Liz3ga\\Documents\\SkriptIDE stuff\\logo\\Export_1.png"));
+
+
+	}
 }
 

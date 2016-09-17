@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 public class IdeGuiController {
 
-	private static SkUnityAPI skUnity = new SkUnityAPI();
+
 	@FXML
 	public TabPane codeTabPane;
 	@FXML
@@ -86,7 +86,7 @@ public class IdeGuiController {
 	public ListView<String> prDependList;
 
 
-	private SceneManager sceneManager = new SceneManager();
+	public SceneManager sceneManager;
 	private ListView<String> chooseView;
 	private boolean showList;
 	private Popup win;
@@ -95,8 +95,9 @@ public class IdeGuiController {
 	private ContextMenu menu;
 
 
-	private void setList() {
-
+	private void setList()
+	{
+		 SkUnityAPI skUnity = new SkUnityAPI();
 
 		if (win == null) {
 			win = new Popup();

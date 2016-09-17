@@ -11,6 +11,7 @@ import com.skriptide.util.Config;
 import com.skriptide.util.IDESystemErr;
 import com.skriptide.util.IDESystemOut;
 import com.skriptide.util.MCServer;
+import com.skriptide.util.skunityapi.SkUnityAPI;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -27,6 +28,8 @@ import org.fxmisc.richtext.CodeArea;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static com.skriptide.main.Main.debugMode;
 
@@ -68,7 +71,6 @@ public class SceneManager extends Application {
 	}
 
 
-
 	public void runMain() {
 
 
@@ -80,26 +82,59 @@ public class SceneManager extends Application {
 
 
 		splash = stage;
+		splashScreen();
+		javafx.application.Platform.runLater(() -> {
+			splashController.setValue(0.2, "Checking Config");
+			checkConfig();
 
-		try {
-			splashParent = splashLoader.load(getClass().getResourceAsStream("/SplashGui.fxml"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			splashController.setValue(0.8, "Setting API");
+			setSkyUnityApi();
 
 
-		splash.initStyle(StageStyle.UNDECORATED);
-		splash.setResizable(false);
-		splash.centerOnScreen();
-		splash.setScene(new Scene(splashParent, 600, 300));
-		splashController = splashLoader.getController();
-	//	Image image = new Image(getClass().getResource("pics/splash.png").toExternalForm());
-	//		splashController.img.setImage(image);
+			//setWindow();
+			//splashController.setValue(0.8, "Window");
 
 
 
+		});
 
-		splash.show();
+	}
+
+	private ScheduledThreadPoolExecutor splashExecutor = new ScheduledThreadPoolExecutor(1);
+	private void splashScreen() {
+
+		splashExecutor.scheduleAtFixedRate(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					splashParent = splashLoader.load(getClass().getResourceAsStream("/SplashGui.fxml"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+
+				splash.initStyle(StageStyle.UNDECORATED);
+				splash.setResizable(false);
+				splash.centerOnScreen();
+				splash.setAlwaysOnTop(true);
+				splash.setScene(new Scene(splashParent, 600, 300));
+				splashController = splashLoader.getController();
+				splashController.setImg();
+
+				splash.show();
+
+
+				splashController.setValue(0.05, "Start");
+
+			}
+
+		},  50, 20, TimeUnit.SECONDS);
+
+
+	}
+
+	private void setWindow() {
 
 
 		mainWindow = new Stage();
@@ -114,26 +149,29 @@ public class SceneManager extends Application {
 
 		Scene mainScene = new Scene(mainParent, 980, 550);
 
-		/*For dark theme.
-		ThemeCreator.setTheme(mainScene, new Dark());
-		*/
+	/*For dark theme.
+	ThemeCreator.setTheme(mainScene, new Dark());
+	*/
 
 		mainScene.getStylesheets().add("Highlighting.css");
 		mainScene.getStylesheets().add("Style.css");
+
 		mainWindow.setTitle("ScriptIDE");
 		mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
 		mainWindow.setScene(mainScene);
 		mainWindow.setMinWidth(980);
 		mainWindow.setMinHeight(550);
 		mainWindow.centerOnScreen();
-		splashController.setValue(20);
+
 
 		ideGuiController = mainLoader.getController();
+		ideGuiController.sceneManager = this;
 
 		if (debugMode) {
 			openDebugger();
 			System.out.println("Main Gui loading finished");
 		}
+
 		mainScene.getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent ev) {
 
@@ -176,21 +214,28 @@ public class SceneManager extends Application {
 
 		});
 
+		System.out.println("win done");
 
-		ideGuiController.setUpWin();
+
+	}
+
+	private void setSkyUnityApi() {
+
+
+		SkUnityAPI api = new SkUnityAPI();
+		System.out.println("api done");
+
+
+	}
+
+
+	private void checkConfig() {
+
 
 		int configState = Config.checkConfig();
 
-		if (configState == 0) {
 
-			if (debugMode) {
-				System.out.println("Trying to loading projects to mainGui");
-			}
-
-			ideGuiController.loadInProjects();
-
-
-		} else if (configState == 1) {
+		if (configState == 1) {
 
 			if (debugMode) {
 				System.out.println("Opening Welcome Screen");
@@ -200,8 +245,29 @@ public class SceneManager extends Application {
 
 
 		}
-		mainWindow.show();
+		if (configState == 0) {
 
+			if (debugMode) {
+				System.out.println("Trying to loading projects to mainGui");
+			}
+
+			ideGuiController.loadInProjects();
+
+
+		}
+		System.out.println("config done");
+
+
+	}
+
+	private void startUp() {
+
+
+		ideGuiController.setUpWin();
+
+
+		splash.close();
+		mainWindow.show();
 
 	}
 
@@ -323,7 +389,6 @@ public class SceneManager extends Application {
 
 	}
 
-
 	public void openCreateServer() {
 
 		if (createNewServerWindow == null) {
@@ -408,7 +473,6 @@ public class SceneManager extends Application {
 		}
 		manageServerController.setValues();
 	}
-
 
 }
 
