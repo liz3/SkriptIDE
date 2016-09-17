@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static com.skriptide.main.Main.debugMode;
 
@@ -83,56 +82,59 @@ public class SceneManager extends Application {
 
 		splash = stage;
 		splashScreen();
-		javafx.application.Platform.runLater(() -> {
-			splashController.setValue(0.2, "Checking Config");
-			checkConfig();
 
-			splashController.setValue(0.8, "Setting API");
+		javafx.application.Platform.runLater(() -> {
+			final boolean v;
+
+
+			splashController.setValue(0.3, "Checking Apis");
+
 			setSkyUnityApi();
 
 
-			//setWindow();
-			//splashController.setValue(0.8, "Window");
+			splashController.setValue(0.5, "Looking for settings");
+			v = checkConfig();
 
+
+			splashController.setValue(0.8, "Initializing Gui");
+			setWindow();
+
+
+			splashController.setValue(1, "Finish, start up");
+
+
+			startUp(v);
 
 
 		});
 
+
 	}
 
-	private ScheduledThreadPoolExecutor splashExecutor = new ScheduledThreadPoolExecutor(1);
+
 	private void splashScreen() {
 
-		splashExecutor.scheduleAtFixedRate(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					splashParent = splashLoader.load(getClass().getResourceAsStream("/SplashGui.fxml"));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+		try {
+			splashParent = splashLoader.load(getClass().getResourceAsStream("/SplashGui.fxml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 
-				splash.initStyle(StageStyle.UNDECORATED);
-				splash.setResizable(false);
-				splash.centerOnScreen();
-				splash.setAlwaysOnTop(true);
-				splash.setScene(new Scene(splashParent, 600, 300));
-				splashController = splashLoader.getController();
-				splashController.setImg();
+		splash.initStyle(StageStyle.UNDECORATED);
+		splash.setResizable(false);
+		splash.centerOnScreen();
+		splash.setAlwaysOnTop(true);
+		splash.setScene(new Scene(splashParent, 600, 300));
+		splashController = splashLoader.getController();
+		splashController.setImg();
 
-				splash.show();
+		splash.show();
 
-
-				splashController.setValue(0.05, "Start");
-
-			}
-
-		},  50, 20, TimeUnit.SECONDS);
-
+		splashController.setValue(0.05, "Init");
 
 	}
+
 
 	private void setWindow() {
 
@@ -190,7 +192,7 @@ public class SceneManager extends Application {
 							@Override
 							public void run() {
 								try {
-									Thread.currentThread().sleep(10000);
+									Thread.sleep(10000);
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
@@ -214,8 +216,6 @@ public class SceneManager extends Application {
 
 		});
 
-		System.out.println("win done");
-
 
 	}
 
@@ -228,8 +228,9 @@ public class SceneManager extends Application {
 
 	}
 
+	ScheduledThreadPoolExecutor configExecutor = new ScheduledThreadPoolExecutor(1);
 
-	private void checkConfig() {
+	private boolean checkConfig() {
 
 
 		int configState = Config.checkConfig();
@@ -241,8 +242,7 @@ public class SceneManager extends Application {
 				System.out.println("Opening Welcome Screen");
 			}
 
-			openWelcomeGui();
-
+			return true;
 
 		}
 		if (configState == 0) {
@@ -251,23 +251,27 @@ public class SceneManager extends Application {
 				System.out.println("Trying to loading projects to mainGui");
 			}
 
-			ideGuiController.loadInProjects();
-
-
+			return false;
 		}
 		System.out.println("config done");
 
 
+		return true;
 	}
 
-	private void startUp() {
+	private void startUp(boolean v) {
 
 
+		ideGuiController.loadInProjects();
 		ideGuiController.setUpWin();
-
 
 		splash.close();
 		mainWindow.show();
+		if (v) {
+
+			openWelcomeGui();
+		}
+
 
 	}
 

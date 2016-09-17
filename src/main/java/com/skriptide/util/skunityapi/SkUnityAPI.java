@@ -73,7 +73,7 @@ public class SkUnityAPI {
 		}
 		try {
 			WebUtils.downloadFile(new URL("http://nfell2009.uk/skunity/api/zip/skunity.zip"), new File(folder.getAbsolutePath() + "/api.zip"));
-
+		//	WebUtils.downloadFile(new URL("https://download-cf.jetbrains.com/idea/ideaIC-2016.2.4.exe"), new File(folder.getAbsolutePath() + "/hallo.exe"));
 			unZip(new File(folder.getAbsolutePath() + "/api.zip").getAbsolutePath(), folder.getAbsolutePath() + "/output");
 			if (Main.debugMode) {
 				System.out.println("Downloaded api");

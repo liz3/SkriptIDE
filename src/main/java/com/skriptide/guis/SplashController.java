@@ -27,13 +27,14 @@ public class SplashController {
 
 	public void setValue(double value, String v) {
 		bar.setProgress(value);
+
 		lbl.setText(v);
 	}
 
 	public void setImg() {
 
 
-		img.setImage(new Image("file:C:\\Users\\Liz3ga\\Documents\\SkriptIDE stuff\\logo\\Export_1.png"));
+		img.setImage(new Image(getClass().getResource("/Export_1.png").toExternalForm()));
 
 
 	}
