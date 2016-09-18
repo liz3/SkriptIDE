@@ -55,6 +55,12 @@
                         <option>-keep public class com.skriptide.main.Main { public static void
                             main(java.lang.String[]); }
                         </option>
+                        <option>-keeppackagenames com.skriptide.guis.**</option>
+                        <option>-keepnames class com.skriptide.guis.**</option>
+                        <option>-keepclassmembernames class * {
+                            @javafx.fxml.FXML *;
+                            }</option>
+
                         <option>-keepattributes Signature,*Annotation*,Exceptions</option>
                         <option>-dontusemixedcaseclassnames</option>
                         <option>-dontskipnonpubliclibraryclasses</option>
@@ -222,4 +228,3 @@
 
     </dependencies>
 </project>
-
