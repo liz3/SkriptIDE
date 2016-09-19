@@ -3,10 +3,11 @@ package com.skriptide.guis;
 import com.skriptide.guis.createprojectgui.CreateProjectGuiController;
 import com.skriptide.guis.createserver.CreateServerGuiController;
 import com.skriptide.guis.idegui.IdeGuiController;
-import com.skriptide.guis.info.InfoGuiController;
+
 import com.skriptide.guis.manageadds.ManageAddsGuiController;
 import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.startgui.StartGuiController;
+import com.skriptide.main.Main;
 import com.skriptide.util.Config;
 import com.skriptide.util.IDESystemErr;
 import com.skriptide.util.IDESystemOut;
@@ -56,7 +57,7 @@ public class SceneManager extends Application {
 	private ManageAddsGuiController manageAddsGuiController;
 	private StartGuiController startGuiController;
 	private ManageServerController manageServerController;
-	private InfoGuiController infoGuiController;
+
 	DebuggerController debuggerController;
 	SplashController splashController;
 
@@ -143,7 +144,7 @@ public class SceneManager extends Application {
 
 		try {
 			mainParent = mainLoader
-					.load(SceneManager.class.getResourceAsStream("/IdeGui.fxml"));
+					.load(getClass().getResourceAsStream("/IdeGui.fxml"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -262,6 +263,10 @@ public class SceneManager extends Application {
 	private void startUp(boolean v) {
 
 
+		if(Config.isDebug())  {
+			Main.debugMode = true;
+			openDebugger();
+		}
 		ideGuiController.loadInProjects();
 		ideGuiController.setUpWin();
 
@@ -354,6 +359,7 @@ public class SceneManager extends Application {
 
 		String username = System.getProperty("user.name");
 
+		startGuiController.setValues();
 		startGuiController.projectsPathField.setText("C:\\Users\\" + username + "\\Documents\\ScriptIDE\\Projects\\");
 
 		startGuiController.serverPathField.setText("C:\\Users\\" + username + "\\Documents\\ScriptIDE\\Servers\\");

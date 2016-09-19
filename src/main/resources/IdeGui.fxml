@@ -25,9 +25,9 @@
                <menus>
                   <Menu mnemonicParsing="false" text="File">
                      <items>
-                        <MenuItem fx:id="newProjectMenuPoint" mnemonicParsing="false" onAction="#newProject" text="New Project" />
+                        <MenuItem fx:id="newProjectMenuPoint" mnemonicParsing="false" text="New Project" />
                         <Menu fx:id="openResentMenu" mnemonicParsing="false" text="Open Recent" />
-                        <MenuItem fx:id="saveMenuPoint" mnemonicParsing="false" onAction="#saveOpenProjects" text="Save" />
+                        <MenuItem fx:id="saveMenuPoint" mnemonicParsing="false" text="Save" />
                         <MenuItem mnemonicParsing="false" text="Save as" />
                         <Menu mnemonicParsing="false" text="Export">
                            <items>
@@ -37,26 +37,26 @@
                               <MenuItem mnemonicParsing="false" text="FTP/SFTP Upload" />
                            </items>
                         </Menu>
-                        <MenuItem mnemonicParsing="false" onAction="#manageAddons" text="Versions" />
+                        <MenuItem fx:id="manageAddonsPoint" mnemonicParsing="false" text="Versions" />
                         <MenuItem mnemonicParsing="false" text="IDE Settings" />
                         <MenuItem fx:id="closeMenuPoint" mnemonicParsing="false" text="Close" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Run">
                      <items>
-                        <MenuItem fx:id="runPoint" mnemonicParsing="false" onAction="#runProject" text="Run" />
+                        <MenuItem fx:id="runPoint" mnemonicParsing="false" text="Run" />
                         <Menu fx:id="runMenuMenu" mnemonicParsing="false" text="Run on" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Server">
                      <items>
-                        <MenuItem fx:id="createServerMenuPoint" mnemonicParsing="false" onAction="#newServer" text="Create Server" />
-                        <MenuItem mnemonicParsing="false" onAction="#manageServers" text="Manage Server" />
+                        <MenuItem fx:id="createServerMenuPoint" mnemonicParsing="false" text="Create Server" />
+                        <MenuItem fx:id="manageServerMenuItem" mnemonicParsing="false" text="Manage Server" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Help">
                      <items>
-                        <MenuItem fx:id="debuggingPoint" mnemonicParsing="false" onAction="#triggerDebugger" text="Debugging" />
+                        <MenuItem fx:id="debuggingPoint" mnemonicParsing="false" text="Debugging" />
                      </items>
                   </Menu>
                </menus>
@@ -133,8 +133,8 @@
                               <HBox prefHeight="25.0" prefWidth="482.0" BorderPane.alignment="CENTER">
                                  <children>
                                     <Label fx:id="runningServerLabel" prefHeight="25.0" prefWidth="54.0" text="Running:" />
-                                    <ComboBox fx:id="serverListComboBox" onShowing="#loadInServers" prefWidth="150.0" />
-                                    <Button mnemonicParsing="false" onAction="#startServer" text="Start!" />
+                                    <ComboBox fx:id="serverListComboBox" prefWidth="150.0" />
+                                    <Button fx:id="startServerBtn" mnemonicParsing="false" text="Start!" />
                                     <Button fx:id="stopServerBtn" mnemonicParsing="false" text="Stop" />
                                     <Button fx:id="restartServerBtn" mnemonicParsing="false" text="Restart" />
                                     <ProgressBar fx:id="mainProcessBar" prefHeight="18.0" prefWidth="136.0" progress="0.0" />
@@ -148,7 +148,7 @@
                               <HBox prefHeight="25.0" prefWidth="393.0" BorderPane.alignment="CENTER">
                                  <children>
                                     <TextField fx:id="comandSendTextField" prefHeight="25.0" prefWidth="400.0" />
-                                    <Button fx:id="commandSendBtn" maxHeight="-Infinity" mnemonicParsing="false" onAction="#sendCommand" prefHeight="25.0" prefWidth="105.0" text="Send" />
+                                    <Button fx:id="commandSendBtn" maxHeight="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Send" />
                                  </children>
                               </HBox>
                            </left>

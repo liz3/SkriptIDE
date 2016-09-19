@@ -118,7 +118,7 @@ public class Skript {
 
 				child.put("Name", name);
 				child.put("Version", version);
-				child.put("Path", path);
+				child.put("Path", path.getAbsolutePath());
 
 			}
 

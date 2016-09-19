@@ -26,11 +26,19 @@ public class StartGuiController {
 	@FXML
 	public Button okBtn;
 	@FXML
+	public Button cancelBtn;
+	@FXML
 	public Button projectsPathBtn;
 	@FXML
 	public Button serverPathBtn;
 
 
+	public void setValues() {
+		okBtn.setOnAction(event -> proceed());
+		cancelBtn.setOnAction(event -> cancelAction());
+		serverPathBtn.setOnAction(event -> openServersPathChooser());
+		projectsPathBtn.setOnAction(event -> openProjectPathChooser());
+	}
 	public void cancelAction() {
 
 		System.exit(0);

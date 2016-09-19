@@ -1,95 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.Pane?>
-<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-      minWidth="-Infinity"
-      prefHeight="551.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/8"
-      fx:controller="com.skriptide.guis.manageserver.ManageServerController">
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.manageserver.ManageServerController">
     <children>
-        <ListView fx:id="serversList" layoutX="14.0" layoutY="39.0" onMouseReleased="#loadSettings" prefHeight="158.0"
-                  prefWidth="265.0"/>
-        <Button fx:id="createServerBtn" layoutX="14.0" layoutY="198.0" mnemonicParsing="false"
-                text="Create new Server"/>
-        <Button fx:id="deleteServerBtn" layoutX="132.0" layoutY="198.0" mnemonicParsing="false" onAction="#deleteServer"
-                text="Delete"/>
-        <ListView fx:id="scriptsList" layoutX="530.0" layoutY="39.0" prefHeight="158.0" prefWidth="276.0"/>
-        <Button fx:id="addScriptAddonBtn" layoutX="689.0" layoutY="198.0" mnemonicParsing="false" onAction="#addAddon"
-                text="Add"/>
-        <Label layoutX="14.0" layoutY="14.0" text="Server:"/>
-        <Label layoutX="541.0" layoutY="14.0" text="Script-Addons"/>
-        <ComboBox fx:id="chooseScriptAddonComboBox" layoutX="530.0" layoutY="198.0" prefWidth="150.0"/>
-        <Button fx:id="remScriptAddonBtn" layoutX="747.0" layoutY="198.0" mnemonicParsing="false" onAction="#remAddon"
-                text="Remove"/>
-        <Button fx:id="confirmBtn" layoutX="776.0" layoutY="512.0" mnemonicParsing="false" onAction="#proceed"
-                text="Ok"/>
-        <Label layoutX="290.0" layoutY="23.0" text="Main-Settings"/>
-        <Label layoutX="290.0" layoutY="40.0" text="Name"/>
-        <TextField fx:id="nameTextField" layoutX="290.0" layoutY="57.0"/>
-        <Label layoutX="439.0" layoutY="40.0" text="Port"/>
-        <TextField fx:id="portTextField" layoutX="439.0" layoutY="57.0" prefHeight="25.0" prefWidth="76.0"/>
-        <Label layoutX="292.0" layoutY="92.0" text="Serverversion"/>
-        <ComboBox fx:id="serverVersionComboBox" layoutX="289.0" layoutY="118.0" prefHeight="25.0" prefWidth="112.0"/>
-        <ComboBox fx:id="scriptVersionComboBox" layoutX="410.0" layoutY="119.0" prefHeight="25.0" prefWidth="112.0"/>
-        <Label layoutX="413.0" layoutY="93.0" text="Skript Version"/>
-        <TextField fx:id="serverPathTextField" editable="false" layoutX="287.0" layoutY="172.0" prefHeight="25.0"
-                   prefWidth="231.0"/>
-        <TextArea fx:id="notesTexrArea" layoutX="618.0" layoutY="381.0" prefHeight="96.0" prefWidth="190.0"/>
-        <Label layoutX="618.0" layoutY="359.0" text="Notes"/>
-        <Label layoutX="287.0" layoutY="155.0" text="Path"/>
-        <Button fx:id="saveChangesBtn" layoutX="189.0" layoutY="198.0" mnemonicParsing="false"
-                onAction="#saveChangesToServer" text="Save Changes"/>
-        <Label layoutX="14.0" layoutY="231.0" text="Start parameters"/>
-        <TextField fx:id="startArgsTextField" layoutX="14.0" layoutY="248.0" prefHeight="25.0" prefWidth="265.0"/>
-        <TextField fx:id="generatorSettingsTextField" layoutX="14.0" layoutY="296.0" prefHeight="25.0"
-                   prefWidth="265.0"/>
-        <Label layoutX="14.0" layoutY="279.0" text="Generator Settings:"/>
-        <TextField fx:id="opPermissionLevelTextField" layoutX="14.0" layoutY="346.0" prefHeight="25.0"
-                   prefWidth="50.0"/>
-        <Label layoutX="14.0" layoutY="329.0" text="OP Perm Level:"/>
-        <CheckBox fx:id="netherCheck" layoutX="290.0" layoutY="230.0" mnemonicParsing="false" text="Allow Nether"/>
-        <TextField fx:id="worldNameTextField" layoutX="14.0" layoutY="394.0" prefHeight="25.0" prefWidth="265.0"/>
-        <Label layoutX="14.0" layoutY="377.0" text="Main World Name"/>
-        <CheckBox fx:id="queryCheck" layoutX="290.0" layoutY="250.0" mnemonicParsing="false" text="Query"/>
-        <CheckBox fx:id="flightCheck" layoutX="290.0" layoutY="270.0" mnemonicParsing="false" text="Allow Flight"/>
-        <CheckBox fx:id="achievementsCheck" layoutX="290.0" layoutY="290.0" mnemonicParsing="false"
-                  text="Announce Achievements"/>
-        <Label layoutX="106.0" layoutY="329.0" text="Max World-Size"/>
-        <TextField fx:id="maxWorldSizeTextField" layoutX="104.0" layoutY="346.0" prefHeight="25.0" prefWidth="84.0"/>
-        <ComboBox fx:id="levelTypeComboBox" layoutX="114.0" layoutY="479.0" prefWidth="150.0"/>
-        <CheckBox fx:id="rconCheck" layoutX="290.0" layoutY="310.0" mnemonicParsing="false" text="RCON"/>
-        <Label layoutX="14.0" layoutY="420.0" text="Level Seed"/>
-        <TextField fx:id="levelSeedTextField" layoutX="14.0" layoutY="437.0" prefHeight="25.0" prefWidth="265.0"/>
-        <CheckBox fx:id="forceGmCheck" layoutX="290.0" layoutY="330.0" mnemonicParsing="false" text="Force Gamemode"/>
-        <TextField fx:id="maxHeightTextField" layoutX="14.0" layoutY="479.0" prefHeight="25.0" prefWidth="50.0"/>
-        <Label layoutX="17.0" layoutY="462.0" text="Max Build Height"/>
-        <CheckBox fx:id="whitelistCheck" layoutX="290.0" layoutY="350.0" mnemonicParsing="false" text="Whitelist"/>
-        <CheckBox fx:id="spawnNpcsCheck" layoutX="290.0" layoutY="370.0" mnemonicParsing="false" text="Spawn NPCS"/>
-        <CheckBox fx:id="spawnAnimalsCheck" layoutX="290.0" layoutY="390.0" mnemonicParsing="false"
-                  text="Spawn Animals"/>
-        <CheckBox fx:id="hardcoreCheck" layoutX="290.0" layoutY="410.0" mnemonicParsing="false" text="Hardcore"/>
-        <CheckBox fx:id="snooperCheck" layoutX="290.0" layoutY="430.0" mnemonicParsing="false" text="Snooper"/>
-        <CheckBox fx:id="onlineModeCheck" layoutX="500.0" layoutY="370.0" mnemonicParsing="false" text="Online-Mode"/>
-        <Label layoutX="536.0" layoutY="282.0" text="Resource-Pack"/>
-        <TextField fx:id="packCheck" layoutX="536.0" layoutY="299.0" prefHeight="25.0" prefWidth="265.0"/>
-        <TextField fx:id="packSHATextField" layoutX="536.0" layoutY="251.0" prefHeight="25.0" prefWidth="265.0"/>
-        <Label layoutX="536.0" layoutY="234.0" text="Resource-Pack-SHA1"/>
-        <CheckBox fx:id="pvpCheck" layoutX="500.0" layoutY="350.0" mnemonicParsing="false" text="PvP"/>
-        <Label layoutX="116.0" layoutY="462.0" text="Level Type"/>
-        <Label layoutX="274.0" layoutY="462.0" text="difficulty"/>
-        <ComboBox fx:id="difficultyComboBox" layoutX="272.0" layoutY="479.0" prefWidth="150.0"/>
-        <ComboBox fx:id="defaultGameModeComboBox" layoutX="425.0" layoutY="479.0" prefWidth="150.0"/>
-        <Label layoutX="427.0" layoutY="464.0" text="Default Gamemode"/>
-        <CheckBox fx:id="cmdBlockCheck" layoutX="500.0" layoutY="390.0" mnemonicParsing="false" text="CMD Block"/>
-        <TextField fx:id="maxPlayersTextField" layoutX="206.0" layoutY="346.0" prefHeight="25.0" prefWidth="43.0"/>
-        <Label layoutX="208.0" layoutY="329.0" text="Max Players:"/>
-        <CheckBox fx:id="spawnMonstersCheck" layoutX="500.0" layoutY="410.0" mnemonicParsing="false"
-                  text="Spawn Monsters"/>
-        <CheckBox fx:id="generateSctructureCheck" layoutX="290.0" layoutY="210.0" mnemonicParsing="false"
-                  text="Generate Structure"/>
-        <Label layoutX="15.0" layoutY="504.0" text="View Distance"/>
-        <TextField fx:id="viewdinstanceTextField" layoutX="15.0" layoutY="521.0" prefHeight="25.0" prefWidth="50.0"/>
-        <TextField fx:id="modtTextField" layoutX="107.0" layoutY="521.0" prefHeight="25.0" prefWidth="265.0"/>
-        <Label layoutX="107.0" layoutY="504.0" text="Message of The Day"/>
+        <ListView fx:id="serversList" layoutX="14.0" layoutY="39.0" prefHeight="158.0" prefWidth="265.0" />
+        <Button fx:id="createServerBtn" layoutX="14.0" layoutY="198.0" mnemonicParsing="false" text="Create new Server" />
+        <Button fx:id="deleteServerBtn" layoutX="132.0" layoutY="198.0" mnemonicParsing="false" text="Delete" />
+        <ListView fx:id="scriptsList" layoutX="530.0" layoutY="39.0" prefHeight="158.0" prefWidth="276.0" />
+        <Button fx:id="addScriptAddonBtn" layoutX="689.0" layoutY="198.0" mnemonicParsing="false" text="Add" />
+        <Label layoutX="14.0" layoutY="14.0" text="Server:" />
+        <Label layoutX="541.0" layoutY="14.0" text="Script-Addons" />
+        <ComboBox fx:id="chooseScriptAddonComboBox" layoutX="530.0" layoutY="198.0" prefWidth="150.0" />
+        <Button fx:id="remScriptAddonBtn" layoutX="747.0" layoutY="198.0" mnemonicParsing="false" text="Remove" />
+        <Button fx:id="confirmBtn" layoutX="776.0" layoutY="512.0" mnemonicParsing="false" text="Ok" />
+        <Label layoutX="290.0" layoutY="23.0" text="Main-Settings" />
+        <Label layoutX="290.0" layoutY="40.0" text="Name" />
+        <TextField fx:id="nameTextField" layoutX="290.0" layoutY="57.0" />
+        <Label layoutX="439.0" layoutY="40.0" text="Port" />
+        <TextField fx:id="portTextField" layoutX="439.0" layoutY="57.0" prefHeight="25.0" prefWidth="76.0" />
+        <Label layoutX="292.0" layoutY="92.0" text="Serverversion" />
+        <ComboBox fx:id="serverVersionComboBox" layoutX="289.0" layoutY="118.0" prefHeight="25.0" prefWidth="112.0" />
+        <ComboBox fx:id="scriptVersionComboBox" layoutX="410.0" layoutY="119.0" prefHeight="25.0" prefWidth="112.0" />
+        <Label layoutX="413.0" layoutY="93.0" text="Skript Version" />
+        <TextField fx:id="serverPathTextField" editable="false" layoutX="287.0" layoutY="172.0" prefHeight="25.0" prefWidth="231.0" />
+        <TextArea fx:id="notesTexrArea" layoutX="618.0" layoutY="381.0" prefHeight="96.0" prefWidth="190.0" />
+        <Label layoutX="618.0" layoutY="359.0" text="Notes" />
+        <Label layoutX="287.0" layoutY="155.0" text="Path" />
+        <Button fx:id="saveChangesBtn" layoutX="189.0" layoutY="198.0" mnemonicParsing="false" text="Save Changes" />
+        <Label layoutX="14.0" layoutY="231.0" text="Start parameters" />
+        <TextField fx:id="startArgsTextField" layoutX="14.0" layoutY="248.0" prefHeight="25.0" prefWidth="265.0" />
+        <TextField fx:id="generatorSettingsTextField" layoutX="14.0" layoutY="296.0" prefHeight="25.0" prefWidth="265.0" />
+        <Label layoutX="14.0" layoutY="279.0" text="Generator Settings:" />
+        <TextField fx:id="opPermissionLevelTextField" layoutX="14.0" layoutY="346.0" prefHeight="25.0" prefWidth="50.0" />
+        <Label layoutX="14.0" layoutY="329.0" text="OP Perm Level:" />
+        <CheckBox fx:id="netherCheck" layoutX="290.0" layoutY="230.0" mnemonicParsing="false" text="Allow Nether" />
+        <TextField fx:id="worldNameTextField" layoutX="14.0" layoutY="394.0" prefHeight="25.0" prefWidth="265.0" />
+        <Label layoutX="14.0" layoutY="377.0" text="Main World Name" />
+        <CheckBox fx:id="queryCheck" layoutX="290.0" layoutY="250.0" mnemonicParsing="false" text="Query" />
+        <CheckBox fx:id="flightCheck" layoutX="290.0" layoutY="270.0" mnemonicParsing="false" text="Allow Flight" />
+        <CheckBox fx:id="achievementsCheck" layoutX="290.0" layoutY="290.0" mnemonicParsing="false" text="Announce Achievements" />
+        <Label layoutX="106.0" layoutY="329.0" text="Max World-Size" />
+        <TextField fx:id="maxWorldSizeTextField" layoutX="104.0" layoutY="346.0" prefHeight="25.0" prefWidth="84.0" />
+        <ComboBox fx:id="levelTypeComboBox" layoutX="114.0" layoutY="479.0" prefWidth="150.0" />
+        <CheckBox fx:id="rconCheck" layoutX="290.0" layoutY="310.0" mnemonicParsing="false" text="RCON" />
+        <Label layoutX="14.0" layoutY="420.0" text="Level Seed" />
+        <TextField fx:id="levelSeedTextField" layoutX="14.0" layoutY="437.0" prefHeight="25.0" prefWidth="265.0" />
+        <CheckBox fx:id="forceGmCheck" layoutX="290.0" layoutY="330.0" mnemonicParsing="false" text="Force Gamemode" />
+        <TextField fx:id="maxHeightTextField" layoutX="14.0" layoutY="479.0" prefHeight="25.0" prefWidth="50.0" />
+        <Label layoutX="17.0" layoutY="462.0" text="Max Build Height" />
+        <CheckBox fx:id="whitelistCheck" layoutX="290.0" layoutY="350.0" mnemonicParsing="false" text="Whitelist" />
+        <CheckBox fx:id="spawnNpcsCheck" layoutX="290.0" layoutY="370.0" mnemonicParsing="false" text="Spawn NPCS" />
+        <CheckBox fx:id="spawnAnimalsCheck" layoutX="290.0" layoutY="390.0" mnemonicParsing="false" text="Spawn Animals" />
+        <CheckBox fx:id="hardcoreCheck" layoutX="290.0" layoutY="410.0" mnemonicParsing="false" text="Hardcore" />
+        <CheckBox fx:id="snooperCheck" layoutX="290.0" layoutY="430.0" mnemonicParsing="false" text="Snooper" />
+        <CheckBox fx:id="onlineModeCheck" layoutX="500.0" layoutY="370.0" mnemonicParsing="false" text="Online-Mode" />
+        <Label layoutX="536.0" layoutY="282.0" text="Resource-Pack" />
+        <TextField fx:id="packCheck" layoutX="536.0" layoutY="299.0" prefHeight="25.0" prefWidth="265.0" />
+        <TextField fx:id="packSHATextField" layoutX="536.0" layoutY="251.0" prefHeight="25.0" prefWidth="265.0" />
+        <Label layoutX="536.0" layoutY="234.0" text="Resource-Pack-SHA1" />
+        <CheckBox fx:id="pvpCheck" layoutX="500.0" layoutY="350.0" mnemonicParsing="false" text="PvP" />
+        <Label layoutX="116.0" layoutY="462.0" text="Level Type" />
+        <Label layoutX="274.0" layoutY="462.0" text="difficulty" />
+        <ComboBox fx:id="difficultyComboBox" layoutX="272.0" layoutY="479.0" prefWidth="150.0" />
+        <ComboBox fx:id="defaultGameModeComboBox" layoutX="425.0" layoutY="479.0" prefWidth="150.0" />
+        <Label layoutX="427.0" layoutY="464.0" text="Default Gamemode" />
+        <CheckBox fx:id="cmdBlockCheck" layoutX="500.0" layoutY="390.0" mnemonicParsing="false" text="CMD Block" />
+        <TextField fx:id="maxPlayersTextField" layoutX="206.0" layoutY="346.0" prefHeight="25.0" prefWidth="43.0" />
+        <Label layoutX="208.0" layoutY="329.0" text="Max Players:" />
+        <CheckBox fx:id="spawnMonstersCheck" layoutX="500.0" layoutY="410.0" mnemonicParsing="false" text="Spawn Monsters" />
+        <CheckBox fx:id="generateSctructureCheck" layoutX="290.0" layoutY="210.0" mnemonicParsing="false" text="Generate Structure" />
+        <Label layoutX="15.0" layoutY="504.0" text="View Distance" />
+        <TextField fx:id="viewdinstanceTextField" layoutX="15.0" layoutY="521.0" prefHeight="25.0" prefWidth="50.0" />
+        <TextField fx:id="modtTextField" layoutX="107.0" layoutY="521.0" prefHeight="25.0" prefWidth="265.0" />
+        <Label layoutX="107.0" layoutY="504.0" text="Message of The Day" />
     </children>
 </Pane>

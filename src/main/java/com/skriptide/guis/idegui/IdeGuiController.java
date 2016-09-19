@@ -39,7 +39,18 @@ import java.util.ArrayList;
 
 public class IdeGuiController {
 
-
+	@FXML
+	public MenuItem manageAddonsPoint;
+	@FXML
+	public Button startServerBtn;
+	@FXML
+	public MenuItem createServerMenuPoint;
+	@FXML
+	public MenuItem manageServerMenuItem;
+	@FXML
+	public MenuItem saveMenuPoint;
+	@FXML
+	public MenuItem newProjectMenuPoint;
 	@FXML
 	public TabPane codeTabPane;
 	@FXML
@@ -363,6 +374,22 @@ public class IdeGuiController {
 
 	public void setUpWin() {
 
+		serverListComboBox.setOnShowing(event -> loadInServers());
+		manageAddonsPoint.setOnAction(event -> {
+			try {
+				manageAddons();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		commandSendBtn.setOnAction(event -> sendCommand());
+		startServerBtn.setOnAction(event -> startServer());
+		debuggingPoint.setOnAction(event -> triggerDebugger());
+		createServerMenuPoint.setOnAction(event -> newServer());
+		runPoint.setOnAction(event -> runProject());
+		manageServerMenuItem.setOnAction(event -> manageServers());
+		saveMenuPoint.setOnAction(event -> saveOpenProjects());
+		newProjectMenuPoint.setOnAction(event -> newProject());
 
 		DragResizer.makeResizable(secBox);
 		comandSendTextField.setOnKeyPressed(event -> {

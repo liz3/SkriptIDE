@@ -156,6 +156,12 @@ public class ManageServerController {
 
 	public void setValues() {
 
+		serversList.setOnMouseReleased(event -> loadSettings());
+		deleteServerBtn.setOnAction(event -> deleteServer());
+		addScriptAddonBtn.setOnAction(event -> addAddon());
+		remScriptAddonBtn.setOnAction(event -> remAddon());
+		confirmBtn.setOnAction(event -> proceed());
+		saveChangesBtn.setOnAction(event -> saveChangesToServer());
 		serversList.getItems().clear();
 
 		ObservableList<MCServer> servers = MCServer.getAllServers();

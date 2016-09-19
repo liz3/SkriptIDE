@@ -21,6 +21,8 @@ public class CreateProjectGuiController {
 
 
 	@FXML
+	public Button chooseSavePathBtn;
+	@FXML
 	public TextField projectNameTxTField;
 
 	@FXML
@@ -145,6 +147,11 @@ public class CreateProjectGuiController {
 
 	public void setValues() {
 
+		projectNameTxTField.setOnKeyReleased(event -> updatePath());
+		cancelBtn.setOnAction(event -> cancel());
+		createBtn.setOnAction(event -> createProject());
+		chooseSavePathBtn.setOnAction(event -> openProjectPathChooser());
+		createServerBtn.setOnAction(event -> createNewServer());
 		truePath = Config.getProjectsPath().substring(0, Config.getProjectsPath().length() - 1);
 		savePathTxTField.setText(Config.getProjectsPath());
 		ObservableList<Skript> sk = Skript.getSkriptVersions();

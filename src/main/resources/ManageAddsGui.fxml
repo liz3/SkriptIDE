@@ -14,8 +14,8 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <Button fx:id="scriptAddBtn" layoutX="599.0" layoutY="330.0" mnemonicParsing="false" onAction="#addScript" prefHeight="25.0" prefWidth="38.0" text="Add" />
-                                <Button fx:id="scriptRemoveBtn" layoutX="530.0" layoutY="330.0" mnemonicParsing="false" onAction="#remScript" text="Remove" />
+                                <Button fx:id="scriptAddBtn" layoutX="599.0" layoutY="330.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" text="Add" />
+                                <Button fx:id="scriptRemoveBtn" layoutX="530.0" layoutY="330.0" mnemonicParsing="false" text="Remove" />
                                 <TableView fx:id="scriptTable" prefHeight="309.0" prefWidth="643.0" />
                             </children>
                         </AnchorPane>
@@ -25,8 +25,8 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <Button fx:id="serverAddBtn" layoutX="599.0" layoutY="330.0" mnemonicParsing="false" onAction="#addServer" prefHeight="25.0" prefWidth="38.0" text="Add" />
-                                <Button fx:id="serverRemove" layoutX="530.0" layoutY="330.0" mnemonicParsing="false" onAction="#remServer" text="Remove" />
+                                <Button fx:id="serverAddBtn" layoutX="599.0" layoutY="330.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" text="Add" />
+                                <Button fx:id="serverRemove" layoutX="530.0" layoutY="330.0" mnemonicParsing="false" text="Remove" />
                                 <TableView fx:id="serverTable" prefHeight="309.0" prefWidth="643.0" />
                             </children>
                         </AnchorPane>
@@ -36,8 +36,8 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <Button fx:id="addonAddBtn" layoutX="599.0" layoutY="330.0" mnemonicParsing="false" onAction="#addAddon" prefHeight="25.0" prefWidth="38.0" text="Add" />
-                                <Button fx:id="addonsRemoveBtn" layoutX="530.0" layoutY="330.0" mnemonicParsing="false" onAction="#remAddon" text="Remove" />
+                                <Button fx:id="addonAddBtn" layoutX="599.0" layoutY="330.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" text="Add" />
+                                <Button fx:id="addonsRemoveBtn" layoutX="530.0" layoutY="330.0" mnemonicParsing="false" text="Remove" />
                                 <TableView fx:id="addonsTable" prefHeight="309.0" prefWidth="643.0" />
                             </children>
                         </AnchorPane>
@@ -45,6 +45,6 @@
                 </Tab>
             </tabs>
         </TabPane>
-        <Button fx:id="confirmBtn" layoutX="606.0" layoutY="419.0" mnemonicParsing="false" onAction="#confirmAction" prefHeight="25.0" prefWidth="51.0" text="Ok" />
+        <Button fx:id="confirmBtn" layoutX="606.0" layoutY="419.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Ok" />
     </children>
 </Pane>

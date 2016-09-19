@@ -45,6 +45,8 @@ public class CreateServerGuiController {
 	private TextField startParameterTextField;
 	@FXML
 	private Label infoLabel;
+	@FXML
+	private Button choosePathBtn;
 	private String truePath;
 
 	public void updatePath() {
@@ -56,8 +58,15 @@ public class CreateServerGuiController {
 
 	public void setValues() {
 
+
+		serverNameTextField.setOnKeyReleased(event -> updatePath());
+		choosePathBtn.setOnAction(event -> choosePath());
+		cancelBtn.setOnAction(event -> cancel());
+		createServerBtn.setOnAction(event -> createServer());
+		customServerVersionBtn.setOnAction(event -> chooseServerVersion());
+		customScriptPluginVersionBtn.setOnAction(event -> chooseScriptVersion());
 		truePath = Config.getServersPath().substring(0, Config.getServersPath().length() - 1);
-		;
+
 		serverPathTextField.setText(Config.getServersPath());
 		scriptVersionComboBox.getItems().clear();
 		serverVersionComboBox.getItems().clear();

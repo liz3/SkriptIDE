@@ -249,6 +249,14 @@ public class ManageAddsGuiController {
 	public void setLists() {
 
 
+		scriptAddBtn.setOnAction(event -> addScript());
+		scriptRemoveBtn.setOnAction(event -> remScript());
+		serverAddBtn.setOnAction(event -> addServer());
+		serverRemove.setOnAction(event -> remServer());
+		addonsRemoveBtn.setOnAction(event -> remAddon());
+		addonAddBtn.setOnAction(event -> addAddon());
+		confirmBtn.setOnAction(event -> confirmAction());
+
 		setSkriptAddons();
 		setServerVersions();
 		setSkriptVersions();
