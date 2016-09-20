@@ -50,14 +50,14 @@ public class Project {
 		Config config = new Config(configFile.getAbsolutePath());
 
 
-		Config project = new Config(new File(config.getString("project." + name + ".path")).getAbsolutePath());
+		Config project = new Config(new File(config.getString("project." + name)).getAbsolutePath());
 
 
 		this.name = project.getString("name");
 		this.skriptPath = project.getString("path");
-		this.sk = new Skript(project.getString("skript-path").toLowerCase());
-		this.outPath = project.getString("output");
-		this.server = new MCServer(project.getString("server-path"));
+		this.sk = new Skript(project.getString("skript-path"));
+		this.outPath = project.getString("output-path");
+		this.server = new MCServer(project.getString("server-name"));
 		this.folder = project.getString("folder-path");
 		this.notes = project.getString("notes");
 		if (Main.debugMode) {
@@ -77,7 +77,7 @@ public class Project {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/ConfigManager.ini");
+			File configFile = new File(current + "/Config.yaml");
 
 
 			Config config = new Config(configFile.getAbsolutePath());
@@ -88,7 +88,7 @@ public class Project {
 			System.out.println(sec.size());
 
 			for (String n : sec) {
-
+                System.out.println(n);
 				values.add(new Project(n));
 			}
 			if (Main.debugMode) {
@@ -116,7 +116,7 @@ public class Project {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/ConfigManager.ini");
+			File configFile = new File(current + "/Config.yaml");
 
 			Config config = new Config(configFile.getAbsolutePath());
 			if(config.getString("project." + name) == null) {
@@ -138,7 +138,7 @@ public class Project {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/ConfigManager.ini");
+			File configFile = new File(current + "/Config.yaml");
 
 			Config config = new Config(configFile.getAbsolutePath());
 			if(config.getString("project." + name) != null) {
@@ -162,7 +162,7 @@ public class Project {
 			File configFile = new File(current + "/Config.yaml");
 
 			Config config = new Config(configFile.getAbsolutePath());
-			if(config.getString("project." + name) != null) {
+			if(config.contains("project." + name)) {
 				config.remove("project." + name);
 			}
 
@@ -209,7 +209,7 @@ public class Project {
 		config.set("folder-path", path);
 		config.set("skript-Version", skript.getVersion());
 		config.set("skript-path", skript.getPath());
-		config.set("server-path", server.getpath());
+		config.set("server-name", server.getname());
 		config.set("output-path", server.getPlFolderPath() + "/Skript/scripts");
 
 		config.set("notes", notes);
@@ -282,7 +282,7 @@ public class Project {
 	private void updateProject(String newName) {
 
 		File oldfolder = new File(this.folderPath());
-		String newPath = oldfolder.getAbsolutePath().substring(0, oldfolder.getAbsolutePath().length() - this.name.length()) + newName + "\\";
+		String newPath = oldfolder.getAbsolutePath().substring(0, oldfolder.getAbsolutePath().length() - this.name.length()) + newName + "/";
 		oldfolder.renameTo(new File(newPath));
 		File sk = new File(newPath, this.name + ".sk");
 		sk.renameTo(new File(newPath, newName + ".sk"));
@@ -293,17 +293,17 @@ public class Project {
 		File info = null;
 
 
-		info = new File(newPath + "/SkriptIDE-Project.yaml");
+		info = new File(newPath + "SkriptIDE-Project.yaml");
 
         Config config = new Config(info.getAbsolutePath());
 
 
-        config.set("name", name);
-        config.set("path", script.getAbsolutePath());
-        config.set("folder-path", this.folderPath());
+        config.set("name", newName);
+        config.set("path", new File(newPath, newName + ".sk").getAbsolutePath());
+        config.set("folder-path", newPath);
         config.set("skript-Version", this.sk.getVersion());
         config.set("skript-path", this.sk.getPath());
-        config.set("server-path", server.getpath());
+        config.set("server-name", server.getname());
         config.set("output-path", server.getPlFolderPath() + "/Skript/scripts");
 
         config.set("notes", notes);
@@ -318,8 +318,8 @@ public class Project {
 			File configFile = new File(current + "/Config.yaml");
 
             Config con = new Config(configFile.getAbsolutePath());
-			con.set("project." + newName, newPath + "/SkriptIDE-Project.yaml");
-
+			con.set("project." + newName, newPath + "SkriptIDE-Project.yaml");
+			con.remove("project." + this.name);
 			con.save();
 
 		} catch (IOException e) {

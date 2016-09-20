@@ -61,7 +61,7 @@ public class ServerVersion {
 			List<String> sec = con.getAll("engine-version");
 			ObservableList<ServerVersion> values = FXCollections.observableArrayList();
 			for (String n : sec) {
-
+                System.out.println(n);
 				values.add(new ServerVersion(n));
 			}
 			if(Main.debugMode) {
@@ -88,9 +88,9 @@ public class ServerVersion {
 
 			Config config = new Config(configFile.getAbsolutePath());
 
-			config.set("engine-version." + path.getAbsolutePath() + ".name", name);
-			config.set("engine-version." + path.getAbsolutePath() + ".version", version);
-			config.set("engine-version." + path.getAbsolutePath() + ".path", path.getAbsolutePath());
+			config.set("engine-version." + path.getAbsolutePath().replace(".","_") + ".name", name);
+			config.set("engine-version." + path.getAbsolutePath().replace(".","_") + ".version", version);
+			config.set("engine-version." + path.getAbsolutePath().replace(".","_") + ".path", path.getAbsolutePath());
 
 			config.save();
 			if(Main.debugMode) {
@@ -106,15 +106,19 @@ public class ServerVersion {
 		String current = null;
 
 
+
 		try {
 			current = new File(".").getCanonicalPath();
 
 			File configFile = new File(current + "/Config.yaml");
 
             Config config = new Config(configFile.getAbsolutePath());
-
-            if(config.getString("engine-version." + path) != null) {
-                config.remove("engine-version." + path);
+            System.out.println("path" + path);
+            System.out.println();
+            if(config.contains(path.replace(".", "_"))) {
+                System.out.println("not null");
+                config.remove("engine-version." + path.replace(".", "_"));
+                config.save();
             }
 
 

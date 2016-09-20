@@ -94,9 +94,10 @@ public class MCServer {
 		}
 		File configFile = new File(current + "/Config.yaml");
 		Config config = new Config(configFile.getAbsolutePath());
-
-		File info = new File(config.getString("server." + name + ".info"));
-
+        System.out.println(name);
+        System.out.println(config.getString("server." + name + ".info"));
+        File info = new File(config.getString("server." + name + ".info"));
+        System.out.println(info.getAbsolutePath());
         Config server = new Config(info.getAbsolutePath());
 
         this.name = server.getString("name");
@@ -118,7 +119,7 @@ public class MCServer {
             if (!str.equals(null) && !str.equals("")) {
 
 
-                skriptAddons[i] = new SkriptAddon(str.toLowerCase());
+                skriptAddons[i] = new SkriptAddon(server.getString("addon." + str + ".path").replace(".", "_"));
                 i++;
             }
         }
@@ -141,7 +142,7 @@ public class MCServer {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/ConfigManager.ini");
+			File configFile = new File(current + "/Config.yaml");
 
 
             Config config = new Config(configFile.getAbsolutePath());
@@ -149,8 +150,8 @@ public class MCServer {
 			List<String> sec = config.getAll("server");
 			ObservableList<MCServer> values = FXCollections.observableArrayList();
 			for (String n : sec) {
-
-				values.add(new MCServer(n));
+                System.out.println(n);
+                values.add(new MCServer(n));
 			}
 			if (Main.debugMode) {
 				System.out.println("Returning all servers");
@@ -172,14 +173,13 @@ public class MCServer {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/ConfigManager.ini");
+			File configFile = new File(current + "/Config.yaml");
 
             Config config = new Config(configFile.getAbsolutePath());
 
             if(config.getString("server." + name) == null) {
 
                 config.set("server." + name + ".info", path + "/SkriptIDE-Server.yaml");
-                config.set("server." + name + ".version", version);
                 config.set("server." + name + ".name", name);
 
                 config.save();
@@ -204,7 +204,7 @@ public class MCServer {
         try {
             current = new File(".").getCanonicalPath();
 
-            File configFile = new File(current + "/ConfigManager.ini");
+            File configFile = new File(current + "/Config.yaml");
 
             Config config = new Config(configFile.getAbsolutePath());
 
@@ -234,7 +234,7 @@ public class MCServer {
 		try {
             current = new File(".").getCanonicalPath();
 
-            File configFile = new File(current + "/ConfigManager.ini");
+            File configFile = new File(current + "/Config.yaml");
 
             Config config = new Config(configFile.getAbsolutePath());
 
@@ -250,9 +250,10 @@ public class MCServer {
 	}
 
 	public void loadServer() {
+        File props = null;
 
-		File props = new File(path + "\\server.PROPERTIES");
-
+         props = new File(path + "/server.properties");
+// PROPERTIES
 
 		try {
 			Scanner sc = new Scanner(props);
@@ -415,7 +416,7 @@ public class MCServer {
 
 	public void updateServer() {
 
-		File props = new File(path + "/server.PROPERTIES");
+		File props = new File(path + "/server.properties");
 		File infoFile = new File(path + "/SkriptIDE-Server.yaml");
 
 		try {
@@ -501,7 +502,7 @@ public class MCServer {
 		Thread t = new Thread(() -> {
 
 
-			ProcessBuilder pb = new ProcessBuilder(System.getProperty("java.home") + "\\bin\\java.exe", "-jar", this.path + "/spigot.jar");
+			ProcessBuilder pb = new ProcessBuilder(System.getProperty("java.home") + "/bin/java", "-jar", this.path + "/spigot.jar");
 			pb.directory(new File(path));
 
 			Process p = null;
@@ -726,11 +727,11 @@ public class MCServer {
 					+ " Projects, you will have to change the Server manually to another?");
 
 			if (isToDelete) {
-				File folder = new File(this.path.replace("\\", "/"));
+				File folder = new File(this.path);
 				System.out.println(path);
 
 				deleteDirectory(folder);
-				removeServer(this.path.toLowerCase().replace("/", "\\"));
+				removeServer(this.path);
 				if (Main.debugMode) {
 					System.out.println("Deleted server!");
 				}
@@ -738,11 +739,11 @@ public class MCServer {
 
 			}
 		} else {
-			File folder = new File(this.path.replace("\\", "/"));
+			File folder = new File(this.path);
 			System.out.println(path);
 
 			deleteDirectory(folder);
-			removeServer(this.path.toLowerCase().replace("/", "\\"));
+			removeServer(this.name);
 			if (Main.debugMode) {
 				System.out.println("Deleted server!");
 			}
@@ -1106,11 +1107,13 @@ public class MCServer {
 
             Config con = new Config(configFile.getAbsolutePath());
 
-            if(con.getString("server." + name) != null) {
+            System.out.println(name);
+            if(con.contains("server." + name)) {
                 con.remove("server." + name);
-            }
+				con.save();
 
-            con.save();
+			}
+
 
 
 		} catch (IOException e) {

@@ -152,7 +152,7 @@ public class CreateProjectGuiController {
 		createBtn.setOnAction(event -> createProject());
 		chooseSavePathBtn.setOnAction(event -> openProjectPathChooser());
 		createServerBtn.setOnAction(event -> createNewServer());
-		truePath = ConfigManager.getProjectsPath().substring(0, ConfigManager.getProjectsPath().length() - 1);
+		truePath = ConfigManager.getProjectsPath();
 		savePathTxTField.setText(ConfigManager.getProjectsPath());
 		ObservableList<Skript> sk = Skript.getSkriptVersions();
 

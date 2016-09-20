@@ -54,7 +54,7 @@ public class SkriptAddon {
 
 		for (File f : plFolder.listFiles()) {
 
-			if (f.getAbsolutePath().endsWith(".jar") && !f.getName().contains("Skript")) {
+			if (f.getAbsolutePath().endsWith(".jar") && !f.getName().contains("Skript.jar")) {
 
 				f.delete();
 
@@ -91,7 +91,7 @@ public class SkriptAddon {
             List<String> sec = config.getAll("addon");
 			ObservableList<SkriptAddon> values = FXCollections.observableArrayList();
 			for (String n : sec) {
-
+                System.out.println(n);
 				values.add(new SkriptAddon(n));
 			}
 
@@ -110,22 +110,27 @@ public class SkriptAddon {
 	public static void addAddon(String name, String version, File path) {
 
 		String current = null;
-
+        try {
+            current = new File(".").getCanonicalPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         File configFile = new File(current + "/Config.yaml");
 
         Config config = new Config(configFile.getAbsolutePath());
 
-        config.set("addon." + path.getAbsolutePath() + ".name", name);
-        config.set("addon." + path.getAbsolutePath() + ".version", version);
-        config.set("addon." + path.getAbsolutePath() + ".path", path.getAbsolutePath());
+        config.set("addon." + path.getAbsolutePath().replace(".","_") + ".name", name);
+        config.set("addon." + path.getAbsolutePath().replace(".","_") + ".version", version);
+        config.set("addon." + path.getAbsolutePath().replace(".","_") + ".path", path.getAbsolutePath());
 
+		config.save();
 
         if(Main.debugMode) {
             System.out.println("added Addon");
         }
 
-        config.save();
+
 
     }
 
@@ -142,8 +147,8 @@ public class SkriptAddon {
 
 			Config config = new Config(configFile.getAbsolutePath());
 
-            if(config.getString("addon." + path) != null) {
-                config.remove("addon." + path);
+            if(config.contains("addon." + path.replace(".", "_"))) {
+                config.remove("addon." + path.replace(".", "_"));
             }
 			if(Main.debugMode) {
 				System.out.println("Removed addon");

@@ -130,7 +130,7 @@ public class ConfigManager {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/ConfigManager.ini");
+			File configFile = new File(current + "/Config.yaml");
 
 
             String path = new Config(configFile.getAbsolutePath()).getString("main.paths.servers");
@@ -151,7 +151,7 @@ public class ConfigManager {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/ConfigManager.ini");
+			File configFile = new File(current + "/Config.yaml");
 
 
             boolean path = Boolean.valueOf(new Config(configFile.getAbsolutePath()).getString("main.set.projects"));

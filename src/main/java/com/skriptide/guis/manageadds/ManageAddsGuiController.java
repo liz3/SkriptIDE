@@ -106,12 +106,15 @@ public class ManageAddsGuiController {
 		File f = dirChooser.showOpenDialog(fileChooserWindow);
 		if (f != null) {
 			SkriptAddon.addAddon(VersionReader.getNameOfPlugin(f), VersionReader.getVersionOfPlugin(f), f);
-			refreshList();
+            System.out.println("LoL es geht");
+            refreshList();
 			if (Main.debugMode) {
 
 				System.out.println("added addon");
 			}
-		}
+		} else {
+            System.out.println("Lol, das geht nicht");
+        }
 
 	}
 

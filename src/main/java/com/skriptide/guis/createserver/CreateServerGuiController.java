@@ -65,7 +65,7 @@ public class CreateServerGuiController {
 		createServerBtn.setOnAction(event -> createServer());
 		customServerVersionBtn.setOnAction(event -> chooseServerVersion());
 		customScriptPluginVersionBtn.setOnAction(event -> chooseScriptVersion());
-		truePath = ConfigManager.getServersPath().substring(0, ConfigManager.getServersPath().length() - 1);
+		truePath = ConfigManager.getServersPath();
 
 		serverPathTextField.setText(ConfigManager.getServersPath());
 		scriptVersionComboBox.getItems().clear();

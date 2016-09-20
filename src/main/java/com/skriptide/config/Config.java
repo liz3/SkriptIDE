@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Config extends BaseConfig implements ConfigSection {
 
@@ -71,7 +72,17 @@ public class Config extends BaseConfig implements ConfigSection {
     }
 
     @Override
-    public void remove(String path) { getValues().remove(path); }
+    public void remove(String path) {
+        ArrayList<String> toRemove = new ArrayList<>();
+        for(String str : getValues().keySet()) {
+            if(str.contains(path)) {
+                toRemove.add(str);
+            }
+        }
+        for(String str : toRemove) {
+            getValues().remove(str);
+        }
+    }
 
     @Override
     public List<String> getNextOf(String next) {
@@ -86,6 +97,7 @@ public class Config extends BaseConfig implements ConfigSection {
                 String[] split = currentKey.split(Pattern.quote("."));
                 for(int i = 0; i != split.length; i++) {
                     if(split[i].equals(next)) {
+
                         truePath = truePath + "." + split[i] + "." + split[i + 1];
 
                         found.add(truePath.substring(1));
@@ -115,9 +127,10 @@ public class Config extends BaseConfig implements ConfigSection {
                 for(int i = 0; i != split.length; i++) {
                     if(split[i].equals(next)) {
 
-
-                        found.add(split[i + 1]);
-                        continue;
+                        if(!found.contains(split[i + 1])) {
+                            found.add(split[i + 1]);
+                            continue;
+                        }
                     }
                 }
 
@@ -128,4 +141,19 @@ public class Config extends BaseConfig implements ConfigSection {
         return found;
     }
 
+    public List<String> containsAll(String arg) {
+        List<String> founds = null;
+        founds.addAll(getValues().keySet().stream().filter(str -> str.contains(arg)).collect(Collectors.toList()));
+        return founds;
+    }
+    public boolean contains(String arg) {
+
+        for (String str : getValues().keySet()) {
+            if (str.contains(arg)) {
+                return true;
+            }
+
+        }
+        return false;
+    }
 }

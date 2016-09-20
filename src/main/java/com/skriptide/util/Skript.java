@@ -91,9 +91,9 @@ public class Skript {
             if(config.getString("skripts." + path.getAbsolutePath()) == null ) {
 
 
-                config.set("skripts." + path.getAbsolutePath() + ".name", name);
-                config.set("skripts." + path.getAbsolutePath() + ".version", version);
-                config.set("skripts." + path.getAbsolutePath() + ".path", path.getAbsoluteFile());
+                config.set("skripts." + path.getAbsolutePath().replace(".","_") + ".name", name);
+                config.set("skripts." + path.getAbsolutePath().replace(".","_") + ".version", version);
+                config.set("skripts." + path.getAbsolutePath().replace(".","_") + ".path", path.getAbsolutePath());
 
                 config.save();
             } else {
@@ -123,9 +123,10 @@ public class Skript {
 
             Config config = new Config(configFile.getAbsolutePath());
 
-            if(config.getString("skript." + path) != null) {
 
-                config.remove("skript." + path);
+            if(config.contains("skript." + path.replace(".", "_"))) {
+
+                config.remove("skript." + path.replace(".", "_"));
 
                 config.save();
 

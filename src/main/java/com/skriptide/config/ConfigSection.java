@@ -33,4 +33,8 @@ public interface ConfigSection {
 
     List<String> getAll(String next);
 
+    List<String> containsAll(String arg);
+
+    boolean contains(String arg);
+
 }
