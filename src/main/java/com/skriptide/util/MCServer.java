@@ -1,18 +1,17 @@
 package com.skriptide.util;
 
+import com.skriptide.config.Config;
 import com.skriptide.guis.SceneManager;
 import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.ini4j.Ini;
-import org.ini4j.Profile;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -85,48 +84,52 @@ public class MCServer {
 		}
 	}
 
-	public MCServer(String path) {
+	public MCServer(String name) {
 
-		File info = new File(getServer(path));
-
+		String current = null;
 		try {
-			Ini ini = new Ini(info);
-			Profile.Section sec = ini.get("Info");
-			this.name = sec.get("Server-name");
-			this.path = path;
-			this.version = new ServerVersion(sec.get("Version-Path"));
-			this.skript = new Skript(sec.get("Skript"));
-			this.plFolderPath = sec.get("Plugin-folder");
-			this.notes = sec.get("Notes");
-			this.startArgs = sec.get("StargArgs");
-
-
-			Profile.Section adds = ini.get("Skript-Addons");
-			int addonsSize = adds.size();
-			skriptAddons = new SkriptAddon[addonsSize];
-			int i = 0;
-			for (String str : adds.values()) {
-
-
-				if (!str.equals(null) && !str.equals("")) {
-
-
-					skriptAddons[i] = new SkriptAddon(str.toLowerCase());
-					i++;
-				}
-			}
-
-
-			if (Main.debugMode) {
-
-				System.out.println("Loaded Server from path" + path);
-			}
-
+			current = new File(".").getCanonicalPath();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		File configFile = new File(current + "/Config.yaml");
+		Config config = new Config(configFile.getAbsolutePath());
 
-		if (Main.debugMode) {
+		File info = new File(config.getString("server." + name + ".info"));
+
+        Config server = new Config(info.getAbsolutePath());
+
+        this.name = server.getString("name");
+        this.path = server.getString("path");
+        this.version = new ServerVersion(server.getString("engine-path"));
+        this.skript = new Skript(server.getString("skript"));
+        this.plFolderPath = server.getString("plugins-path");
+        this.notes = server.getString("notes");
+        this.startArgs = server.getString("start-args");
+
+
+        List<String> adds = server.getAll("addon");
+        int addonsSize = adds.size();
+        skriptAddons = new SkriptAddon[addonsSize];
+        int i = 0;
+        for (String str : adds) {
+
+
+            if (!str.equals(null) && !str.equals("")) {
+
+
+                skriptAddons[i] = new SkriptAddon(str.toLowerCase());
+                i++;
+            }
+        }
+
+
+        if (Main.debugMode) {
+
+            System.out.println("Loaded Server from path" + path);
+        }
+
+        if (Main.debugMode) {
 			System.out.println("Loaded settings from server");
 		}
 
@@ -138,19 +141,14 @@ public class MCServer {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/ConfigManager.ini");
 
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
-			}
-			Profile.Section sec = cfg.get("Servers");
+            Config config = new Config(configFile.getAbsolutePath());
+
+			List<String> sec = config.getAll("server");
 			ObservableList<MCServer> values = FXCollections.observableArrayList();
-			for (String n : sec.childrenNames()) {
+			for (String n : sec) {
 
 				values.add(new MCServer(n));
 			}
@@ -174,33 +172,19 @@ public class MCServer {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/ConfigManager.ini");
 
+            Config config = new Config(configFile.getAbsolutePath());
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Servers");
-			if (sec.containsKey("Placeholder")) {
-				sec.remove("Placeholder");
-			}
+            if(config.getString("server." + name) == null) {
 
-			if (sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
+                config.set("server." + name + ".info", path + "/SkriptIDE-Server.yaml");
+                config.set("server." + name + ".version", version);
+                config.set("server." + name + ".name", name);
 
+                config.save();
+            }
 
-			} else {
-
-				Profile.Section newSever = sec.addChild(path.getAbsolutePath().toLowerCase());
-
-				newSever.put("Name", name);
-				newSever.put("Version", version);
-				newSever.put("Info", path + "\\ScriptIDE-Server.ini");
-			}
-
-			cfg.store();
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -213,41 +197,30 @@ public class MCServer {
 
 	private static void updateServer(String name, String version, File path) {
 
-		String current = null;
+
+        String current = null;
 
 
-		try {
-			current = new File(".").getCanonicalPath();
+        try {
+            current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+            File configFile = new File(current + "/ConfigManager.ini");
 
+            Config config = new Config(configFile.getAbsolutePath());
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Servers");
+            if(config.getString("server." + name) == null) {
 
-			if (sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
-				Profile.Section newSever = sec.getChild(path.getAbsolutePath().toLowerCase());
+                config.set("server." + name + ".info", path + "/SkriptIDE-Server.yaml");
+                config.set("server." + name + ".version", version);
+                config.set("server." + name + ".name", name);
 
-				newSever.put("Name", name);
-				newSever.put("Version", version);
-				newSever.put("Info", path + "\\ScriptIDE-Server.ini");
-
-				cfg.store();
-
-			} else {
+                config.save();
+            }
 
 
-			}
-
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 	}
@@ -259,27 +232,14 @@ public class MCServer {
 
 
 		try {
-			current = new File(".").getCanonicalPath();
+            current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+            File configFile = new File(current + "/ConfigManager.ini");
+
+            Config config = new Config(configFile.getAbsolutePath());
 
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Servers");
-
-			Profile.Section child = sec.getChild(name);
-
-			String path = child.get("Info");
-
-			if (Main.debugMode) {
-				System.out.println("returning server path");
-			}
-			return path;
+			return config.getString("server." + name + ".info");
 
 
 		} catch (IOException e) {
@@ -455,8 +415,8 @@ public class MCServer {
 
 	public void updateServer() {
 
-		File props = new File(path + "\\server.PROPERTIES");
-		File infoFile = new File(path + "\\ScriptIDE-Server.ini");
+		File props = new File(path + "/server.PROPERTIES");
+		File infoFile = new File(path + "/SkriptIDE-Server.yaml");
 
 		try {
 			PrintWriter pw = new PrintWriter(new FileWriter(props));
@@ -495,55 +455,30 @@ public class MCServer {
 			pw.flush();
 			pw.close();
 
-			Ini info = new Ini(infoFile);
+			Config config = new Config(infoFile.getAbsolutePath());
 
-			Profile.Section mainSec = info.get("Info");
-			mainSec.put("Server-name", name);
-			mainSec.put("Version-Path", version.getPath().toLowerCase());
-			mainSec.put("mainPath", path.toLowerCase());
-			mainSec.put("Skript", skript.getPath().toLowerCase());
-			mainSec.put("Plugin-folder", this.plFolderPath);
 
-			Profile.Section addons = info.get("Skript-Addons");
-			ArrayList<String> removes = new ArrayList<>();
-			for (String key : addons.keySet()) {
-				String entry = addons.get(key);
-				System.out.println(entry);
-				boolean toDelete = true;
-				for (int i = 0; i != skriptAddons.length; i++) {
+			config.set("name", name);
+			config.set("engine-path", version.getPath());
+			config.set("path", path);
+			config.set("skript", skript.getPath());
+			config.set("Plugin-folder", this.plFolderPath);
 
-					String path = skriptAddons[i].getPath().toLowerCase();
-					System.out.println(path);
-					if (entry.equalsIgnoreCase(path)) {
-						toDelete = false;
-					}
-
-				}
-				if (toDelete) {
-					removes.add(key);
-
-				}
-			}
-			removes.forEach(addons::remove);
-			if (addons.size() == 0) {
-				addons.put("Placeholder", "");
-			}
+			config.remove("addon");
 
 			if (this.skriptAddons.length != 0) {
 
 				for (int i = 0; i != skriptAddons.length; i++) {
-					if (skriptAddons.length > 0) {
-						if (addons.containsKey("Placeholder")) {
-							addons.remove("Placeholder");
-						}
-					}
+
 					if (skriptAddons[i] != null) {
-						addons.put(skriptAddons[i].getName() + "-" + skriptAddons[i].getVersion(), skriptAddons[i].getPath());
+						config.set("addon." + skriptAddons[i].getName() + ".name", skriptAddons[i].getName());
+                        config.set("addon." + skriptAddons[i].getName() + ".path", skriptAddons[i].getPath());
+                        config.set("addon." + skriptAddons[i].getName() + ".version", skriptAddons[i].getVersion());
 					}
 				}
 			}
 
-			info.store();
+			config.save();
 
 			updateServer(this.name, this.version.getVersion(), new File(this.path));
 			SkriptAddon.compareAndSet(skriptAddons, new File(this.plFolderPath));
@@ -660,7 +595,7 @@ public class MCServer {
 
 		File folder = new File(path);
 		if (!folder.exists()) {
-			Path pathToFile = Paths.get(path + "\\data.ini");
+			Path pathToFile = Paths.get(path + "/data.yaml");
 			try {
 				Files.createDirectories(pathToFile.getParent());
 			} catch (IOException e) {
@@ -704,33 +639,27 @@ public class MCServer {
 			System.out.println("Spigot.jar for a server has been created");
 		}
 
-		File infoFile = new File(path + "\\ScriptIDE-Server.ini");
+		File infoFile = new File(path + "/SkriptIDE-Server.yaml");
 		try {
 			infoFile.createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		try {
-			Ini info = new Ini(infoFile);
+        Config config = new Config(infoFile.getAbsolutePath());
 
-			Profile.Section mainSec = info.add("Info");
-			mainSec.put("Server-name", name);
-			mainSec.put("Version-Path", version.getPath().toLowerCase());
-			mainSec.put("mainPath", path.toLowerCase());
-			mainSec.put("Skript", skript.getPath().toLowerCase());
-			mainSec.put("Plugin-folder", this.plFolderPath);
-			mainSec.put("Notes", this.notes);
-			mainSec.put("StartArgs", this.startArgs);
 
-			Profile.Section addons = info.add("Skript-Addons");
-			addons.put("Placeholder", "");
+        config.set("name", name);
+        config.set("engine-path", version.getPath());
+        config.set("path", path);
+        config.set("skript", skript.getPath());
+        config.set("plugins-path", this.plFolderPath);
+        config.set("notes", this.notes);
+        config.set("start-args", this.startArgs);
 
-			info.store();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
-		File plFolder = new File(path + "/plugins");
+        config.save();
+
+        File plFolder = new File(path + "/plugins");
 		plFolder.mkdir();
 		try {
 			FileInputStream jarInPut = new FileInputStream(new File(skript.getPath()));
@@ -1165,7 +1094,7 @@ public class MCServer {
 		this.skriptAddons = addons;
 	}
 
-	private void removeServer(String path) {
+	private void removeServer(String name) {
 
 		String current = null;
 
@@ -1173,27 +1102,15 @@ public class MCServer {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
 
+            Config con = new Config(configFile.getAbsolutePath());
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Servers");
+            if(con.getString("server." + name) != null) {
+                con.remove("server." + name);
+            }
 
-
-			if (sec.getChild(path.toLowerCase()) != null) {
-				sec.removeChild(path.toLowerCase());
-
-			}
-
-			if (sec.size() == 0) {
-				sec.put("Placeholder", "");
-			}
-			cfg.store();
+            con.save();
 
 
 		} catch (IOException e) {

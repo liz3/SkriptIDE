@@ -1,9 +1,7 @@
 package com.skriptide.util;
 
+import com.skriptide.config.Config;
 import com.skriptide.main.Main;
-import org.ini4j.Ini;
-import org.ini4j.Profile;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,7 +11,7 @@ import java.nio.file.Paths;
 /**
  * Created by Liz3ga on 27.07.2016.
  */
-public class Config {
+public class ConfigManager {
 
 	public static int checkConfig() {
 
@@ -22,16 +20,16 @@ public class Config {
 			String current = new File(".").getCanonicalPath();
 
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
 
 			if (configFile.exists()) {
 				if(Main.debugMode) {
-					System.out.println("Config exists");
+					System.out.println("ConfigManager exists");
 				}
 				return 0;
 			} else {
 				if(Main.debugMode) {
-					System.out.println("Config does not exists");
+					System.out.println("ConfigManager does not exists");
 				}
 				return 1;
 
@@ -51,7 +49,7 @@ public class Config {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
 
 			configFile.createNewFile();
 
@@ -60,46 +58,32 @@ public class Config {
 
 
 			if (!projPath.exists()) {
-				Path pathToFile = Paths.get(pPath + "\\data.ini");
+				Path pathToFile = Paths.get(pPath + "\\data.yaml");
 				Files.createDirectories(pathToFile.getParent());
 				Files.createFile(pathToFile);
 				File f = new File(pathToFile.toUri());
 				f.delete();
 			}
 			if (!servPath.exists()) {
-				Path pathToFile = Paths.get(sPath + "\\data.ini");
+				Path pathToFile = Paths.get(sPath + "\\data.yaml");
 				Files.createDirectories(pathToFile.getParent());
 				Files.createFile(pathToFile);
 				File f = new File(pathToFile.toUri());
 				f.delete();
 			}
-			Ini cfg = new Ini(configFile);
+            Config config = new Config(configFile.getAbsolutePath());
 
-			Profile.Section generel = cfg.add("Info");
-			Profile.Section srv = cfg.add("Servers");
-			Profile.Section proj = cfg.add("Projects");
-			Profile.Section scripts = cfg.add("Scripts");
-			Profile.Section addons = cfg.add("Addons");
-			Profile.Section serverVersion = cfg.add("Server-versions");
-			Profile.Section settings = cfg.add("Settings");
-
-			generel.add("Projects-Path", pPath);
-			generel.add("Servers-Path", sPath);
-			generel.add("Lang", lang);
-			generel.add("DebugMode", "false");
-
-			srv.add("Placeholder", "");
-			proj.add("Placeholder", "");
-			scripts.add("Placeholder", "");
-			addons.add("Placeholder", "");
-			serverVersion.add("Placeholder", "");
+			config.set("main.paths.projects", pPath);
+			config.set("main.paths.servers", sPath);
+			config.set("main.settings.lang", lang);
+            config.set("main.settings.debugMode", "false");
 
 
-			cfg.store();
+			config.save();
 
 			if (Main.debugMode) {
 
-				System.out.println("Config created without errors");
+				System.out.println("ConfigManager created without errors");
 			}
 
 			return true;
@@ -119,13 +103,10 @@ public class Config {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
 
 
-			Ini cfg = new Ini(configFile);
-			Profile.Section sec = cfg.get("Info");
-
-			String path = sec.get("Projects-Path");
+			String path = new Config(configFile.getAbsolutePath()).getString("main.paths.projects");
 
 
 			if (Main.debugMode) {
@@ -149,16 +130,10 @@ public class Config {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/ConfigManager.ini");
 
 
-			Ini cfg = new Ini(configFile);
-			Profile.Section sec = cfg.get("Info");
-
-			String path = sec.get("Servers-Path");
-			if (Main.debugMode) {
-				System.out.println("Servers path called");
-			}
+            String path = new Config(configFile.getAbsolutePath()).getString("main.paths.servers");
 
 
 			return path;
@@ -176,19 +151,13 @@ public class Config {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/ConfigManager.ini");
 
 
-			Ini cfg = new Ini(configFile);
-			Profile.Section sec = cfg.get("Info");
+            boolean path = Boolean.valueOf(new Config(configFile.getAbsolutePath()).getString("main.set.projects"));
 
-			String path = sec.get("DebugMode");
 
-			if (path.equals("true")) {
-				return true;
-			} else {
-				return false;
-			}
+            return path;
 
 
 		} catch (IOException e) {

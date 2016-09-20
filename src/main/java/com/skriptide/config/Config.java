@@ -1,8 +1,11 @@
 package com.skriptide.config;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 public class Config extends BaseConfig implements ConfigSection {
 
@@ -65,6 +68,64 @@ public class Config extends BaseConfig implements ConfigSection {
     @Override
     public void set(String path, Object value) {
         getValues().put(path, value);
+    }
+
+    @Override
+    public void remove(String path) { getValues().remove(path); }
+
+    @Override
+    public List<String> getNextOf(String next) {
+
+        Set<String> allEntries = getValues().keySet();
+        ArrayList<String> found = new ArrayList<>();
+        for(String currentKey : allEntries) {
+
+            if(currentKey.contains(next)) {
+
+                String truePath = "";
+                String[] split = currentKey.split(Pattern.quote("."));
+                for(int i = 0; i != split.length; i++) {
+                    if(split[i].equals(next)) {
+                        truePath = truePath + "." + split[i] + "." + split[i + 1];
+
+                        found.add(truePath.substring(1));
+                        continue;
+                    } else {
+                        truePath = truePath + "." + split[i];
+                    }
+                }
+
+            }
+        }
+
+
+        return found;
+    }
+    @Override
+    public List<String> getAll(String next) {
+
+        Set<String> allEntries = getValues().keySet();
+        ArrayList<String> found = new ArrayList<>();
+        for(String currentKey : allEntries) {
+
+            if(currentKey.contains(next)) {
+
+
+                String[] split = currentKey.split(Pattern.quote("."));
+                for(int i = 0; i != split.length; i++) {
+                    if(split[i].equals(next)) {
+
+
+                        found.add(split[i + 1]);
+                        continue;
+                    }
+                }
+
+            }
+        }
+
+
+        return found;
     }
 
 }

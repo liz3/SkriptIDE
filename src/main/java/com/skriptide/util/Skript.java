@@ -1,13 +1,13 @@
 package com.skriptide.util;
 
+import com.skriptide.config.Config;
 import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.ini4j.Ini;
-import org.ini4j.Profile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Liz3ga on 23.08.2016.
@@ -19,7 +19,7 @@ public class Skript {
 	public String version;
 	public String path;
 
-	public Skript(String childName) {
+	public Skript(String path) {
 
 		String current = null;
 
@@ -27,21 +27,14 @@ public class Skript {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
+
+			Config config = new Config(configFile.getAbsolutePath());
 
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Scripts");
-
-			Profile.Section child = sec.getChild(childName);
-			this.name = child.get("Name");
-			this.version = child.get("Version");
-			this.path = child.get("Path");
+			this.name = config.getString("skripts." + path + ".name");
+			this.version = config.getString("skripts." + path + ".version");
+			this.path = config.getString("skripts." + path + ".path");
 
 			if(Main.debugMode) {
 				System.out.println("loaded Skript version");
@@ -60,32 +53,26 @@ public class Skript {
 
 
 		try {
-			current = new File(".").getCanonicalPath();
+            current = new File(".").getCanonicalPath();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
 
-			File configFile = new File(current + "/Config.ini");
+		File configFile = new File(current + "/Config.yaml");
 
+		Config config = new Config(configFile.getAbsolutePath());
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Scripts");
-			ObservableList<Skript> values = FXCollections.observableArrayList();
-			for (String n : sec.childrenNames()) {
+		ObservableList<Skript> values = FXCollections.observableArrayList();
 
-				values.add(new Skript(n));
-			}
-			if(Main.debugMode) {
-				System.out.println("returning skript versions");
-			}
-			return values;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		for(String str : config.getAll("skripts")) {
+            values.add(new Skript(str));
+        }
 
-		return null;
+		if(Main.debugMode) {
+            System.out.println("returning skript versions");
+        }
+		return values;
+
 
 	}
 
@@ -97,32 +84,25 @@ public class Skript {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
+
+            Config config = new Config(configFile.getAbsolutePath());
+
+            if(config.getString("skripts." + path.getAbsolutePath()) == null ) {
 
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Scripts");
-			if (sec.containsKey("Placeholder")) {
-				sec.remove("Placeholder");
-			}
-			if (sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
+                config.set("skripts." + path.getAbsolutePath() + ".name", name);
+                config.set("skripts." + path.getAbsolutePath() + ".version", version);
+                config.set("skripts." + path.getAbsolutePath() + ".path", path.getAbsoluteFile());
+
+                config.save();
+            } else {
 
 
-			} else {
-				Profile.Section child = sec.addChild(path.getAbsolutePath().toLowerCase());
+            }
 
-				child.put("Name", name);
-				child.put("Version", version);
-				child.put("Path", path.getAbsolutePath());
 
-			}
 
-			cfg.store();
 			if(Main.debugMode) {
 				System.out.println("added skript version");
 			}
@@ -139,27 +119,20 @@ public class Skript {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
 
+            Config config = new Config(configFile.getAbsolutePath());
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Scripts");
+            if(config.getString("skript." + path) != null) {
 
-			if (sec.getChild(path.toLowerCase()) != null) {
+                config.remove("skript." + path);
 
+                config.save();
 
-				sec.removeChild(path.toLowerCase());
+            }else {
 
-				if (sec.size() == 0) {
-					sec.put("Placeholder", "");
-				}
-			}
-			cfg.store();
+            }
+
 			if(Main.debugMode) {
 				System.out.println("removed skript version");
 			}

@@ -1,12 +1,11 @@
 package com.skriptide.util;
 
+import com.skriptide.config.Config;
 import com.skriptide.guis.SceneManager;
 import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TextInputDialog;
-import org.ini4j.Ini;
-import org.ini4j.Profile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,38 +44,26 @@ public class Project {
 			e.printStackTrace();
 		}
 
-		File configFile = new File(current + "/Config.ini");
+		File configFile = new File(current + "/Config.yaml");
 
 
-		Ini cfg = null;
-
-		try {
-			cfg = new Ini(configFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Profile.Section sec = cfg.get("Projects");
-
-		try {
-			Ini proj = new Ini(new File(sec.get(name)));
-
-			Profile.Section info = proj.get("Information");
-			this.name = info.get("Name");
-			this.skriptPath = info.get("Path");
-			this.sk = new Skript(info.get("Skript-Path").toLowerCase());
-			this.outPath = info.get("Output-Path");
-			this.server = new MCServer(info.get("Server-Path"));
-			this.folder = info.get("Folder-Path");
-			this.notes = info.get("Notes");
-			if (Main.debugMode) {
-				System.out.println("Project called");
-			}
+		Config config = new Config(configFile.getAbsolutePath());
 
 
-		} catch (IOException e) {
-			System.out.println("no project found");
-		}
+		Config project = new Config(new File(config.getString("project." + name + ".path")).getAbsolutePath());
+
+
+		this.name = project.getString("name");
+		this.skriptPath = project.getString("path");
+		this.sk = new Skript(project.getString("skript-path").toLowerCase());
+		this.outPath = project.getString("output");
+		this.server = new MCServer(project.getString("server-path"));
+		this.folder = project.getString("folder-path");
+		this.notes = project.getString("notes");
+		if (Main.debugMode) {
+            System.out.println("Project called");
+        }
+
 
 		if (Main.debugMode) {
 			System.out.println("Loaded project");
@@ -89,22 +77,17 @@ public class Project {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/ConfigManager.ini");
 
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			Config config = new Config(configFile.getAbsolutePath());
 
 
-			Profile.Section sec = cfg.get("Projects");
+			List<String> sec = config.getAll("project");
 			ObservableList<Project> values = FXCollections.observableArrayList();
 			System.out.println(sec.size());
 
-			for (String n : sec.keySet()) {
+			for (String n : sec) {
 
 				values.add(new Project(n));
 			}
@@ -133,27 +116,14 @@ public class Project {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/ConfigManager.ini");
 
-
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
+			Config config = new Config(configFile.getAbsolutePath());
+			if(config.getString("project." + name) == null) {
+				config.set("project." + name, path.getAbsolutePath());
 			}
-			Profile.Section sec = cfg.get("Projects");
 
-			if (sec.containsKey("Placeholder")) {
-				sec.remove("Placeholder");
-			}
-			sec.put(name, path.getAbsolutePath());
-
-			cfg.store();
-			if (Main.debugMode) {
-
-				System.out.println("Project added to Config");
-			}
+			config.save();
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -168,28 +138,14 @@ public class Project {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/ConfigManager.ini");
 
-
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Projects");
-
-			if (sec.containsKey("Placeholder")) {
-				sec.remove("Placeholder");
-			}
-			sec.put(name, path.getAbsolutePath());
-
-			cfg.store();
-			if (Main.debugMode) {
-
-				System.out.println("Project added to Config");
+			Config config = new Config(configFile.getAbsolutePath());
+			if(config.getString("project." + name) != null) {
+				config.set("project." + name, path.getAbsolutePath());
 			}
 
+			config.save();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -203,29 +159,15 @@ public class Project {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
 
-
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
+			Config config = new Config(configFile.getAbsolutePath());
+			if(config.getString("project." + name) != null) {
+				config.remove("project." + name);
 			}
-			Profile.Section sec = cfg.get("Projects");
 
+			config.save();
 
-			if (sec.containsKey(name)) {
-
-				sec.remove(name);
-				if (sec.size() == 0) {
-					sec.put("Placeholder", "");
-				}
-				cfg.store();
-			}
-			if (Main.debugMode) {
-				System.out.println("Removed project");
-			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -246,7 +188,7 @@ public class Project {
 
 
 		script = new File(outPath + "/" + name + ".sk");
-		info = new File(outPath + "/SkriptIDE-Project.ini");
+		info = new File(outPath + "/SkriptIDE-Project.yaml");
 
 		try {
 			script.createNewFile();
@@ -259,31 +201,26 @@ public class Project {
 			e.printStackTrace();
 		}
 
-		try {
-			Ini inf = new Ini(info);
+		Config config = new Config(info.getAbsolutePath());
 
-			Profile.Section infoSec = inf.add("Information");
 
-			infoSec.put("Name", name);
-			infoSec.put("Path", script.getAbsolutePath());
-			infoSec.put("Folder-Path", path);
-			infoSec.put("Skript-Version", skript.getVersion());
-			infoSec.put("Skript-Path", skript.getPath());
-			infoSec.put("Server-Path", server.getpath());
-			infoSec.put("Output-Path", server.getPlFolderPath() + "/Skript/scripts");
+		config.set("name", name);
+		config.set("path", script.getAbsolutePath());
+		config.set("folder-path", path);
+		config.set("skript-Version", skript.getVersion());
+		config.set("skript-path", skript.getPath());
+		config.set("server-path", server.getpath());
+		config.set("output-path", server.getPlFolderPath() + "/Skript/scripts");
 
-			infoSec.put("Notes", notes);
+		config.set("notes", notes);
 
-			inf.store();
+		config.save();
 
-			if (Main.debugMode) {
+		if (Main.debugMode) {
 
-				System.out.println("A Project file has been created");
-			}
+            System.out.println("A Project file has been created");
+        }
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		addProject(name, info);
 
 		if (Main.debugMode) {
@@ -356,59 +293,34 @@ public class Project {
 		File info = null;
 
 
-		info = new File(newPath + "/SkriptIDE-Project.ini");
+		info = new File(newPath + "/SkriptIDE-Project.yaml");
 
-		Ini inf = null;
+        Config config = new Config(info.getAbsolutePath());
 
-		try {
-			inf = new Ini(info);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
-		Profile.Section infoSec = inf.get("Information");
+        config.set("name", name);
+        config.set("path", script.getAbsolutePath());
+        config.set("folder-path", this.folderPath());
+        config.set("skript-Version", this.sk.getVersion());
+        config.set("skript-path", this.sk.getPath());
+        config.set("server-path", server.getpath());
+        config.set("output-path", server.getPlFolderPath() + "/Skript/scripts");
 
-		infoSec.put("Name", newName);
-		infoSec.put("Path", newPath + newName + ".sk");
-		infoSec.put("Folder-Path", newPath);
-		infoSec.put("Skript-Version", this.sk.getVersion());
-		infoSec.put("Skript-Path", this.sk.getPath());
-		infoSec.put("Server-Path", this.server.getpath());
-		infoSec.put("Output-Path", this.server.getPlFolderPath() + "/Skript/scripts");
+        config.set("notes", notes);
 
-		try {
-			inf.store();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        config.save();
 		String current = null;
 
 
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
 
+            Config con = new Config(configFile.getAbsolutePath());
+			con.set("project." + newName, newPath + "/SkriptIDE-Project.yaml");
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Projects");
-
-			if (sec.containsKey("Placeholder")) {
-				sec.remove("Placeholder");
-			}
-			sec.remove(this.name);
-			sec.put(newName, newPath + "\\SkriptIDE-Project.ini");
-
-			cfg.store();
-			if (Main.debugMode) {
-
-				System.out.println("Project added to Config");
-			}
+			con.save();
 
 		} catch (IOException e) {
 			e.printStackTrace();

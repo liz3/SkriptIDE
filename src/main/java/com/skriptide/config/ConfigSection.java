@@ -27,4 +27,10 @@ public interface ConfigSection {
 
     void set(String path, Object value);
 
+    void remove(String path);
+
+    List<String> getNextOf(String next);
+
+    List<String> getAll(String next);
+
 }

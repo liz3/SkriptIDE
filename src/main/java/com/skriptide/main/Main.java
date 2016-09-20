@@ -2,7 +2,6 @@ package com.skriptide.main;
 
 
 import com.skriptide.guis.SceneManager;
-import com.skriptide.util.Config;
 
 /**
  * Created by Liz3ga on 26.07.2016.

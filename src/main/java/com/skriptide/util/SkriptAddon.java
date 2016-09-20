@@ -1,15 +1,14 @@
 package com.skriptide.util;
 
+import com.skriptide.config.Config;
 import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.ini4j.Ini;
-import org.ini4j.Profile;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 /**
  * Created by Liz3ga on 23.08.2016.
@@ -29,21 +28,14 @@ public class SkriptAddon {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
 
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg != null ? cfg.get("Addons") : null;
+			Config config = new Config(configFile.getAbsolutePath());
 
-			Profile.Section child = sec != null ? sec.getChild(childName) : null;
-			this.name = child != null ? child.get("Name") : null;
-			this.version = child != null ? child.get("Version") : null;
-			this.path = child != null ? child.get("Path") : null;
+			this.name = config.getString("addon." + childName + ".name");
+            this.version = config.getString("addon." + childName + ".version");
+            this.path = config.getString("addon." + childName + ".path");
 
 
 			if (Main.debugMode) {
@@ -93,18 +85,12 @@ public class SkriptAddon {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
 
-
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Addons");
+            Config config = new Config(configFile.getAbsolutePath());
+            List<String> sec = config.getAll("addon");
 			ObservableList<SkriptAddon> values = FXCollections.observableArrayList();
-			for (String n : sec.childrenNames()) {
+			for (String n : sec) {
 
 				values.add(new SkriptAddon(n));
 			}
@@ -126,45 +112,22 @@ public class SkriptAddon {
 		String current = null;
 
 
-		try {
-			current = new File(".").getCanonicalPath();
+        File configFile = new File(current + "/Config.yaml");
 
-			File configFile = new File(current + "/Config.ini");
+        Config config = new Config(configFile.getAbsolutePath());
+
+        config.set("addon." + path.getAbsolutePath() + ".name", name);
+        config.set("addon." + path.getAbsolutePath() + ".version", version);
+        config.set("addon." + path.getAbsolutePath() + ".path", path.getAbsolutePath());
 
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = null;
-			if (cfg != null) {
-				sec = cfg.get("Addons");
-			}
-			if (sec.containsKey("Placeholder")) {
-				sec.remove("Placeholder");
-			}
-			if (sec.getChild(path.getAbsolutePath().toLowerCase()) != null) {
+        if(Main.debugMode) {
+            System.out.println("added Addon");
+        }
 
-			} else {
-				Profile.Section child = sec.addChild(path.getAbsolutePath().toLowerCase());
+        config.save();
 
-				child.put("Name", name);
-				child.put("Version", version);
-				child.put("Path", path);
-
-			}
-			if(Main.debugMode) {
-				System.out.println("added Addon");
-			}
-
-			cfg.store();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    }
 
 	public static void removeAddon(String path) {
 
@@ -174,31 +137,19 @@ public class SkriptAddon {
 		try {
 			current = new File(".").getCanonicalPath();
 
-			File configFile = new File(current + "/Config.ini");
+			File configFile = new File(current + "/Config.yaml");
 
 
-			Ini cfg = null;
-			try {
-				cfg = new Ini(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Profile.Section sec = cfg.get("Addons");
+			Config config = new Config(configFile.getAbsolutePath());
 
-
-			if (sec.getChild(path.toLowerCase()) != null) {
-
-
-				sec.removeChild(path.toLowerCase());
-				if (sec.size() == 0) {
-					sec.put("Placeholder", "");
-				}
-			}
-			cfg.store();
+            if(config.getString("addon." + path) != null) {
+                config.remove("addon." + path);
+            }
 			if(Main.debugMode) {
 				System.out.println("Removed addon");
 			}
 
+			config.save();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -6,7 +6,7 @@ import com.skriptide.codemanage.ControlMain;
 import com.skriptide.codemanage.Supers;
 import com.skriptide.guis.SceneManager;
 import com.skriptide.main.Main;
-import com.skriptide.util.Config;
+import com.skriptide.util.ConfigManager;
 import com.skriptide.util.DragResizer;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.Project;
@@ -479,7 +479,7 @@ public class IdeGuiController {
 	public void loadInProjects() {
 
 
-		if (Config.checkConfig() == 0) {
+		if (ConfigManager.checkConfig() == 0) {
 			ObservableList<Project> projects = Project.getProjects();
 			System.out.println(projects.size());
 			projectsList.getItems().clear();

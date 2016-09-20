@@ -1,7 +1,7 @@
 package com.skriptide.guis.startgui;
 
 import com.skriptide.main.Main;
-import com.skriptide.util.Config;
+import com.skriptide.util.ConfigManager;
 import com.skriptide.util.skunityapi.SkUnityAPI;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -90,7 +90,7 @@ public class StartGuiController {
 		String lang = langComboBox.getId();
 
 
-		Config.createConfig(projectsPath, serversPath, lang);
+		ConfigManager.createConfig(projectsPath, serversPath, lang);
 
 		Stage stage = (Stage) okBtn.getScene().getWindow();
 

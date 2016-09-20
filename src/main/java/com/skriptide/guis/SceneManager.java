@@ -8,7 +8,7 @@ import com.skriptide.guis.manageadds.ManageAddsGuiController;
 import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.startgui.StartGuiController;
 import com.skriptide.main.Main;
-import com.skriptide.util.Config;
+import com.skriptide.util.ConfigManager;
 import com.skriptide.util.IDESystemErr;
 import com.skriptide.util.IDESystemOut;
 import com.skriptide.util.MCServer;
@@ -234,7 +234,7 @@ public class SceneManager extends Application {
 	private boolean checkConfig() {
 
 
-		int configState = Config.checkConfig();
+		int configState = ConfigManager.checkConfig();
 
 
 		if (configState == 1) {
@@ -263,10 +263,7 @@ public class SceneManager extends Application {
 	private void startUp(boolean v) {
 
 
-		if(Config.isDebug())  {
-			Main.debugMode = true;
-			openDebugger();
-		}
+
 		ideGuiController.loadInProjects();
 		ideGuiController.setUpWin();
 
@@ -277,6 +274,10 @@ public class SceneManager extends Application {
 			openWelcomeGui();
 		}
 
+			if(ConfigManager.isDebug())  {
+            Main.debugMode = true;
+            openDebugger();
+        }
 
 	}
 

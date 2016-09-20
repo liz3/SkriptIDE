@@ -2,7 +2,7 @@ package com.skriptide.guis.createprojectgui;
 
 import com.skriptide.guis.SceneManager;
 import com.skriptide.main.Main;
-import com.skriptide.util.Config;
+import com.skriptide.util.ConfigManager;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.Project;
 import com.skriptide.util.Skript;
@@ -102,7 +102,7 @@ public class CreateProjectGuiController {
 			Project.createProject(projectNameTxTField.getText(), tSk, trueSRV, savePathTxTField.getText(), notesTextArea.getText());
 
 
-			if (Config.checkConfig() == 0) {
+			if (ConfigManager.checkConfig() == 0) {
 				ObservableList<Project> projects = Project.getProjects();
 				SceneManager.projectsList.getItems().clear();
 				for (Project project : projects.sorted()) {
@@ -152,8 +152,8 @@ public class CreateProjectGuiController {
 		createBtn.setOnAction(event -> createProject());
 		chooseSavePathBtn.setOnAction(event -> openProjectPathChooser());
 		createServerBtn.setOnAction(event -> createNewServer());
-		truePath = Config.getProjectsPath().substring(0, Config.getProjectsPath().length() - 1);
-		savePathTxTField.setText(Config.getProjectsPath());
+		truePath = ConfigManager.getProjectsPath().substring(0, ConfigManager.getProjectsPath().length() - 1);
+		savePathTxTField.setText(ConfigManager.getProjectsPath());
 		ObservableList<Skript> sk = Skript.getSkriptVersions();
 
 		pluginVersionComboBox.getItems().clear();
