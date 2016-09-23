@@ -335,6 +335,7 @@ public class ManageServerController {
 
 	public void loadSettings() {
 
+
 		MCServer srv = null;
 		ObservableList<MCServer> servers = MCServer.getAllServers();
 
@@ -351,7 +352,7 @@ public class ManageServerController {
 			nameTextField.setText(srv.getname());
 			portTextField.setText(String.valueOf(srv.getport()));
 
-
+			serverVersionComboBox.getItems().clear();
 			ObservableList<ServerVersion> srvVers = ServerVersion.getServerVersions();
 			for (ServerVersion ver : srvVers.sorted()) {
 				serverVersionComboBox.getItems().add(ver.getVersion());
@@ -359,7 +360,7 @@ public class ManageServerController {
 					serverVersionComboBox.getSelectionModel().select(ver.getVersion());
 				}
 			}
-
+			scriptVersionComboBox.getItems().clear();
 			ObservableList<Skript> skripts = Skript.getSkriptVersions();
 			for (Skript sk : skripts.sorted()) {
 

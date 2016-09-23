@@ -224,7 +224,6 @@ public class IdeGuiController {
 							chooseView.getItems().sorted().stream().filter(str -> !str.toLowerCase().contains(prefix.toLowerCase())).forEach(str -> {
 								chooseView.getItems().remove(str);
 								all.add(str);
-								chooseView.refresh();
 							});
 
 							ArrayList<String> toRemove = new ArrayList<String>();

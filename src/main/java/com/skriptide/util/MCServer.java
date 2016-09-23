@@ -103,7 +103,9 @@ public class MCServer {
         this.name = server.getString("name");
         this.path = server.getString("path");
         this.version = new ServerVersion(server.getString("engine-path"));
+        System.out.println("1. " + this.version.path);
         this.skript = new Skript(server.getString("skript"));
+        System.out.println("2. " + this.skript.path);
         this.plFolderPath = server.getString("plugins-path");
         this.notes = server.getString("notes");
         this.startArgs = server.getString("start-args");

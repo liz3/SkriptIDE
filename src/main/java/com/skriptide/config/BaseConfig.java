@@ -1,10 +1,13 @@
 package com.skriptide.config;
 
-import com.google.common.io.Files;
+//import com.google.common.io.Files;
 import com.skriptide.main.Main;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +53,11 @@ public abstract class BaseConfig {
     public void create() {
         try {
             if (!getConfFile().exists()) {
-                Files.createParentDirs(getConfFile());
+                Path pathToFile = Paths.get(getConfFile().getPath());
+                Files.createDirectories(pathToFile.getParent());
+                Files.createFile(pathToFile);
+                File f = new File(pathToFile.toUri());
+                f.delete();
                 getConfFile().createNewFile();
 
             }

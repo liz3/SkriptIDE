@@ -13,17 +13,28 @@ import com.skriptide.util.IDESystemErr;
 import com.skriptide.util.IDESystemOut;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.skunityapi.SkUnityAPI;
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import org.fxmisc.richtext.CodeArea;
 
 import java.io.IOException;
@@ -38,6 +49,7 @@ import static com.skriptide.main.Main.debugMode;
  */
 public class SceneManager extends Application {
 
+
 	public static ArrayList<String> openProjects = new ArrayList<>();
 	public static CodeArea consoleOut;
 	public static MCServer runningServer;
@@ -48,6 +60,15 @@ public class SceneManager extends Application {
 	public static ProgressBar procBar;
 
 
+    private boolean v;
+
+
+    private Pane splashLayout;
+    private ProgressBar loadProgress;
+    private Label progressText;
+    private Stage mainStage;
+    private static final int SPLASH_WIDTH = 600;
+    private static final int SPLASH_HEIGHT = 300;
 	public Stage mainWindow, welcomeWindow, createNewProjectWindow, createNewServerWindow, addsManager, manageServer, debugger, info, splash;
 	private FXMLLoader mainLoader = new FXMLLoader(), welcomeLoader = new FXMLLoader(), createNewProjectLoader = new FXMLLoader(), createNewServerLoader = new FXMLLoader(), addManagerLoader = new FXMLLoader(), manageServerLoader = new FXMLLoader(), debuggerLoader = new FXMLLoader(), splashLoader = new FXMLLoader();
 	private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null, createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null, debuggerParent = null, splashParent = null;
@@ -59,7 +80,7 @@ public class SceneManager extends Application {
 	private ManageServerController manageServerController;
 
 	DebuggerController debuggerController;
-	SplashController splashController;
+
 
 	public static void cleanUP() {
 
@@ -70,157 +91,209 @@ public class SceneManager extends Application {
 
 	}
 
+    public static void runMain() throws Exception {
+        launch();
+    }
 
-	public void runMain() {
+    @Override
+    public void init() {
+        ImageView splash = new ImageView(new Image(
+                getClass().getResource("/splash.png").toExternalForm()));
 
+        loadProgress = new ProgressBar();
+        loadProgress.setPrefWidth(SPLASH_WIDTH);
+        progressText = new Label("Will find friends for peanuts . . .");
+        splashLayout = new Pane();
+        splashLayout.setPrefSize(600, 300);
+        splash.setFitWidth(600);
+        splash.setFitHeight(300);
+        loadProgress.setPrefSize(320, 10);
+        loadProgress.setLayoutX(270);
+        loadProgress.setLayoutY(190);
+        progressText.setPrefSize(320, 15);
+        progressText.setLayoutX(270);
+        progressText.setLayoutY(210);
+        splashLayout.getChildren().addAll(splash, loadProgress, progressText);
+        progressText.setAlignment(Pos.CENTER);
 
-		launch();
-	}
+        splashLayout.setEffect(new DropShadow());
+    }
 
-	@Override
-	public void start(Stage stage) {
-
-
-		splash = stage;
-		splashScreen();
-
-		javafx.application.Platform.runLater(() -> {
-			final boolean v;
-
-
-			splashController.setValue(0.3, "Checking Apis");
-
-			setSkyUnityApi();
-
-
-			splashController.setValue(0.5, "Looking for settings");
-			v = checkConfig();
-
-
-			splashController.setValue(0.8, "Initializing Gui");
-			setWindow();
-
-
-			splashController.setValue(1, "Finish, start up");
-
-
-			startUp(v);
+    @Override
+    public void start(final Stage initStage) throws Exception {
+        final Task<Runnable> load = new Task<Runnable>() {
+            @Override
+            protected Runnable call() throws Exception {
 
 
-		});
+                //std::strcpy(a,b);
+                updateMessage("Checking the SkUnityAPI...");
+                updateProgress(15, 100);
+                setSkyUnityApi();
+                updateMessage("Loading configuration...");
+                updateProgress(35, 100);
+                v = checkConfig();
+                updateMessage("Loading Gui...");
+                updateProgress(65, 100);
+                if(ConfigManager.isDebug()) {
+                    Main.debugMode = true;
+                    openDebugger();
+                }
+                Thread.sleep(5000);
 
 
-	}
+                return null;
+            }
 
 
-	private void splashScreen() {
+        };
 
-		try {
-			splashParent = splashLoader.load(getClass().getResourceAsStream("/SplashGui.fxml"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        showSplash(
+                initStage,
+                load,
+                () -> showMainStage()
+        );
+        new Thread(load).start();
+    }
 
+    private void showMainStage() {
 
-		splash.initStyle(StageStyle.UNDECORATED);
-		splash.setResizable(false);
-		splash.centerOnScreen();
-		splash.setAlwaysOnTop(true);
-		splash.setScene(new Scene(splashParent, 600, 300));
-		splashController = splashLoader.getController();
-		splashController.setImg();
-
-		splash.show();
-
-		splashController.setValue(0.05, "Init");
-
-	}
+        mainWindow = new Stage();
 
 
-	private void setWindow() {
+        try {
+            mainParent = mainLoader
+                    .load(getClass().getResourceAsStream("/IdeGui.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
-		mainWindow = new Stage();
 
-		try {
-			mainParent = mainLoader
-					.load(getClass().getResourceAsStream("/IdeGui.fxml"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        Scene mainScene = new Scene(mainParent, 980, 550);
+        mainScene.getStylesheets().add("Highlighting.css");
+        mainScene.getStylesheets().add("Style.css");
+        mainWindow.setTitle("ScriptIDE");
+        //	mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
+        mainWindow.setScene(mainScene);
+        mainWindow.setMinWidth(980);
+        mainWindow.setMinHeight(550);
+        mainWindow.centerOnScreen();
 
-
-		Scene mainScene = new Scene(mainParent, 980, 550);
+        ideGuiController = mainLoader.getController();
+        ideGuiController.sceneManager = this;
+        ideGuiController.loadInProjects();
+        ideGuiController.setUpWin();
+        mainWindow.show();
 
 	/*For dark theme.
 	ThemeCreator.setTheme(mainScene, new Dark());
 	*/
 
-		mainScene.getStylesheets().add("Highlighting.css");
-		mainScene.getStylesheets().add("Style.css");
-
-		mainWindow.setTitle("ScriptIDE");
-		mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
-		mainWindow.setScene(mainScene);
-		mainWindow.setMinWidth(980);
-		mainWindow.setMinHeight(550);
-		mainWindow.centerOnScreen();
 
 
-		ideGuiController = mainLoader.getController();
-		ideGuiController.sceneManager = this;
-
-		if (debugMode) {
-			openDebugger();
-			System.out.println("Main Gui loading finished");
-		}
-
-		mainScene.getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
-			public void handle(WindowEvent ev) {
-
-				if (ideGuiController.codeTabPane.getTabs().size() != 0) {
-					boolean save = infoCheck("Save", "Save Projects", "Do you want to save: " + ideGuiController.codeTabPane.getTabs().size() + " projects before close?");
-					if (save) {
-						ideGuiController.saveOpenProjects();
-					}
-				}
-				if (runningServer != null) {
-					boolean save = infoCheck("Stop Server", "Stop running Server", "The server: " + runningServer.getname() + " is running, stop the server? Otherwise the process will be killed!");
-					if (save) {
-						ideGuiController.comandSendTextField.setText("stop");
-						ideGuiController.sendCommand();
-						Thread t = new Thread(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									Thread.sleep(10000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-								Platform.exit();
-								System.exit(0);
-							}
-						});
-						t.start();
-					} else {
-						runningServer = null;
-						Platform.exit();
-						System.exit(0);
-					}
-				} else {
-					Platform.exit();
-					System.exit(0);
-				}
 
 
-			}
 
-		});
+
+        mainScene.getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent ev) {
+
+                if (ideGuiController.codeTabPane.getTabs().size() != 0) {
+                    boolean save = infoCheck("Save", "Save Projects", "Do you want to save: " + ideGuiController.codeTabPane.getTabs().size() + " projects before close?");
+                    if (save) {
+                        ideGuiController.saveOpenProjects();
+                    }
+                }
+                if (runningServer != null) {
+                    boolean save = infoCheck("Stop Server", "Stop running Server", "The server: " + runningServer.getname() + " is running, stop the server? Otherwise the process will be killed!");
+                    if (save) {
+                        ideGuiController.comandSendTextField.setText("stop");
+                        ideGuiController.sendCommand();
+                        Thread t = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(10000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                Platform.exit();
+                                System.exit(0);
+                            }
+                        });
+                        t.start();
+                    } else {
+                        runningServer = null;
+                        Platform.exit();
+                        System.exit(0);
+                    }
+                } else {
+                    Platform.exit();
+                    System.exit(0);
+                }
+
+
+            }
+
+        });
+
+
+
+        startUp(false);
+    }
+    private void loadWindow() {
+
+
+
+    }
+
+    private void showSplash(
+            final Stage initStage,
+            Task<?> task,
+            SceneManager.InitCompletionHandler initCompletionHandler
+    ) {
+        progressText.textProperty().bind(task.messageProperty());
+        loadProgress.progressProperty().bind(task.progressProperty());
+        task.stateProperty().addListener((observableValue, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
+                loadProgress.progressProperty().unbind();
+                loadProgress.setProgress(1);
+                initStage.toFront();
+                FadeTransition fadeSplash = new FadeTransition(Duration.seconds(1.2), splashLayout);
+                fadeSplash.setFromValue(1.0);
+                fadeSplash.setToValue(0.0);
+                fadeSplash.setOnFinished(actionEvent -> initStage.hide());
+                fadeSplash.play();
+
+                initCompletionHandler.complete();
+            } // todo add code to gracefully handle other task states.
+        });
+
+        Scene splashScene = new Scene(splashLayout, Color.TRANSPARENT);
+        final Rectangle2D bounds = Screen.getPrimary().getBounds();
+        initStage.setScene(splashScene);
+        initStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);
+        initStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - SPLASH_HEIGHT / 2);
+        initStage.initStyle(StageStyle.TRANSPARENT);
+        initStage.setAlwaysOnTop(true);
+        initStage.show();
+    }
+
+    public interface InitCompletionHandler {
+        void complete();
+    }
+
+
+
+
+	public void setWindow() {
+
 
 
 	}
 
-	private void setSkyUnityApi() {
+	public void setSkyUnityApi() {
 
 
 		SkUnityAPI api = new SkUnityAPI();
@@ -231,7 +304,7 @@ public class SceneManager extends Application {
 
 	ScheduledThreadPoolExecutor configExecutor = new ScheduledThreadPoolExecutor(1);
 
-	private boolean checkConfig() {
+	public boolean checkConfig() {
 
 
 		int configState = ConfigManager.checkConfig();
@@ -260,15 +333,9 @@ public class SceneManager extends Application {
 		return true;
 	}
 
-	private void startUp(boolean v) {
+	public void startUp(boolean v) {
 
-
-
-		ideGuiController.loadInProjects();
-		ideGuiController.setUpWin();
-
-		splash.close();
-		mainWindow.show();
+        mainWindow.show();
 		if (v) {
 
 			openWelcomeGui();
