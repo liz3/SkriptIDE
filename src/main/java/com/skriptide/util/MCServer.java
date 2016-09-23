@@ -658,7 +658,7 @@ public class MCServer {
         config.set("plugins-path", this.plFolderPath);
         config.set("notes", this.notes);
         config.set("start-args", this.startArgs);
-
+		config.set("Plugin-folder", this.plFolderPath);
 
         config.save();
 

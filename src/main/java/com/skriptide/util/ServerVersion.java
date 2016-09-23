@@ -21,6 +21,7 @@ public class ServerVersion {
 	public ServerVersion(String childName) {
 
 		String current = null;
+        System.out.printf("nae: " + childName);
 
 
 		try {
@@ -30,11 +31,11 @@ public class ServerVersion {
 
 			Config config = new Config(configFile.getAbsolutePath());
 
-			this.name = config.getString("engine-version." + childName + ".name");
-			this.version = config.getString("engine-version." + childName + ".version");
-			this.path = config.getString("engine-version." + childName + ".path");
-
-			if(Main.debugMode) {
+			this.name = config.getString("engine-version." + childName.replace(".", "_") + ".name");
+			this.version = config.getString("engine-version." + childName.replace(".", "_") + ".version");
+			this.path = config.getString("engine-version." + childName.replace(".", "_") + ".path");
+            System.out.printf(config.getString("engine-version." + childName.replace(".", "_") + ".name"));
+            if(Main.debugMode) {
 				System.out.println("Server version test");
 			}
 
@@ -58,13 +59,13 @@ public class ServerVersion {
 
 			Config con = new Config(configFile.getAbsolutePath());
 
-			List<String> sec = con.getAll("engine-version");
 			ObservableList<ServerVersion> values = FXCollections.observableArrayList();
-			for (String n : sec) {
-                System.out.println(n);
+			for (String n : con.getAll("engine-version")) {
+                System.out.println("Server version: " + n);
 				values.add(new ServerVersion(n));
 			}
-			if(Main.debugMode) {
+            System.out.println(values.get(0).toString());
+            if(Main.debugMode) {
 				System.out.println("returing server versions");
 			}
 			return values;

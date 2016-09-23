@@ -32,9 +32,9 @@ public class Skript {
 			Config config = new Config(configFile.getAbsolutePath());
 
 
-			this.name = config.getString("skripts." + path + ".name");
-			this.version = config.getString("skripts." + path + ".version");
-			this.path = config.getString("skripts." + path + ".path");
+			this.name = config.getString("skripts." + path.replace(".", "_") + ".name");
+			this.version = config.getString("skripts." + path.replace(".", "_") + ".version");
+			this.path = config.getString("skripts." + path.replace(".", "_") + ".path");
 
 			if(Main.debugMode) {
 				System.out.println("loaded Skript version");

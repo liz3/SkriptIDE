@@ -354,9 +354,13 @@ public class ManageServerController {
 
 			serverVersionComboBox.getItems().clear();
 			ObservableList<ServerVersion> srvVers = ServerVersion.getServerVersions();
+
 			for (ServerVersion ver : srvVers.sorted()) {
+				System.out.println("ver: " + ver.getVersion());
+				System.out.println("srv: " + srv.getversion());
 				serverVersionComboBox.getItems().add(ver.getVersion());
 				if (ver.getVersion().equals(srv.getversion().getVersion())) {
+
 					serverVersionComboBox.getSelectionModel().select(ver.getVersion());
 				}
 			}
