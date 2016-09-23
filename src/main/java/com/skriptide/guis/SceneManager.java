@@ -240,7 +240,7 @@ public class SceneManager extends Application {
 
 
 
-        startUp(false);
+        startUp(v);
     }
     private void loadWindow() {
 
