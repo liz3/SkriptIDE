@@ -22,7 +22,7 @@ public class StartGuiController {
 	@FXML
 	public TextField serverPathField;
 	@FXML
-	public ComboBox langComboBox;
+	public ComboBox<String> langComboBox;
 	@FXML
 	public Button okBtn;
 	@FXML
@@ -38,6 +38,8 @@ public class StartGuiController {
 		cancelBtn.setOnAction(event -> cancelAction());
 		serverPathBtn.setOnAction(event -> openServersPathChooser());
 		projectsPathBtn.setOnAction(event -> openProjectPathChooser());
+		langComboBox.getItems().add("English");
+		langComboBox.getSelectionModel().select(0);
 	}
 	public void cancelAction() {
 
@@ -87,7 +89,7 @@ public class StartGuiController {
 
 		String projectsPath = projectsPathField.getText().replace("\\", "/");
 		String serversPath = serverPathField.getText().replace("\\", "/");
-		String lang = langComboBox.getId();
+		String lang = langComboBox.getSelectionModel().getSelectedItem();
 
 
 		ConfigManager.createConfig(projectsPath, serversPath, lang);

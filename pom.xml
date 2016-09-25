@@ -6,7 +6,7 @@
 
     <groupId>com.skriptide</groupId>
     <artifactId>SkriptIDE</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,7 +52,7 @@
                     <outjar>SkriptIDE-final.jar</outjar>
                     <includeDependency>true</includeDependency>
                     <options>
-                        <option>-keep public class com.skriptide.main.Main { public static void
+                        <option>-keep public class com.skriptide.guis.SceneManager { public static void
                             main(java.lang.String[]); }
                         </option>
 
@@ -115,7 +115,7 @@
                     </assembly>
                     <archive>
                         <manifest>
-                            <mainClass>com.skriptide.main.Main</mainClass>
+                            <mainClass>com.skriptide.guis.SceneManager</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -154,7 +154,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.skriptide.main.Main</mainClass>
+                            <mainClass>com.skriptide.guis.SceneManager</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

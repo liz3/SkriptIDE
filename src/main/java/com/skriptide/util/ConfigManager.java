@@ -22,7 +22,9 @@ public class ConfigManager {
 
 			File configFile = new File(current + "/Config.yaml");
 
-			if (configFile.exists()) {
+			Config con = new Config(configFile.getAbsolutePath());
+
+			if (con.contains("main.settings.lang")) {
 				if(Main.debugMode) {
 					System.out.println("ConfigManager exists");
 				}
@@ -51,7 +53,7 @@ public class ConfigManager {
 
 			File configFile = new File(current + "/Config.yaml");
 
-			configFile.createNewFile();
+
 
 			File projPath = new File(pPath);
 			File servPath = new File(sPath);
@@ -154,7 +156,7 @@ public class ConfigManager {
 			File configFile = new File(current + "/Config.yaml");
 
 
-            boolean path = Boolean.valueOf(new Config(configFile.getAbsolutePath()).getString("main.set.projects"));
+            boolean path = Boolean.valueOf(new Config(configFile.getAbsolutePath()).getString("main.settings.debugMode"));
 
 
             return path;

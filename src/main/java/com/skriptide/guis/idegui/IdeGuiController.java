@@ -162,6 +162,42 @@ public class IdeGuiController {
         }
     }
 
+    public void openFromFile(String path) {
+
+        File project = new File(path);
+        CodeArea area = new CodeArea();
+
+        CompleteList completeList = new CompleteList();
+
+
+        new AutoComplete().setAutoComplete(area, completeList, codeTabPane, commandSendBtn);
+
+
+        if (!SceneManager.openProjects.contains("External: " + project.getName())) {
+            Tab tab = new Tab("External: " + project.getName());
+
+            tab.setOnCloseRequest(event -> SceneManager.openProjects.remove("External: " + project.getName()));
+            codeTabPane.getTabs().add(tab);
+
+            tab.setContent(area);
+
+
+            CodeReader reader = new CodeReader(project);
+
+            area.appendText(reader.getCode());
+
+            SceneManager.openProjects.add("External: " + project.getName());
+
+            ControlMain.controlCode(area);
+
+
+        }
+        if (Main.debugMode) {
+            System.out.println("Open project");
+        }
+
+    }
+
     public void sendCommand() {
         if (SceneManager.runningServer != null) {
             try {
@@ -433,8 +469,9 @@ public class IdeGuiController {
 
     public void saveOpenProjects() {
 
-        for (Tab tab : codeTabPane.getTabs().sorted()) {
+        codeTabPane.getTabs().sorted().stream().filter(tab -> !tab.getText().contains("External: ")).forEach(tab -> {
             StyleClassedTextArea area = (StyleClassedTextArea) tab.getContent();
+
 
             Project pr = new Project(tab.getText());
 
@@ -442,9 +479,7 @@ public class IdeGuiController {
             CodeWriter writer = new CodeWriter(area.getText(), pr);
             System.out.println("saver called");
             writer.write();
-
-
-        }
+        });
         if (Main.debugMode) {
             System.out.println("Saved open projects!");
         }
