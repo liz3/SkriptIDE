@@ -49,7 +49,7 @@
                 <configuration>
                     <obfuscate>true</obfuscate>
                     <injar>${project.build.finalName}.jar</injar>
-                    <outjar>${project.build.finalName}-final.jar</outjar>
+                    <outjar>SkriptIDE-final.jar</outjar>
                     <includeDependency>true</includeDependency>
                     <options>
                         <option>-keep public class com.skriptide.main.Main { public static void
