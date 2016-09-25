@@ -6,7 +6,7 @@
 
     <groupId>com.skriptide</groupId>
     <artifactId>SkriptIDE</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,7 +58,6 @@
 
                         <option>-adaptclassstrings</option>
                         <option>-adaptresourcefilecontents **.fxml</option>
-                        <option>-keepnames class com.skriptide.guis.manageadds.ManageAddsGuiController</option>
                         <option>-keepclassmembernames class * {
                             @javafx.fxml.FXML *;
                             }</option>
