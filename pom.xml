@@ -112,11 +112,6 @@
                                 <artifactId>snakeyaml</artifactId>
                                 <library>true</library>
                             </inclusion>
-                            <inclusion>
-                                <groupId>com.google.guava</groupId>
-                                <artifactId>guava</artifactId>
-                                <library>true</library>
-                            </inclusion>
                         </inclusions>
                     </assembly>
                     <archive>
