@@ -128,18 +128,10 @@ public class SceneManager extends Application {
 
                 Parameters params = getParameters();
                 List<String> parameters = params.getRaw();
-                for (int i = 0; i != parameters.size(); i++) {
+               if(parameters.size() != 0) {
+                   path[0] = parameters.get(0);
 
-                    String current = parameters.get(i);
-                    System.out.println(current);
-                    if(current.equalsIgnoreCase("-file")) {
-                        String value = parameters.get(i + 1);
-                        path[0] = value;
-                        System.out.println(path[0]);
-                    }
-
-
-                }
+               }
                 updateMessage("Checking the SkUnityAPI...");
                 updateProgress(15, 100);
 
