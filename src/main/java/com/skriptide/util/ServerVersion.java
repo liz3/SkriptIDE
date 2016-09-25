@@ -20,7 +20,7 @@ public class ServerVersion {
 
 	public ServerVersion(String childName) {
 
-		String current = null;
+		String current;
         System.out.printf("nae: " + childName);
 
 
@@ -49,7 +49,7 @@ public class ServerVersion {
 	}
 
 	public static ObservableList<ServerVersion> getServerVersions() {
-		String current = null;
+		String current;
 
 
 		try {
@@ -64,7 +64,7 @@ public class ServerVersion {
                 System.out.println("Server version: " + n);
 				values.add(new ServerVersion(n));
 			}
-            System.out.println(values.get(0).toString());
+
             if(Main.debugMode) {
 				System.out.println("returing server versions");
 			}
@@ -79,7 +79,7 @@ public class ServerVersion {
 
 	public static void addServerVersion(String name, String version, File path) {
 
-		String current = null;
+		String current;
 
 
 		try {
@@ -104,7 +104,7 @@ public class ServerVersion {
 
 	public static void removeServerVersion(String path) {
 
-		String current = null;
+		String current;
 
 
 

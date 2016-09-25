@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -139,7 +138,7 @@ public class MCServer {
 	}
 
 	public static ObservableList<MCServer> getAllServers() {
-		String current = null;
+		String current;
 
 		try {
 			current = new File(".").getCanonicalPath();
@@ -167,9 +166,9 @@ public class MCServer {
 
 	}
 
-	private static void addServer(String name, String version, File path) {
+	private static void addServer(String name, File path) {
 
-		String current = null;
+		String current;
 
 
 		try {
@@ -709,7 +708,7 @@ public class MCServer {
 		}
 
 		startServer();
-		addServer(this.name, this.version.getVersion(), new File(this.path));
+		addServer(this.name, new File(this.path));
 		if (Main.debugMode) {
 			System.out.println("Server created: " + this.getname());
 		}

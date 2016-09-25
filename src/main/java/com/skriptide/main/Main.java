@@ -9,7 +9,6 @@ import com.skriptide.util.WebUtils;
  */
 public class Main {
 
-	public static SceneManager sceneManager;
 	public static boolean debugMode;
 
 

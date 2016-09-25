@@ -58,12 +58,8 @@ public class SceneManager extends Application {
 	public static ComboBox<String> runninServerList;
 	public static TextArea debugArea;
 	public static ProgressBar procBar;
-
-
-    private boolean v;
-
-
-    private Pane splashLayout;
+	private boolean v;
+	private Pane splashLayout;
     private ProgressBar loadProgress;
     private Label progressText;
     private Stage mainStage;
@@ -173,7 +169,7 @@ public class SceneManager extends Application {
         Scene mainScene = new Scene(mainParent, 980, 550);
         mainScene.getStylesheets().add("Highlighting.css");
         mainScene.getStylesheets().add("Style.css");
-        mainWindow.setTitle("ScriptIDE");
+        mainWindow.setTitle("SkriptIDE");
         //	mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
         mainWindow.setScene(mainScene);
         mainWindow.setMinWidth(980);
