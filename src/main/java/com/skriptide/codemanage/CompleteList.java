@@ -163,27 +163,24 @@ public class CompleteList {
             Popup finalWin = win;
             final ListView[] finalChooseView = {chooseView};
             final boolean[] finalShowList = {showList};
-            chooseView.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent event) {
-                    KeyCode code = event.getCode();
+            chooseView.setOnKeyPressed(event -> {
+                KeyCode code = event.getCode();
 
-                    if (code == KeyCode.ESCAPE) {
+                if (code == KeyCode.ESCAPE) {
 
 
-                        if (finalShowList[0]) {
+                    if (finalShowList[0]) {
 
-                            win.hide();
-                            chooseView.setVisible(false);
-                            finalShowList[0] = false;
+                        win.hide();
+                        chooseView.setVisible(false);
+                        finalShowList[0] = false;
 
-                        }
-                    } else if (code == KeyCode.ENTER) {
-                        if (showList) {
+                    }
+                } else if (code == KeyCode.ENTER) {
+                    if (showList) {
 
-                            setWord(codeTabPane, win, chooseView, showList, prefix);
+                        setWord(codeTabPane, win, chooseView, showList, prefix);
 
-                        }
                     }
                 }
             });

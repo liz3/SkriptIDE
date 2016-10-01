@@ -408,7 +408,6 @@ public class IdeGuiController {
         }
     }
 
-
     public void openProject() {
         CodeArea area = new CodeArea();
 
@@ -465,7 +464,6 @@ public class IdeGuiController {
             System.out.println("Open project");
         }
     }
-
 
     public void saveOpenProjects() {
 
