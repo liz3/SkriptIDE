@@ -1,6 +1,5 @@
 package com.skriptide.codemanage;
 
-import com.skriptide.guis.SceneManager;
 import com.skriptide.main.Main;
 
 import java.io.*;
@@ -11,7 +10,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class CodeReader {
 
-	File mainF;
+	private final File mainF;
 
 
 	public CodeReader(File f) {

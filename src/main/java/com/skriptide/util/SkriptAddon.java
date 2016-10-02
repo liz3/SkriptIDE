@@ -16,9 +16,9 @@ import java.util.List;
 public class SkriptAddon {
 
 
-	public String name;
-	public String version;
-	public String path;
+	private String name;
+	private String version;
+	private String path;
 
 	public SkriptAddon(String childName) {
 

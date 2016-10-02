@@ -1,5 +1,6 @@
 package com.skriptide.guis;
 
+import com.skriptide.codemanage.CompleteList;
 import com.skriptide.guis.createprojectgui.CreateProjectGuiController;
 import com.skriptide.guis.createserver.CreateServerGuiController;
 import com.skriptide.guis.idegui.IdeGuiController;
@@ -41,8 +42,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.regex.Pattern;
 
 import static com.skriptide.main.Main.debugMode;
 
@@ -52,7 +51,7 @@ import static com.skriptide.main.Main.debugMode;
 public class SceneManager extends Application {
 
 
-    public static ArrayList<String> openProjects = new ArrayList<>();
+    public static final ArrayList<String> openProjects = new ArrayList<>();
     public static CodeArea consoleOut;
     public static MCServer runningServer;
     public static Label runningServerLabel;
@@ -60,6 +59,7 @@ public class SceneManager extends Application {
     public static ComboBox<String> runninServerList;
     public static TextArea debugArea;
     public static ProgressBar procBar;
+    public boolean fast = false;
     private boolean v;
     private Pane splashLayout;
     private ProgressBar loadProgress;
@@ -67,17 +67,30 @@ public class SceneManager extends Application {
     private Stage mainStage;
     private static final int SPLASH_WIDTH = 600;
     private static final int SPLASH_HEIGHT = 300;
-    public Stage mainWindow, welcomeWindow, createNewProjectWindow, createNewServerWindow, addsManager, manageServer, debugger, info, splash;
-    private FXMLLoader mainLoader = new FXMLLoader(), welcomeLoader = new FXMLLoader(), createNewProjectLoader = new FXMLLoader(), createNewServerLoader = new FXMLLoader(), addManagerLoader = new FXMLLoader(), manageServerLoader = new FXMLLoader(), debuggerLoader = new FXMLLoader(), splashLoader = new FXMLLoader();
+    private Stage mainWindow;
+    private Stage welcomeWindow;
+    private Stage createNewProjectWindow;
+    private Stage createNewServerWindow;
+    private Stage addsManager;
+    private Stage manageServer;
+    private Stage debugger;
+    public Stage info;
+    public Stage splash;
+    private final FXMLLoader mainLoader = new FXMLLoader();
+    private final FXMLLoader welcomeLoader = new FXMLLoader();
+    private final FXMLLoader createNewProjectLoader = new FXMLLoader();
+    private final FXMLLoader createNewServerLoader = new FXMLLoader();
+    private final FXMLLoader addManagerLoader = new FXMLLoader();
+    private final FXMLLoader manageServerLoader = new FXMLLoader();
+    private final FXMLLoader debuggerLoader = new FXMLLoader();
+    private FXMLLoader splashLoader = new FXMLLoader();
     private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null, createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null, debuggerParent = null, splashParent = null;
     private CreateProjectGuiController createProjectGuiController;
     private CreateServerGuiController createServerGuiController;
     private IdeGuiController ideGuiController;
-    private ManageAddsGuiController manageAddsGuiController;
-    private StartGuiController startGuiController;
     private ManageServerController manageServerController;
 
-    DebuggerController debuggerController;
+    private DebuggerController debuggerController;
 
 
     public static void cleanUP() {
@@ -90,6 +103,8 @@ public class SceneManager extends Application {
     }
 
     public static void main(String[] args) throws Exception {
+
+
         launch(args);
     }
 
@@ -128,10 +143,14 @@ public class SceneManager extends Application {
 
                 Parameters params = getParameters();
                 List<String> parameters = params.getRaw();
-               if(parameters.size() != 0) {
-                   path[0] = parameters.get(0);
+                if (parameters.size() != 0) {
+                    String cp = parameters.get(0);
+                    if (cp.equals("-fast"))
+                        fast = true;
+                    else
+                        path[0] = parameters.get(0);
 
-               }
+                }
                 updateMessage("Checking the SkUnityAPI...");
                 updateProgress(15, 100);
 
@@ -145,11 +164,8 @@ public class SceneManager extends Application {
                 updateMessage("Loading Gui...");
                 updateProgress(65, 100);
 
-                if (ConfigManager.isDebug()) {
-                    Main.debugMode = true;
-                    openDebugger();
-                }
-                Thread.sleep(2500);
+                if (!fast)
+                    Thread.sleep(2500);
 
 
                 return null;
@@ -188,7 +204,14 @@ public class SceneManager extends Application {
         mainWindow.setMinWidth(980);
         mainWindow.setMinHeight(550);
         mainWindow.centerOnScreen();
-
+        mainWindow.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue && !newValue) {
+                CompleteList cl = CompleteList.getCurrentInstance();
+                if (cl != null && cl.win.isShowing()) {
+                    cl.win.hide();
+                }
+            }
+        });
         ideGuiController = mainLoader.getController();
         ideGuiController.sceneManager = this;
         ideGuiController.setUpWin();
@@ -212,15 +235,15 @@ public class SceneManager extends Application {
 
                 if (ideGuiController.codeTabPane.getTabs().size() != 0) {
                     int t = 0;
-                    for(Tab tab : ideGuiController.codeTabPane.getTabs()) {
+                    for (Tab tab : ideGuiController.codeTabPane.getTabs()) {
                         String name = tab.getText();
 
 
-                        if(!name.contains("External: ")) {
+                        if (!name.contains("External: ")) {
                             t++;
                         }
                     }
-                    if( t != 0) {
+                    if (t != 0) {
 
                         boolean save = infoCheck("Save", "Save Projects", "Do you want to save: " + t + " projects before close?");
                         if (save) {
@@ -302,13 +325,7 @@ public class SceneManager extends Application {
         void complete();
     }
 
-
-    public void setWindow() {
-
-
-    }
-
-    public void setSkyUnityApi() {
+    private void setSkyUnityApi() {
 
 
         SkUnityAPI api = new SkUnityAPI();
@@ -317,7 +334,7 @@ public class SceneManager extends Application {
 
     }
 
-    public boolean checkConfig() {
+    private boolean checkConfig() {
 
 
         int configState = ConfigManager.checkConfig();
@@ -346,7 +363,7 @@ public class SceneManager extends Application {
         return true;
     }
 
-    public void startUp(boolean v) {
+    private void startUp(boolean v) {
 
         mainWindow.show();
         if (v) {
@@ -373,11 +390,8 @@ public class SceneManager extends Application {
 
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            return true;
-        }
+        return result.get() == ButtonType.OK;
 
-        return false;
     }
 
     public void openDebugger() {
@@ -404,8 +418,8 @@ public class SceneManager extends Application {
 
         debugger.show();
         debuggerController.setOut();
-        System.setOut(new IDESystemOut(System.out));
-        System.setErr(new IDESystemErr(System.err));
+        System.setOut(new IDESystemOut());
+        System.setErr(new IDESystemErr());
 
         if (debugMode) {
             System.out.println("loaded debugger window");
@@ -413,7 +427,7 @@ public class SceneManager extends Application {
 
     }
 
-    public void openWelcomeGui() {
+    private void openWelcomeGui() {
 
 
         welcomeWindow = new Stage();
@@ -436,7 +450,7 @@ public class SceneManager extends Application {
             System.out.println("Welcome scrren open");
         }
 
-        startGuiController = welcomeLoader.getController();
+        StartGuiController startGuiController = welcomeLoader.getController();
 
         String username = System.getProperty("user.name");
 
@@ -521,7 +535,7 @@ public class SceneManager extends Application {
             addsManager.setTitle("Manage Addons");
             addsManager.setScene(new Scene(addsManagerParent, 670, 455));
             addsManager.setResizable(false);
-            manageAddsGuiController = addManagerLoader.getController();
+            ManageAddsGuiController manageAddsGuiController = addManagerLoader.getController();
             manageAddsGuiController.setLists();
         }
 

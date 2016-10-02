@@ -175,7 +175,7 @@ public class ManageServerController {
 
 	}
 
-	public void proceed() {
+	private void proceed() {
 
 		Stage stage = (Stage) confirmBtn.getScene().getWindow();
 		// do what you have to do
@@ -186,7 +186,7 @@ public class ManageServerController {
 		}
 	}
 
-	public void loadAddons() {
+	private void loadAddons() {
 
 		chooseScriptAddonComboBox.getItems().clear();
 		ObservableList<SkriptAddon> addons = SkriptAddon.getScriptAddons();
@@ -201,7 +201,7 @@ public class ManageServerController {
 		}
 	}
 
-	public void saveChangesToServer() {
+	private void saveChangesToServer() {
 
 		String selection = serversList.getSelectionModel().getSelectedItem();
 
@@ -290,7 +290,7 @@ public class ManageServerController {
 
 	}
 
-	public void deleteServer() {
+	private void deleteServer() {
 		String selection = serversList.getSelectionModel().getSelectedItem();
 
 		ObservableList<MCServer> servers = MCServer.getAllServers();
@@ -308,7 +308,7 @@ public class ManageServerController {
 
 	}
 
-	public void addAddon() {
+	private void addAddon() {
 
 		String selectedItem = chooseScriptAddonComboBox.getSelectionModel().getSelectedItem();
 		scriptsList.getItems().add(selectedItem);
@@ -322,7 +322,7 @@ public class ManageServerController {
 
 	}
 
-	public void remAddon() {
+	private void remAddon() {
 
 		String selected = scriptsList.getSelectionModel().getSelectedItem();
 		scriptsList.getItems().remove(selected);
@@ -333,7 +333,7 @@ public class ManageServerController {
 
 	}
 
-	public void loadSettings() {
+	private void loadSettings() {
 
 
 		MCServer srv = null;

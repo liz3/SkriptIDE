@@ -7,15 +7,14 @@ import javafx.collections.ObservableList;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by Liz3ga on 23.08.2016.
  */
 public class ServerVersion {
 
-	public String name;
-	public String version;
+	private String name;
+	private String version;
 	public String path;
 
 	public ServerVersion(String childName) {

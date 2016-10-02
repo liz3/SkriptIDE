@@ -135,10 +135,7 @@ public class ConfigManager {
 			File configFile = new File(current + "/Config.yaml");
 
 
-            String path = new Config(configFile.getAbsolutePath()).getString("main.paths.servers");
-
-
-			return path;
+			return new Config(configFile.getAbsolutePath()).getString("main.paths.servers");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -148,7 +145,7 @@ public class ConfigManager {
 	}
 
 	public static boolean isDebug() {
-		String current = null;
+		String current;
 
 		try {
 			current = new File(".").getCanonicalPath();
@@ -156,10 +153,7 @@ public class ConfigManager {
 			File configFile = new File(current + "/Config.yaml");
 
 
-            boolean path = Boolean.valueOf(new Config(configFile.getAbsolutePath()).getString("main.settings.debugMode"));
-
-
-            return path;
+			return Boolean.valueOf(new Config(configFile.getAbsolutePath()).getString("main.settings.debugMode"));
 
 
 		} catch (IOException e) {

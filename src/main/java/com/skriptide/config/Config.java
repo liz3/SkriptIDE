@@ -74,12 +74,12 @@ public class Config extends BaseConfig implements ConfigSection {
     @Override
     public void remove(String path) {
         ArrayList<String> toRemove = new ArrayList<>();
-        for(String str : getValues().keySet()) {
-            if(str.contains(path)) {
+        for (String str : getValues().keySet()) {
+            if (str.contains(path)) {
                 toRemove.add(str);
             }
         }
-        for(String str : toRemove) {
+        for (String str : toRemove) {
             getValues().remove(str);
         }
     }
@@ -89,23 +89,21 @@ public class Config extends BaseConfig implements ConfigSection {
 
         Set<String> allEntries = getValues().keySet();
         ArrayList<String> found = new ArrayList<>();
-        for(String currentKey : allEntries) {
+        for (String currentKey : allEntries) {
 
-            if(currentKey.contains(next)) {
+            if (currentKey.contains(next)) {
 
                 String truePath = "";
                 String[] split = currentKey.split(Pattern.quote("."));
-                for(int i = 0; i != split.length; i++) {
-                    if(split[i].equals(next)) {
+                for (int i = 0; i != split.length; i++)
+                    if (split[i].equals(next)) {
 
                         truePath = truePath + "." + split[i] + "." + split[i + 1];
 
                         found.add(truePath.substring(1));
-                        continue;
                     } else {
                         truePath = truePath + "." + split[i];
                     }
-                }
 
             }
         }
@@ -113,23 +111,23 @@ public class Config extends BaseConfig implements ConfigSection {
 
         return found;
     }
+
     @Override
     public List<String> getAll(String next) {
 
         Set<String> allEntries = getValues().keySet();
         ArrayList<String> found = new ArrayList<>();
-        for(String currentKey : allEntries) {
+        for (String currentKey : allEntries) {
 
-            if(currentKey.contains(next)) {
+            if (currentKey.contains(next)) {
 
 
                 String[] split = currentKey.split(Pattern.quote("."));
-                for(int i = 0; i != split.length; i++) {
-                    if(split[i].equals(next)) {
+                for (int i = 0; i != split.length; i++) {
+                    if (split[i].equals(next)) {
 
-                        if(!found.contains(split[i + 1])) {
+                        if (!found.contains(split[i + 1])) {
                             found.add(split[i + 1]);
-                            continue;
                         }
                     }
                 }
@@ -146,6 +144,7 @@ public class Config extends BaseConfig implements ConfigSection {
         founds.addAll(getValues().keySet().stream().filter(str -> str.contains(arg)).collect(Collectors.toList()));
         return founds;
     }
+
     public boolean contains(String arg) {
 
         for (String str : getValues().keySet()) {

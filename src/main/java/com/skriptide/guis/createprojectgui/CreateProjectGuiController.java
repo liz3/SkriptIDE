@@ -21,30 +21,30 @@ public class CreateProjectGuiController {
 
 
 	@FXML
-	public Button chooseSavePathBtn;
+	public  Button chooseSavePathBtn;
 	@FXML
-	public TextField projectNameTxTField;
+	public  TextField projectNameTxTField;
 
 	@FXML
-	public ComboBox<String> pluginVersionComboBox;
+	public  ComboBox<String> pluginVersionComboBox;
 
 	@FXML
-	public ComboBox<String> loadOnServerComboBox;
+	public  ComboBox<String> loadOnServerComboBox;
 
 	@FXML
-	public Button createServerBtn;
+	public  Button createServerBtn;
 
 	@FXML
-	public TextField savePathTxTField;
+	public  TextField savePathTxTField;
 
 	@FXML
-	public TextArea notesTextArea;
+	public  TextArea notesTextArea;
 
 	@FXML
-	public Button cancelBtn;
+	public  Button cancelBtn;
 
 	@FXML
-	public Button createBtn;
+	public  Button createBtn;
 
 	@FXML
 	public CheckBox createSubFolderCheckBox;
@@ -52,14 +52,17 @@ public class CreateProjectGuiController {
 
 	private String truePath;
 
-	public void updatePath() {
+	public CreateProjectGuiController() {
+	}
+
+	private void updatePath() {
 
 		savePathTxTField.setText(truePath + "/" + projectNameTxTField.getText());
 
 
 	}
 
-	public void createProject() {
+	private void createProject() {
 
 		boolean canGo = true;
 		String error = "";
@@ -125,7 +128,7 @@ public class CreateProjectGuiController {
 		}
 	}
 
-	public void cancel() {
+	private void cancel() {
 
 		Stage stage = (Stage) createBtn.getScene().getWindow();
 		// do what you have to do
@@ -136,7 +139,7 @@ public class CreateProjectGuiController {
 
 	}
 
-	public void createNewServer() {
+	private void createNewServer() {
 
 		SceneManager sceneManager = new SceneManager();
 		sceneManager.openCreateServer();
@@ -159,9 +162,7 @@ public class CreateProjectGuiController {
 		pluginVersionComboBox.getItems().clear();
 		for (Skript skript : sk.sorted()) {
 
-			Skript s = skript;
-
-			pluginVersionComboBox.getItems().add(s.getVersion());
+			pluginVersionComboBox.getItems().add(skript.getVersion());
 		}
 		ObservableList<MCServer> servers = MCServer.getAllServers();
 		loadOnServerComboBox.getItems().clear();
@@ -177,12 +178,15 @@ public class CreateProjectGuiController {
 	}
 
 
-	public void openProjectPathChooser() {
+	private void openProjectPathChooser() {
 
 		Stage fileChooserWindow = new Stage();
 		DirectoryChooser dirChooser = new DirectoryChooser();
 		dirChooser.setTitle("Choose Path for Projects");
 		File dir = dirChooser.showDialog(fileChooserWindow);
+
+		if(dir == null)
+			return;
 
 		savePathTxTField.setText(dir.getAbsolutePath());
 

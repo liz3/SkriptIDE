@@ -3,8 +3,6 @@ package com.skriptide.util;
 import com.skriptide.guis.SceneManager;
 
 import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -14,8 +12,8 @@ import java.util.Calendar;
 public class IDESystemOut extends PrintStream {
 
 
-	public IDESystemOut(PrintStream out) {
-		super(out);
+	public IDESystemOut() {
+		super(System.out);
 	}
 
 	@Override

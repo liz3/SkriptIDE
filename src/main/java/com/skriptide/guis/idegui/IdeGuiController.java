@@ -7,51 +7,37 @@ import com.skriptide.util.ConfigManager;
 import com.skriptide.util.DragResizer;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.Project;
-import com.skriptide.util.skunityapi.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
-import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.PopupAlignment;
 import org.fxmisc.richtext.StyleClassedTextArea;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class IdeGuiController {
 
     @FXML
-    public MenuItem manageAddonsPoint;
+    public  MenuItem manageAddonsPoint;
     @FXML
-    public Button startServerBtn;
+    public  Button startServerBtn;
     @FXML
-    public MenuItem createServerMenuPoint;
+    public  MenuItem createServerMenuPoint;
     @FXML
-    public MenuItem manageServerMenuItem;
+    public  MenuItem manageServerMenuItem;
     @FXML
-    public MenuItem saveMenuPoint;
+    public  MenuItem saveMenuPoint;
     @FXML
-    public MenuItem newProjectMenuPoint;
+    public  MenuItem newProjectMenuPoint;
     @FXML
-    public TabPane codeTabPane;
+    public  TabPane codeTabPane;
     @FXML
     public Label searchLabel;
     @FXML
@@ -119,6 +105,8 @@ public class IdeGuiController {
         saveMenuPoint.setOnAction(event -> saveOpenProjects());
         newProjectMenuPoint.setOnAction(event -> newProject());
 
+
+
         DragResizer.makeResizable(secBox);
         comandSendTextField.setOnKeyPressed(event -> {
 
@@ -143,6 +131,12 @@ public class IdeGuiController {
                     if (tab != null) {
                         String name = tab.getText();
                         ObservableList<Project> prs = Project.getProjects();
+
+                        CompleteList cl = CompleteList.getCurrentInstance();
+                        if(cl != null && cl.win.isShowing()) {
+                            cl.win.hide();
+                        }
+
                         for (Project project : prs.sorted()) {
                             if (project.getName().equalsIgnoreCase(name)) {
 
@@ -151,6 +145,7 @@ public class IdeGuiController {
                                 prServerLbl.setText("Server: " + project.getServer().getname());
                                 prSkVersionLbl.setText("Skript version: " + project.getSk().getVersion());
                                 prNotesArea.setText(project.getNotes());
+
                             }
                         }
                     }
@@ -218,7 +213,7 @@ public class IdeGuiController {
         }
     }
 
-    public void runProject() {
+    private void runProject() {
 
         Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
         String name = tab.getText();
@@ -340,11 +335,11 @@ public class IdeGuiController {
         });
     }
 
-    public void triggerDebugger() {
+    private void triggerDebugger() {
         sceneManager.openDebugger();
     }
 
-    public void loadInServers() {
+    private void loadInServers() {
 
         serverListComboBox.getItems().setAll();
         ObservableList<MCServer> servers = MCServer.getAllServers();
@@ -358,7 +353,7 @@ public class IdeGuiController {
 
     }
 
-    public void startServer() {
+    private void startServer() {
 
         ObservableList<MCServer> servers = MCServer.getAllServers();
         for (MCServer srv : servers.sorted()) {
@@ -372,7 +367,7 @@ public class IdeGuiController {
         }
     }
 
-    public void newProject() {
+    private void newProject() {
 
         sceneManager.openCreateProject();
 
@@ -382,7 +377,7 @@ public class IdeGuiController {
 
     }
 
-    public void newServer() {
+    private void newServer() {
 
         sceneManager.openCreateServer();
         if (Main.debugMode) {
@@ -390,7 +385,7 @@ public class IdeGuiController {
         }
     }
 
-    public void manageAddons() throws IOException {
+    private void manageAddons() throws IOException {
 
         sceneManager.openManageVersions();
         if (Main.debugMode) {
@@ -400,7 +395,7 @@ public class IdeGuiController {
 
     }
 
-    public void manageServers() {
+    private void manageServers() {
 
         sceneManager.openManageServer();
         if (Main.debugMode) {
@@ -408,7 +403,7 @@ public class IdeGuiController {
         }
     }
 
-    public void openProject() {
+    private void openProject() {
         CodeArea area = new CodeArea();
 
         CompleteList completeList = new CompleteList();

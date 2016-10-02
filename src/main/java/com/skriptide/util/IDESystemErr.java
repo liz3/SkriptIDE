@@ -12,8 +12,8 @@ import java.util.Calendar;
 public class IDESystemErr extends PrintStream {
 
 
-	public IDESystemErr(PrintStream err) {
-		super(err);
+	public IDESystemErr() {
+		super(System.err);
 	}
 
 	@Override

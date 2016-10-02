@@ -17,7 +17,7 @@ public abstract class BaseConfig {
     private final Yaml yaml = new Yaml();
     private Map<String, Object> values;
 
-    public BaseConfig(String path) {
+    BaseConfig(String path) {
         confFile = new File(path);
 
         create();
@@ -25,11 +25,11 @@ public abstract class BaseConfig {
 
     }
 
-    public File getConfFile() {
+    private File getConfFile() {
         return confFile;
     }
 
-    public Map<String, Object> getMappedValues() {
+    Map<String, Object> getMappedValues() {
         return values;
     }
 
@@ -50,7 +50,7 @@ public abstract class BaseConfig {
 
     }
 
-    public void create() {
+    private void create() {
         try {
             if (!getConfFile().exists()) {
                 Path pathToFile = Paths.get(getConfFile().getPath());

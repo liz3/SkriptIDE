@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by liz3 on 19.09.16.
  */
-public class ConfigTests {
+class ConfigTests {
 
     public static void makeTests() {
 

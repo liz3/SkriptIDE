@@ -4,7 +4,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 
 /**
  * Created by Liz3ga on 11.09.2016.
@@ -46,16 +45,16 @@ public class DragResizer {
 		region.setOnMouseReleased(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				resizer.mouseReleased(event);
+				resizer.mouseReleased();
 			}});
 	}
 
-	protected void mouseReleased(MouseEvent event) {
+	private void mouseReleased() {
 		dragging = false;
 		region.setCursor(Cursor.DEFAULT);
 	}
 
-	protected void mouseOver(MouseEvent event) {
+	private void mouseOver(MouseEvent event) {
 		if(isInDraggableZone(event) || dragging) {
 			region.setCursor(Cursor.S_RESIZE);
 		}
@@ -64,11 +63,11 @@ public class DragResizer {
 		}
 	}
 
-	protected boolean isInDraggableZone(MouseEvent event) {
+	private boolean isInDraggableZone(MouseEvent event) {
 		return event.getY() > (region.getHeight() - RESIZE_MARGIN);
 	}
 
-	protected void mouseDragged(MouseEvent event) {
+	private void mouseDragged(MouseEvent event) {
 		if(!dragging) {
 			return;
 		}
@@ -82,7 +81,7 @@ public class DragResizer {
 		y = mousey;
 	}
 
-	protected void mousePressed(MouseEvent event) {
+	private void mousePressed(MouseEvent event) {
 
 		// ignore clicks outside of the draggable margin
 		if(!isInDraggableZone(event)) {

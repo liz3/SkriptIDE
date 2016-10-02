@@ -3,7 +3,7 @@ package com.skriptide.config;
 import java.util.List;
 import java.util.Map;
 
-public interface ConfigSection {
+interface ConfigSection {
 
     Map<String, Object> getValues();
 

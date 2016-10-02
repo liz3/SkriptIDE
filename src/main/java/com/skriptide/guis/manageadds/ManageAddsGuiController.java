@@ -46,7 +46,7 @@ public class ManageAddsGuiController {
 	public Button confirmBtn;
 
 
-	public void confirmAction() {
+	private void confirmAction() {
 
 		Stage stage = (Stage) confirmBtn.getScene().getWindow();
 		stage.close();
@@ -54,7 +54,7 @@ public class ManageAddsGuiController {
 	}
 
 
-	public void addScript() {
+	private void addScript() {
 
 		Stage fileChooserWindow = new Stage();
 		FileChooser dirChooser = new FileChooser();
@@ -75,7 +75,7 @@ public class ManageAddsGuiController {
 		}
 	}
 
-	public void addServer() {
+	private void addServer() {
 
 		Stage fileChooserWindow = new Stage();
 		FileChooser dirChooser = new FileChooser();
@@ -95,7 +95,7 @@ public class ManageAddsGuiController {
 		}
 	}
 
-	public void addAddon() {
+	private void addAddon() {
 
 		Stage fileChooserWindow = new Stage();
 		FileChooser dirChooser = new FileChooser();
@@ -118,7 +118,7 @@ public class ManageAddsGuiController {
 
 	}
 
-	public void remScript() {
+	private void remScript() {
 
 		ObservableList<Skript> selected, all;
 		all = scriptTable.getItems();
@@ -136,7 +136,7 @@ public class ManageAddsGuiController {
 		}
 	}
 
-	public void remServer() {
+	private void remServer() {
 
 
 		ObservableList<ServerVersion> selected, all;
@@ -156,7 +156,7 @@ public class ManageAddsGuiController {
 
 	}
 
-	public void remAddon() {
+	private void remAddon() {
 
 		ObservableList<SkriptAddon> selected, all;
 		all = addonsTable.getItems();
@@ -175,7 +175,7 @@ public class ManageAddsGuiController {
 	}
 
 
-	public void setServerVersions() {
+	private void setServerVersions() {
 
 		//MC-Server Vrsionen
 		TableColumn<ServerVersion, String> nameColum = new TableColumn<>("Name");
@@ -199,7 +199,7 @@ public class ManageAddsGuiController {
 
 	}
 
-	public void setSkriptVersions() {
+	private void setSkriptVersions() {
 
 		//MC-Server Vrsionen
 		TableColumn<Skript, String> nameColum = new TableColumn<>("Name");
@@ -224,7 +224,7 @@ public class ManageAddsGuiController {
 
 	}
 
-	public void setSkriptAddons() {
+	private void setSkriptAddons() {
 
 		//MC-Server Vrsionen
 		TableColumn<SkriptAddon, String> nameColum = new TableColumn<>("Name");
@@ -267,7 +267,7 @@ public class ManageAddsGuiController {
 
 	}
 
-	public void refreshList() {
+	private void refreshList() {
 
 
 		addonsTable.refresh();

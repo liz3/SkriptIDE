@@ -18,8 +18,6 @@ import java.util.zip.ZipInputStream;
  */
 public class SkUnityAPI {
 
-	private File mainFolder = null;
-	private boolean folderExists;
 	private File conditions;
 	private File effects;
 	private File events;
@@ -29,7 +27,7 @@ public class SkUnityAPI {
 
 	public SkUnityAPI() {
 
-		folderExists = exists();
+		boolean folderExists = exists();
 
 		if (folderExists) {
 			String current = null;
@@ -67,22 +65,19 @@ public class SkUnityAPI {
 
 
 		File folder = new File(current + "/SkUnity");
-		mainFolder = folder;
 		if (!folder.exists()) {
 			folder.mkdirs();
 		}
 		try {
-			WebUtils.downloadFile(new URL("http://nfell2009.uk/skunity/api/zip/skunity.zip"), new File(folder.getAbsolutePath() + "/api.zip"));
+            WebUtils.downloadFile(new URL("http://nfell2009.uk/skunity/api/zip/skunity.zip"), new File(folder.getAbsolutePath() + "/api.zip"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 		//	WebUtils.downloadFile(new URL("https://download-cf.jetbrains.com/idea/ideaIC-2016.2.4.exe"), new File(folder.getAbsolutePath() + "/hallo.exe"));
-			unZip(new File(folder.getAbsolutePath() + "/api.zip").getAbsolutePath(), folder.getAbsolutePath() + "/output");
-			if (Main.debugMode) {
-				System.out.println("Downloaded api");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		unZip(new File(folder.getAbsolutePath() + "/api.zip").getAbsolutePath(), folder.getAbsolutePath() + "/output");
+		if (Main.debugMode) {
+            System.out.println("Downloaded api");
+        }
 
 	}
 
@@ -100,12 +95,7 @@ public class SkUnityAPI {
 		if (Main.debugMode) {
 			System.out.println("scheck skunity api");
 		}
-		if (folder.exists()) {
-			return true;
-		}
-
-
-		return false;
+		return folder.exists();
 	}
 
 	private void unZip(String zipFile, String outputFolder) {

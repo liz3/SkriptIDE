@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -533,7 +534,7 @@ public class MCServer {
 
 					Thread sender = new Thread(() -> {
 
-						if (finalLine != "" && finalLine != null) {
+						if (!Objects.equals(finalLine, "") && finalLine != null) {
 
 							javafx.application.Platform.runLater(() -> {
 								SceneManager.consoleOut.appendText(finalLine + System.getProperty("line.separator"));
@@ -752,21 +753,8 @@ public class MCServer {
 
 	}
 
-	private boolean deleteDirectory(File directory) {
-		if (directory.exists()) {
-			File[] files = directory.listFiles();
-			if (null != files) {
-				for (int i = 0; i < files.length; i++) {
-					if (files[i].isDirectory()) {
-						deleteDirectory(files[i]);
-					} else {
-						files[i].delete();
-					}
-				}
-			}
-		}
-
-		return (directory.delete());
+	private void deleteDirectory(File directory) {
+		FileUtils.deleteDirectory(directory, true);
 	}
 
 	public SkriptAddon[] getSkriptAddons() {

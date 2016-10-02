@@ -11,14 +11,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.Objects;
 
 /**
  * Created by Liz3ga on 28.07.2016.
  */
 public class CreateServerGuiController {
 
-	File serverCustomFile = null;
-	File scriptPluginVersionFile = null;
+	private File serverCustomFile = null;
+	private File scriptPluginVersionFile = null;
 	@FXML
 	private TextField serverNameTextField;
 	@FXML
@@ -49,7 +50,7 @@ public class CreateServerGuiController {
 	private Button choosePathBtn;
 	private String truePath;
 
-	public void updatePath() {
+	private void updatePath() {
 
 		serverPathTextField.setText(truePath + "/" + serverNameTextField.getText());
 
@@ -88,7 +89,7 @@ public class CreateServerGuiController {
 
 	}
 
-	public void createServer() {
+	private void createServer() {
 
 		boolean canGo = true;
 
@@ -101,7 +102,7 @@ public class CreateServerGuiController {
 		Skript trueSkript = null;
 		ServerVersion trueVer = null;
 		String selectedSkript = scriptVersionComboBox.getSelectionModel().getSelectedItem();
-		if (selectedSkript == null || selectedSkript == "") {
+		if (selectedSkript == null || Objects.equals(selectedSkript, "")) {
 			canGo = false;
 			error = error + "Please choose a Skript Version! ";
 		} else {
@@ -115,7 +116,7 @@ public class CreateServerGuiController {
 			}
 		}
 		String selectedServer = serverVersionComboBox.getSelectionModel().getSelectedItem();
-		if (selectedServer == null || selectedServer == "") {
+		if (selectedServer == null || Objects.equals(selectedServer, "")) {
 			canGo = false;
 			error = error + "Please choose a Server Version! ";
 		} else {
@@ -182,7 +183,7 @@ public class CreateServerGuiController {
 	}
 
 
-	public void cancel() {
+	private void cancel() {
 
 		Stage stage = (Stage) createServerBtn.getScene().getWindow();
 		// do what you have to do
@@ -192,7 +193,7 @@ public class CreateServerGuiController {
 		}
 	}
 
-	public void choosePath() {
+	private void choosePath() {
 
 		Stage fileChooserWindow = new Stage();
 		DirectoryChooser dirChooser = new DirectoryChooser();
@@ -207,7 +208,7 @@ public class CreateServerGuiController {
 		}
 	}
 
-	public void chooseServerVersion() {
+	private void chooseServerVersion() {
 
 		Stage fileChooserWindow = new Stage();
 		FileChooser fileChooser = new FileChooser();
@@ -233,7 +234,7 @@ public class CreateServerGuiController {
 
 	}
 
-	public void chooseScriptVersion() {
+	private void chooseScriptVersion() {
 
 		Stage fileChooserWindow = new Stage();
 		FileChooser fileChooser = new FileChooser();

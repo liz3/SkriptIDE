@@ -1,17 +1,19 @@
 package com.skriptide.util.skunityapi;
 
+import java.util.Objects;
+
 /**
  * Created by Liz3ga on 31.08.2016.
  */
 public class ApiExpression {
 
-	private String id;
-	private String feature;
-	private String addon;
-	private String pattern;
-	private String description;
-	private String example;
-	private String requirements;
+	private final String id;
+	private final String feature;
+	private final String addon;
+	private final String pattern;
+	private final String description;
+	private final String example;
+	private final String requirements;
 
 	public ApiExpression(String id, String feature, String addon, String pattern, String description, String example, String requirements) {
 		this.id = id;
@@ -24,49 +26,49 @@ public class ApiExpression {
 	}
 
 	public String getId() {
-		if (this.id != "") {
+		if (!Objects.equals(this.id, "")) {
 			return this.id;
 		}
 		return null;
 	}
 
 	public String getFeature() {
-		if (this.feature != "") {
+		if (!Objects.equals(this.feature, "")) {
 			return this.feature;
 		}
 		return null;
 	}
 
 	public String getAddon() {
-		if (this.addon != "") {
+		if (!Objects.equals(this.addon, "")) {
 			return this.addon;
 		}
 		return null;
 	}
 
 	public String getPattern() {
-		if (this.pattern != "") {
+		if (!Objects.equals(this.pattern, "")) {
 			return this.pattern;
 		}
 		return null;
 	}
 
 	public String getDescription() {
-		if (this.description != "") {
+		if (!Objects.equals(this.description, "")) {
 			return this.description;
 		}
 		return null;
 	}
 
 	public String getExample() {
-		if (this.example != "") {
+		if (!Objects.equals(this.example, "")) {
 			return this.example;
 		}
 		return null;
 	}
 
 	public String getRequirements() {
-		if (this.requirements != "") {
+		if (!Objects.equals(this.requirements, "")) {
 			return this.requirements;
 		}
 		return null;

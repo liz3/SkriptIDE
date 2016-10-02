@@ -41,13 +41,13 @@ public class StartGuiController {
 		langComboBox.getItems().add("English");
 		langComboBox.getSelectionModel().select(0);
 	}
-	public void cancelAction() {
+	private void cancelAction() {
 
 		System.exit(0);
 
 	}
 
-	public void openProjectPathChooser() {
+	private void openProjectPathChooser() {
 
 		Stage fileChooserWindow = new Stage();
 		DirectoryChooser dirChooser = new DirectoryChooser();
@@ -65,7 +65,7 @@ public class StartGuiController {
 
 	}
 
-	public void openServersPathChooser() {
+	private void openServersPathChooser() {
 
 		Stage fileChooserWindow = new Stage();
 		DirectoryChooser dirChooser = new DirectoryChooser();
@@ -84,7 +84,7 @@ public class StartGuiController {
 	}
 
 
-	public void proceed() {
+	private void proceed() {
 
 
 		String projectsPath = projectsPathField.getText().replace("\\", "/");

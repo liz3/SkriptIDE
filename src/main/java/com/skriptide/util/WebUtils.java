@@ -44,7 +44,7 @@ public class WebUtils {
 		}
 	}
 
-	public static void downloadFile(URL url, File f) throws IOException, InterruptedException {
+	public static void downloadFile(URL url, File f) throws Exception {
 		if (!f.exists()) {
 			f.createNewFile();
 		}

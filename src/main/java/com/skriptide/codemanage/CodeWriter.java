@@ -14,8 +14,8 @@ import java.io.IOException;
 public class CodeWriter {
 
 
-	private Project pr;
-	private String inputCode;
+	private final Project pr;
+	private final String inputCode;
 
 	public CodeWriter(String code, Project pr) {
 		this.inputCode = code;

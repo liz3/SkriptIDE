@@ -10,6 +10,7 @@ import org.fxmisc.richtext.StyleSpansBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +20,7 @@ import java.util.regex.Pattern;
 public class ControlMain {
 
 
-    private static SkUnityAPI skUnity = new SkUnityAPI();
+    private static final SkUnityAPI skUnity = new SkUnityAPI();
 
 
     public static void controlCode(CodeArea code) {
@@ -117,7 +118,7 @@ public class ControlMain {
         cnsArray = new String[conditions.size()];
         for (int i = 0; i != conditions.size(); i++) {
             ApiCondition condition = conditions.get(i);
-            if (condition.getId() != null && condition.getId() != "") {
+            if (condition.getId() != null && !Objects.equals(condition.getId(), "")) {
                 cnsArray[i] = condition.getId().trim();
 
             }
@@ -133,7 +134,7 @@ public class ControlMain {
         cnsArray = new String[effects.size()];
         for (int i = 0; i != effects.size(); i++) {
             ApiEffect condition = effects.get(i);
-            if (condition.getId() != null && condition.getId() != "") {
+            if (condition.getId() != null && !Objects.equals(condition.getId(), "")) {
                 cnsArray[i] = condition.getId().trim();
 
             }
@@ -149,7 +150,7 @@ public class ControlMain {
         cnsArray = new String[events.size()];
         for (int i = 0; i != events.size(); i++) {
             ApiEvent condition = events.get(i);
-            if (condition.getId() != null && condition.getId() != "") {
+            if (condition.getId() != null && !Objects.equals(condition.getId(), "")) {
                 cnsArray[i] = condition.getId().trim();
 
             }
@@ -165,7 +166,7 @@ public class ControlMain {
         cnsArray = new String[expressions.size()];
         for (int i = 0; i != expressions.size(); i++) {
             ApiExpression condition = expressions.get(i);
-            if (condition.getId() != null && condition.getId() != "") {
+            if (condition.getId() != null && !Objects.equals(condition.getId(), "")) {
                 cnsArray[i] = condition.getId().trim();
 
             }
@@ -181,7 +182,7 @@ public class ControlMain {
         cnsArray = new String[types.size()];
         for (int i = 0; i != types.size(); i++) {
             ApiType condition = types.get(i);
-            if (condition.getId() != null && condition.getId() != "") {
+            if (condition.getId() != null && !Objects.equals(condition.getId(), "")) {
                 cnsArray[i] = condition.getId().trim();
 
             }

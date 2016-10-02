@@ -2,19 +2,27 @@ package com.skriptide.codemanage;
 
 import com.skriptide.main.Main;
 import com.skriptide.util.skunityapi.*;
-import javafx.event.EventHandler;
+import com.sun.deploy.util.ArrayUtil;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.PopupAlignment;
 
+import javax.swing.text.Utilities;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by yannh on 25.09.2016.
@@ -22,18 +30,23 @@ import java.util.ArrayList;
 public class CompleteList {
 
     private ListView<String> chooseView;
-    private boolean showList;
-    private Popup win;
-    private ArrayList<String> all = new ArrayList<>();
-    private int pos = 0;
+    public Popup win;
+    private final ArrayList<String> all = new ArrayList<>();
+    private static CompleteList me;
 
-    public void setList(Popup win, ListView chooseView, TabPane codeTabPane, boolean showList) {
+
+    public static CompleteList getCurrentInstance() {
+        return me;
+    }
+
+    private void setList(Popup win, ListView<String> chooseView, TabPane codeTabPane) {
         SkUnityAPI skUnity = new SkUnityAPI();
 
         if (win == null) {
             win = new Popup();
-            chooseView = new ListView();
+            chooseView = new ListView<>();
         }
+        all.clear();
 
         ArrayList<ApiCondition> conditions = skUnity.getConditions();
         ArrayList<ApiEffect> effects = skUnity.getEffects();
@@ -42,22 +55,22 @@ public class CompleteList {
         ArrayList<ApiType> types = skUnity.getTypes();
         for (int i = 1; i != conditions.size(); i++) {
 
-            chooseView.getItems().add(conditions.get(i).getId() + " Condition\n" + conditions.get(i).getAddon());
+            all.add(conditions.get(i).getId() + " Condition\n" + conditions.get(i).getAddon());
         }
         for (int i = 0; i != effects.size(); i++) {
-            chooseView.getItems().add(effects.get(i).getId() + " Effect\n" + effects.get(i).getAddon());
+            all.add(effects.get(i).getId() + " Effect\n" + effects.get(i).getAddon());
         }
         for (int i = 0; i != events.size(); i++) {
-            chooseView.getItems().add(events.get(i).getId() + " Event\n" + events.get(i).getAddon());
+            all.add(events.get(i).getId() + " Event\n" + events.get(i).getAddon());
         }
         for (int i = 0; i != expressions.size(); i++) {
-            chooseView.getItems().add(expressions.get(i).getId() + " Expression\n" + expressions.get(i).getAddon());
+            all.add(expressions.get(i).getId() + " Expression\n" + expressions.get(i).getAddon());
         }
         for (int i = 0; i != types.size(); i++) {
-            chooseView.getItems().add(types.get(i).getId() + " Type\n" + types.get(i).getAddon());
+            all.add(types.get(i).getId() + " Type\n" + types.get(i).getAddon());
         }
 
-        chooseView.getItems().addAll(new Supers().getSupervArray());
+        all.addAll(Arrays.asList(new Supers().getSupervArray()));
 
         chooseView.setPrefSize(180, 200);
 
@@ -68,6 +81,7 @@ public class CompleteList {
         area.setPopupWindow(win);
 
 
+        updateList(codeTabPane, win, chooseView);
 
 
         if (Main.debugMode) {
@@ -75,131 +89,139 @@ public class CompleteList {
         }
     }
 
-    public void chooseList(TabPane codeTabPane, Button commandSendBtn) {
+    void chooseList(TabPane codeTabPane, Button commandSendBtn) {
+
+        me = this;
 
         Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
         CodeArea area = (CodeArea) tab.getContent();
 
         if (win == null) {
             win = new Popup();
-            chooseView = new ListView();
-            setList(win, chooseView, codeTabPane, showList);
+            chooseView = new ListView<>();
+            setList(win, chooseView, codeTabPane);
 
             area.setOnMouseClicked(event -> {
-                if (showList) {
-
+                if (win.isShowing()) {
                     win.hide();
                     chooseView.setVisible(false);
-                    showList = false;
-
                 }
             });
         }
 
 
         if (!win.isShowing()) {
-
             Stage stage = (Stage) commandSendBtn.getScene().getWindow();
-
-
             area.setPopupAlignment(PopupAlignment.CARET_BOTTOM);
             win.show(stage);
             chooseView.setVisible(true);
-            showList = true;
             if (Main.debugMode) {
                 System.out.println("showed list");
             }
 
         }
-        updateList(codeTabPane, win, chooseView, showList);
-
-
     }
 
-    public void updateList(TabPane codeTabPane, Popup win, ListView<String> chooseView, boolean showList) {
+    private void updateList(TabPane codeTabPane, Popup win, ListView<String> chooseView) {
 
         Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
         CodeArea area = (CodeArea) tab.getContent();
+        final String[] prefix = new String[1];
 
 
         area.caretPositionProperty().addListener((obs, oldPosition, newPosition) -> {
+            String text = area.getText().substring(0, newPosition);
 
-            String text = area.getText().substring(0, newPosition.intValue());
-            int index;
-            for (index = text.length() - 1; index >= 0 && !Character.isWhitespace(text.charAt(index)); index--) ;
-            String prefix = text.substring(index + 1, text.length());
-
-
-            if (chooseView.isVisible() && !(chooseView == null)) {
-                javafx.application.Platform.runLater(() -> {
-
-
-                            chooseView.getItems().sorted().stream().filter(str -> !str.toLowerCase().contains(prefix.toLowerCase())).forEach(str -> {
-                                chooseView.getItems().remove(str);
-                                all.add(str);
-                            });
-
-                            ArrayList<String> toRemove = new ArrayList<String>();
-                            for (int i = 0; i != all.size(); i++) {
-                                String current = all.get(i);
-                                if (current.toLowerCase().contains(prefix.toLowerCase())) {
-                                    chooseView.getItems().add(current);
-                                    toRemove.add(current);
-                                    chooseView.refresh();
-                                }
-                            }
-                            for (int i = 0; i != toRemove.size(); i++) {
-                                String rem = toRemove.get(i);
-                                if (all.contains(rem)) {
-                                    all.remove(rem);
-                                }
-                            }
-
-                        }
-
-
-                );
+            prefix[0] = text;
+            if (prefix[0].contains("\n")) {
+                String[] parts = prefix[0].split("\n");
+                prefix[0] = parts[parts.length - 1].trim();
             }
-            Popup finalWin = win;
-            final ListView[] finalChooseView = {chooseView};
-            final boolean[] finalShowList = {showList};
-            chooseView.setOnKeyPressed(event -> {
-                KeyCode code = event.getCode();
-
-                if (code == KeyCode.ESCAPE) {
 
 
-                    if (finalShowList[0]) {
+            if (prefix[0].contains(" "))
+                prefix[0] = prefix[0].substring(prefix[0].lastIndexOf(" ") + 1);
 
-                        win.hide();
-                        chooseView.setVisible(false);
-                        finalShowList[0] = false;
+            String completeText = area.getText();
 
-                    }
-                } else if (code == KeyCode.ENTER) {
-                    if (showList) {
+            Pattern p = Pattern.compile("\"([^\"]*)\"");
+            Matcher m = p.matcher(completeText);
 
-                        setWord(codeTabPane, win, chooseView, showList, prefix);
+            while (m.find()) {
+                //"test"  10 + 4 = 14
 
-                    }
+                String g = m.group();
+                int start = completeText.indexOf(g);
+                int end = start + g.length();
+                if(newPosition > start && newPosition < end) {
+                    win.hide();
+                    chooseView.setVisible(false);
+                    return;
                 }
-            });
-            chooseView.setOnMouseClicked(event -> setWord(codeTabPane, win, chooseView, showList, prefix));
+            }
 
+            if(!win.isShowing()) {
+                win.show(area.getScene().getWindow());
+                chooseView.setVisible(true);
+            }
+
+            if (prefix[0].equals("")) {
+                win.hide();
+                chooseView.setVisible(false);
+                return;
+            }
+            if (chooseView.isVisible()) {
+                ObservableList<String> tempList = FXCollections.observableArrayList();
+                for (String item : all) {
+                    if (item.toLowerCase().contains(prefix[0].toLowerCase()))
+                        tempList.add(item);
+                }
+                if (tempList.size() != chooseView.getItems().size()) {
+                    chooseView.getItems().clear();
+                    chooseView.setItems(tempList);
+                }
+                chooseView.scrollTo(0);
+                chooseView.getSelectionModel().selectFirst();
+                tempList = null;
+            }
         });
+        chooseView.setOnKeyPressed(event -> {
+            KeyCode code = event.getCode();
+            if (code == KeyCode.ESCAPE) {
+                if (win.isShowing()) {
+                    win.hide();
+                    chooseView.setVisible(false);
+                }
+            } else if (code == KeyCode.ENTER) {
+                if (win.isShowing()) {
 
+                    setWord(codeTabPane, win, chooseView, prefix[0]);
+                }
+            }
+        });
+        chooseView.setOnMouseClicked(event -> setWord(codeTabPane, win, chooseView, prefix[0]));
         if (Main.debugMode) {
             System.out.println("Updatet list");
         }
     }
 
-    private void setWord(TabPane codeTabPane, Popup win, ListView<String> chooseView, boolean showList, String prefix) {
+    private void setWord(TabPane codeTabPane, Popup win, ListView<String> chooseView, String prefix) {
 
 
         Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
         CodeArea area = (CodeArea) tab.getContent();
-        String seletion = chooseView.getSelectionModel().getSelectedItem();
+
+
+        String seletion;
+
+        if (chooseView.getItems().size() == 0) {
+            return;
+        } else {
+            seletion = chooseView.getSelectionModel().getSelectedItem();
+        }
+
         String before;
+        int pos;
         if (seletion.contains("Event")) {
 
             String trueT = "";
@@ -223,7 +245,7 @@ public class CompleteList {
             pos = area.getCaretPosition() - before.length();
 
         } else {
-            String trueT = "";
+            String trueT;
             String[] split = seletion.split(" ");
             trueT = split[0];
 
@@ -235,11 +257,12 @@ public class CompleteList {
 
             pos = area.getCaretPosition() - before.length();
         }
+
         System.out.println(pos);
         area.moveTo(pos);
 
 
-        if (showList) {
+        if (win.isShowing()) {
             win.hide();
             chooseView.setVisible(false);
 
