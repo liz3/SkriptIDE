@@ -2,15 +2,13 @@ package com.skriptide.codemanage;
 
 import com.skriptide.main.Main;
 import com.skriptide.util.skunityapi.*;
-import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.LineNumberFactory;
-import org.fxmisc.richtext.StyleSpans;
-import org.fxmisc.richtext.StyleSpansBuilder;
+import javafx.geometry.Point2D;
+import javafx.scene.control.Label;
+import javafx.stage.Popup;
+import org.fxmisc.richtext.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
+import java.time.Duration;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,23 +31,52 @@ public class ControlMain {
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
 
         code.richChanges()
-                .filter(ch -> !ch.getInserted().equals(ch.getRemoved())) // XXX
-                .subscribe(change -> {
-                    code.setStyleSpans(0, computeHighlighting(code.getText()));
+                .filter(ch -> !ch.getInserted().equals(ch.getRemoved())).subscribe(change -> {
+            code.setStyleSpans(0, computeHighlighting(code.getText()));
                 });
         code.replaceText(0, 0, saver);
+        toolTip(code);
         if (Main.debugMode) {
             System.out.println("Highlighted : " + code.getText());
         }
     }
 
+    private static void toolTip(CodeArea area) {
 
+        List<String> allMatches = new ArrayList<String>();
+
+
+        Popup popup = new Popup();
+        Label popupMsg = new Label();
+        popupMsg.setStyle(
+                "-fx-background-color: black;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-padding: 5;");
+        popup.getContent().add(popupMsg);
+
+        area.setMouseOverTextDelay(Duration.ofSeconds(2));
+        area.addEventHandler(MouseOverTextEvent.MOUSE_OVER_TEXT_BEGIN, e -> {
+
+            int chIdx = e.getCharacterIndex();
+            Point2D pos = e.getScreenPosition();
+            popupMsg.setText("Character '" + area.getText(chIdx, chIdx+1) + "' at " + pos);
+            popup.show(area, pos.getX(), pos.getY() + 10);
+        });
+        area.addEventHandler(MouseOverTextEvent.MOUSE_OVER_TEXT_END, e -> {
+            popup.hide();
+        });
+
+
+
+
+    }
     private static StyleSpans<Collection<String>> computeHighlighting(String text) {
         Matcher matcher = PATTERN.matcher(text);
         int lastKwEnd = 0;
         StyleSpansBuilder<Collection<String>> spansBuilder
                 = new StyleSpansBuilder<>();
         while (matcher.find()) {
+
             String styleClass =
                     matcher.group("CONDITIONS") != null ? "conditions" :
                             matcher.group("EFFECTS") != null ? "effects" :

@@ -2,10 +2,9 @@ package com.skriptide.codemanage;
 
 import com.skriptide.main.Main;
 import com.skriptide.util.skunityapi.*;
-import com.sun.deploy.util.ArrayUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
@@ -16,11 +15,9 @@ import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.PopupAlignment;
 
-import javax.swing.text.Utilities;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
