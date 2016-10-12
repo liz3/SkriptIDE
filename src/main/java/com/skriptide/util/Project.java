@@ -70,7 +70,7 @@ public class Project {
     }
 
     public static ObservableList<Project> getProjects() {
-        String current = null;
+        String current;
 
 
         try {
@@ -109,7 +109,7 @@ public class Project {
 
     private static void addProject(String name, File path) {
 
-        String current = null;
+        String current;
 
 
         try {

@@ -47,7 +47,7 @@ public class ConfigManager {
 
 	public static boolean createConfig(String pPath, String sPath, String lang) {
 
-		String current = null;
+		String current;
 		try {
 			current = new File(".").getCanonicalPath();
 
@@ -100,7 +100,7 @@ public class ConfigManager {
 
 	public static String getProjectsPath() {
 
-		String current = null;
+		String current;
 
 		try {
 			current = new File(".").getCanonicalPath();
@@ -127,7 +127,7 @@ public class ConfigManager {
 
 	public static String getServersPath() {
 
-		String current = null;
+		String current;
 
 		try {
 			current = new File(".").getCanonicalPath();

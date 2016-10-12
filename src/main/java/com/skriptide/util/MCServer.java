@@ -200,7 +200,7 @@ public class MCServer {
 	private static void updateServer(String name, String version, File path) {
 
 
-        String current = null;
+        String current;
 
 
         try {
@@ -230,7 +230,7 @@ public class MCServer {
 	private static String getServer(String name) {
 
 
-		String current = null;
+		String current;
 
 
 		try {
@@ -252,20 +252,18 @@ public class MCServer {
 	}
 
 	public void loadServer() {
-        File props = null;
+        File props;
 
          props = new File(path + "/server.properties");
-// PROPERTIES
-
 		try {
 			Scanner sc = new Scanner(props);
 
 			while (sc.hasNextLine()) {
 				String line = sc.nextLine();
-				String value = "";
+				String value;
 				if (line.contains("=")) {
 					String[] split = line.split(Pattern.quote("="));
-					String key = split[0];  //=
+					String key = split[0];
 					if (split.length == 2) {
 						value = split[1];
 					} else {
@@ -518,10 +516,14 @@ public class MCServer {
 			}
 			SceneManager.runningServer = MCServer.this;
 			Process finalP = p;
-			Thread writer = new Thread(() -> MCServer.this.writer = new BufferedWriter(new OutputStreamWriter(finalP.getOutputStream())));
+			Thread writer = new Thread(() -> {
+				assert finalP != null;
+				MCServer.this.writer = new BufferedWriter(new OutputStreamWriter(finalP.getOutputStream()));
+			});
 			writer.start();
 
 
+			assert p != null;
 			this.reader =
 					new BufferedReader(new InputStreamReader(p.getInputStream()));
 
@@ -534,7 +536,7 @@ public class MCServer {
 
 					Thread sender = new Thread(() -> {
 
-						if (!Objects.equals(finalLine, "") && finalLine != null) {
+						if (!Objects.equals(finalLine, "")) {
 
 							javafx.application.Platform.runLater(() -> {
 								SceneManager.consoleOut.appendText(finalLine + System.getProperty("line.separator"));
@@ -719,6 +721,7 @@ public class MCServer {
 
 		ObservableList<Project> projects = Project.getProjects();
 		int t = 0;
+		assert projects != null;
 		for (Project pr : projects) {
 			if (pr.getServer().getname().equalsIgnoreCase(this.getname())) {
 				t++;
@@ -1086,7 +1089,7 @@ public class MCServer {
 
 	private void removeServer(String name) {
 
-		String current = null;
+		String current;
 
 
 		try {

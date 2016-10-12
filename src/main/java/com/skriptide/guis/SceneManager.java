@@ -19,7 +19,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -34,7 +33,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import org.fxmisc.richtext.CodeArea;
 
@@ -59,23 +57,20 @@ public class SceneManager extends Application {
     public static ComboBox<String> runninServerList;
     public static TextArea debugArea;
     public static ProgressBar procBar;
-    public boolean fast = false;
+    private boolean fast = false;
     private boolean v;
     private Pane splashLayout;
     private ProgressBar loadProgress;
     private Label progressText;
-    private Stage mainStage;
     private static final int SPLASH_WIDTH = 600;
     private static final int SPLASH_HEIGHT = 300;
     private Stage mainWindow;
-    private Stage welcomeWindow;
     private Stage createNewProjectWindow;
     private Stage createNewServerWindow;
     private Stage addsManager;
     private Stage manageServer;
     private Stage debugger;
     public Stage info;
-    public Stage splash;
     private final FXMLLoader mainLoader = new FXMLLoader();
     private final FXMLLoader welcomeLoader = new FXMLLoader();
     private final FXMLLoader createNewProjectLoader = new FXMLLoader();
@@ -83,7 +78,6 @@ public class SceneManager extends Application {
     private final FXMLLoader addManagerLoader = new FXMLLoader();
     private final FXMLLoader manageServerLoader = new FXMLLoader();
     private final FXMLLoader debuggerLoader = new FXMLLoader();
-    private FXMLLoader splashLoader = new FXMLLoader();
     private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null, createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null, debuggerParent = null, splashParent = null;
     private CreateProjectGuiController createProjectGuiController;
     private CreateServerGuiController createServerGuiController;
@@ -91,6 +85,9 @@ public class SceneManager extends Application {
     private ManageServerController manageServerController;
 
     private DebuggerController debuggerController;
+
+    public SceneManager() {
+    }
 
 
     public static void cleanUP() {
@@ -135,7 +132,6 @@ public class SceneManager extends Application {
     @Override
     public void start(final Stage initStage) throws Exception {
 
-        int mode = 0;
         final String[] path = {""};
         final Task<Runnable> load = new Task<Runnable>() {
             @Override
@@ -177,12 +173,12 @@ public class SceneManager extends Application {
         showSplash(
                 initStage,
                 load,
-                () -> showMainStage(mode, path[0])
+                () -> showMainStage(path[0])
         );
         new Thread(load).start();
     }
 
-    private void showMainStage(int mode, String path) {
+    private void showMainStage(String path) {
 
         mainWindow = new Stage();
 
@@ -230,58 +226,52 @@ public class SceneManager extends Application {
 	*/
 
 
-        mainScene.getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent ev) {
+        mainScene.getWindow().setOnCloseRequest(ev -> {
 
-                if (ideGuiController.codeTabPane.getTabs().size() != 0) {
-                    int t = 0;
-                    for (Tab tab : ideGuiController.codeTabPane.getTabs()) {
-                        String name = tab.getText();
+            if (ideGuiController.codeTabPane.getTabs().size() != 0) {
+                int t = 0;
+                for (Tab tab : ideGuiController.codeTabPane.getTabs()) {
+                    String name = tab.getText();
 
 
-                        if (!name.contains("External: ")) {
-                            t++;
-                        }
+                    if (!name.contains("External: ")) {
+                        t++;
                     }
-                    if (t != 0) {
-
-                        boolean save = infoCheck("Save", "Save Projects", "Do you want to save: " + t + " projects before close?");
-                        if (save) {
-                            ideGuiController.saveOpenProjects();
-                        }
-                    }
-
                 }
-                if (runningServer != null) {
-                    boolean save = infoCheck("Stop Server", "Stop running Server", "The server: " + runningServer.getname() + " is running, stop the server? Otherwise the process will be killed!");
+                if (t != 0) {
+
+                    boolean save = infoCheck("Save", "Save Projects", "Do you want to save: " + t + " projects before close?");
                     if (save) {
-                        ideGuiController.comandSendTextField.setText("stop");
-                        ideGuiController.sendCommand();
-                        Thread t = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Thread.sleep(10000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                Platform.exit();
-                                System.exit(0);
-                            }
-                        });
-                        t.start();
-                    } else {
-                        runningServer = null;
+                        ideGuiController.saveOpenProjects();
+                    }
+                }
+
+            }
+            if (runningServer != null) {
+                boolean save = infoCheck("Stop Server", "Stop running Server", "The server: " + runningServer.getname() + " is running, stop the server? Otherwise the process will be killed!");
+                if (save) {
+                    ideGuiController.comandSendTextField.setText("stop");
+                    ideGuiController.sendCommand();
+                    Thread t = new Thread(() -> {
+                        try {
+                            Thread.sleep(10000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         Platform.exit();
                         System.exit(0);
-                    }
+                    });
+                    t.start();
                 } else {
+                    runningServer = null;
                     Platform.exit();
                     System.exit(0);
                 }
-
-
+            } else {
+                Platform.exit();
+                System.exit(0);
             }
+
 
         });
 
@@ -328,7 +318,7 @@ public class SceneManager extends Application {
     private void setSkyUnityApi() {
 
 
-        SkUnityAPI api = new SkUnityAPI();
+        new SkUnityAPI();
         System.out.println("api done");
 
 
@@ -430,7 +420,7 @@ public class SceneManager extends Application {
     private void openWelcomeGui() {
 
 
-        welcomeWindow = new Stage();
+        Stage welcomeWindow = new Stage();
 
 
         try {
@@ -526,7 +516,7 @@ public class SceneManager extends Application {
     public void openManageVersions() throws IOException {
 
 
-        if (addsManagerParent == null || addManagerLoader == null) {
+        if (addsManagerParent == null) {
 
             addsManager = new Stage();
 
@@ -535,7 +525,8 @@ public class SceneManager extends Application {
             addsManager.setTitle("Manage Addons");
             addsManager.setScene(new Scene(addsManagerParent, 670, 455));
             addsManager.setResizable(false);
-            ManageAddsGuiController manageAddsGuiController = addManagerLoader.getController();
+            ManageAddsGuiController manageAddsGuiController;
+            manageAddsGuiController = addManagerLoader.getController();
             manageAddsGuiController.setLists();
         }
 

@@ -29,7 +29,7 @@ public class CodeReader {
 
 			try {
 
-				String line = "";
+				String line;
 
 				do {
 					line = reader.readLine();

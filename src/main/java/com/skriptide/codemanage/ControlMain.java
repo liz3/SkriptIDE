@@ -43,8 +43,6 @@ public class ControlMain {
 
     private static void toolTip(CodeArea area) {
 
-        List<String> allMatches = new ArrayList<String>();
-
 
         Popup popup = new Popup();
         Label popupMsg = new Label();
