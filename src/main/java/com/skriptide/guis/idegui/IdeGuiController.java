@@ -79,6 +79,8 @@ public class IdeGuiController {
     @FXML
     public TextArea prNotesArea;
     @FXML
+    public MenuItem ideSettingsPoint;
+    @FXML
     public ListView<String> prDependList;
 
 
@@ -86,6 +88,10 @@ public class IdeGuiController {
     private ContextMenu menu;
 
 
+    private void openSettings() {
+
+        sceneManager.openSettings();
+    }
     public void setUpWin() {
 
         serverListComboBox.setOnShowing(event -> loadInServers());
@@ -96,6 +102,8 @@ public class IdeGuiController {
                 e.printStackTrace();
             }
         });
+
+        ideSettingsPoint.setOnAction(event -> openSettings());
         commandSendBtn.setOnAction(event -> sendCommand());
         startServerBtn.setOnAction(event -> startServer());
         debuggingPoint.setOnAction(event -> triggerDebugger());

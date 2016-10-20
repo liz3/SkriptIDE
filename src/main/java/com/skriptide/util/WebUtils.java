@@ -54,7 +54,7 @@ public class WebUtils {
 		BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
 		FileOutputStream fis = new FileOutputStream(f);
 		byte[] buffer = new byte[1024];
-		boolean count = false;
+
 
 		int count1;
 		while ((count1 = bis.read(buffer, 0, 1024)) != -1) {

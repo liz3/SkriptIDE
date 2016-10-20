@@ -24,7 +24,7 @@ public class ConfigManager {
 
 			Config con = new Config(configFile.getAbsolutePath());
 
-			if (con.contains("main.settings.lang")) {
+			if (con.contains("settings.main.lang")) {
 				if(Main.debugMode) {
 					System.out.println("ConfigManager exists");
 				}
@@ -77,8 +77,26 @@ public class ConfigManager {
 
 			config.set("main.paths.projects", pPath);
 			config.set("main.paths.servers", sPath);
-			config.set("main.settings.lang", lang);
-            config.set("main.settings.debugMode", "false");
+			config.set("settings.main.lang", lang);
+            config.set("settings.main.debugMode", "false");
+			config.set("settings.main.style","Standard");
+			config.set("settings.main.auto-save-interval", 5);
+			config.set("settings.main.auto-save-interval", "Second");
+			config.set("settings.main.update-check", true);
+			config.set("settings.server.mark-skript-msg", true);
+			config.set("settings.server.start-after-create", true);
+			config.set("settings.server.clear-projects-after-stop", false);
+			config.set("settings.server.save-path", sPath);
+			config.set("settings.server.save-output", true);
+			config.set("settings.code.use-code-management", true);
+			config.set("settings.code.use-highlight", true);
+			config.set("settings.code.use-auto-complete", true);
+			config.set("settings.export.method", "SFTP");
+			config.set("settings.export.host", "");
+			config.set("settings.export.username", "");
+			config.set("settings.export.password", "");
+			
+			
 
 
 			config.save();

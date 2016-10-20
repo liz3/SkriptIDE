@@ -38,7 +38,7 @@
                            </items>
                         </Menu>
                         <MenuItem fx:id="manageAddonsPoint" mnemonicParsing="false" text="Versions" />
-                        <MenuItem mnemonicParsing="false" text="IDE Settings" />
+                        <MenuItem fx:id="ideSettingsPoint" mnemonicParsing="false" text="IDE Settings" />
                         <MenuItem fx:id="closeMenuPoint" mnemonicParsing="false" text="Close" />
                      </items>
                   </Menu>

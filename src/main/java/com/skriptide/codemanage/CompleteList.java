@@ -229,7 +229,7 @@ public class CompleteList {
             }
 
             String space = "";
-            for (int i = 0; i != trueT.length(); i++) {
+            for (int i = 0; i != trueT.trim().length() + 1; i++) {
                 space = space + " ";
             }
 
