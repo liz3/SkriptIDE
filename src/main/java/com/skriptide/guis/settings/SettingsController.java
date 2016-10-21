@@ -72,9 +72,4 @@ public class SettingsController {
     public Button applyBtn;
 
 
-    public void setValues() {
-
-    }
-
-
 }

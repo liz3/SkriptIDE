@@ -13,7 +13,6 @@
     </properties>
 
     <build>
-        <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -27,12 +26,6 @@
                 <filtering>false</filtering>
                 <excludes>
                     <exclude>**/version.txt</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
                 </excludes>
             </resource>
             <resource>
@@ -71,7 +64,8 @@
                         </option>
 
                         <option>-adaptclassstrings</option>
-                        <option>-adaptresourcefilecontents **.fxml</option>
+                        <option>-adaptresourcefilecontents ***.fxml</option>
+
                         <option>-keepclassmembernames class * {
                             @javafx.fxml.FXML *;
                             }</option>
@@ -85,8 +79,6 @@
                         <lib>${java.home}/lib/jce.jar</lib>
                         <lib>${java.home}/lib/ext/jfxrt.jar</lib>
                         <lib>${java.home}/lib/jfxswt.jar</lib>
-
-
                     </libs>
                     <assembly>
                         <inclusions>

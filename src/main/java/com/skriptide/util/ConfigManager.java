@@ -83,11 +83,11 @@ public class ConfigManager {
 			config.set("settings.main.auto-save-interval", 5);
 			config.set("settings.main.auto-save-interval", "Second");
 			config.set("settings.main.update-check", true);
-			config.set("settings.server.mark-skript-msg", true);
-			config.set("settings.server.start-after-create", true);
-			config.set("settings.server.clear-projects-after-stop", false);
-			config.set("settings.server.save-path", sPath);
-			config.set("settings.server.save-output", true);
+			config.set("settings.server-settings.mark-skript-msg", true);
+			config.set("settings.server-settings.start-after-create", true);
+			config.set("settings.server-settings.clear-projects-after-stop", false);
+			config.set("settings.server-settings.save-path", sPath);
+			config.set("settings.server-settings.save-output", true);
 			config.set("settings.code.use-code-management", true);
 			config.set("settings.code.use-highlight", true);
 			config.set("settings.code.use-auto-complete", true);

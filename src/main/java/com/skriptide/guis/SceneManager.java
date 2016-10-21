@@ -20,7 +20,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -332,7 +331,7 @@ public class SceneManager extends Application {
 
             settings = new Stage();
             try {
-                settingsParent = settingsLoader.load(getClass().getResourceAsStream("/Settings.fxml"));
+                settingsParent = settingsLoader.load(getClass().getResourceAsStream("/SettingsGui.fxml"));
 
                 Scene scene = new Scene(settingsParent, 705, 495);
 
