@@ -21,7 +21,6 @@ public class ManageExtensionsController {
     @FXML
     public Pane pane;
 
-
     @FXML
     public Button removeButton;
 
