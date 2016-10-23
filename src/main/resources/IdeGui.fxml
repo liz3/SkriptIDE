@@ -59,6 +59,11 @@
                         <MenuItem fx:id="debuggingPoint" mnemonicParsing="false" text="Debugging" />
                      </items>
                   </Menu>
+                  <Menu mnemonicParsing="false" text="Extensions">
+                    <items>
+                      <MenuItem fx:id="manageExtensions" mnemonicParsing="false" text="Manage Extensions" />
+                    </items>
+                  </Menu>
                </menus>
             </MenuBar>
          </top>

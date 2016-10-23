@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="226.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.manageadds.ManageAddsGuiController">
+   <children>
+      <TabPane layoutX="14.0" layoutY="14.0" prefHeight="398.0" prefWidth="192.0" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab fx:id="tab" text="Extensions">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="369.0" prefWidth="212.0">
+                     <children>
+                        <Button fx:id="scriptAddBtn" layoutX="147.0" layoutY="331.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" text="Add" />
+                        <Button fx:id="removeButton" layoutX="73.0" layoutY="331.0" mnemonicParsing="false" text="Remove" />
+                        <TableView fx:id="scriptTable" prefHeight="320.0" prefWidth="191.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+      <Button fx:id="confirmBtn" layoutX="155.0" layoutY="412.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Ok" />
+   </children>
+</Pane>

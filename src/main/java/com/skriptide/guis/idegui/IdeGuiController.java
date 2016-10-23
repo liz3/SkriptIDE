@@ -81,6 +81,8 @@ public class IdeGuiController {
     @FXML
     public MenuItem ideSettingsPoint;
     @FXML
+    public MenuItem manageExtensions;
+    @FXML
     public ListView<String> prDependList;
 
 
@@ -104,6 +106,7 @@ public class IdeGuiController {
         });
 
         ideSettingsPoint.setOnAction(event -> openSettings());
+        manageExtensions.setOnAction(event -> openExtensions());
         commandSendBtn.setOnAction(event -> sendCommand());
         startServerBtn.setOnAction(event -> startServer());
         debuggingPoint.setOnAction(event -> triggerDebugger());
@@ -400,6 +403,17 @@ public class IdeGuiController {
 
             System.out.println("open manage addons");
         }
+
+    }
+
+    private void openExtensions()   {
+
+        try {
+            sceneManager.openManageExtensions();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

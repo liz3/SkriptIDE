@@ -5,6 +5,7 @@ import com.skriptide.util.ServerVersion;
 import com.skriptide.util.Skript;
 import com.skriptide.util.SkriptAddon;
 import com.skriptide.util.VersionReader;
+import com.sun.javafx.scene.control.skin.TableViewSkinBase;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -270,9 +271,9 @@ public class ManageAddsGuiController {
 	private void refreshList() {
 
 
-		addonsTable.refresh();
-		scriptTable.refresh();
-		serverTable.refresh();
+		addonsTable.getProperties().put(TableViewSkinBase.REFRESH, Boolean.TRUE);//refresh();
+		scriptTable.getProperties().put(TableViewSkinBase.REFRESH, Boolean.TRUE);//refresh();
+		serverTable.getProperties().put(TableViewSkinBase.REFRESH, Boolean.TRUE);//refresh();
 
 		serverTable.setItems(ServerVersion.getServerVersions());
 		scriptTable.setItems(Skript.getSkriptVersions());

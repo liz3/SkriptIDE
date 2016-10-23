@@ -3,6 +3,7 @@ package com.skriptide.guis;
 import com.skriptide.codemanage.CompleteList;
 import com.skriptide.guis.createprojectgui.CreateProjectGuiController;
 import com.skriptide.guis.createserver.CreateServerGuiController;
+import com.skriptide.guis.extension.ManageExtensionsController;
 import com.skriptide.guis.idegui.IdeGuiController;
 
 import com.skriptide.guis.manageadds.ManageAddsGuiController;
@@ -87,6 +88,8 @@ public class SceneManager extends Application {
     private ManageServerController manageServerController;
     private DebuggerController debuggerController;
     private SettingsController settingsController;
+
+
 
     public SceneManager() {
     }
@@ -325,9 +328,10 @@ public class SceneManager extends Application {
 
 
     }
+
     public void openSettings() {
 
-        if(settings == null) {
+        if (settings == null) {
 
             settings = new Stage();
             try {
@@ -562,6 +566,40 @@ public class SceneManager extends Application {
         if (debugMode) {
             System.out.println("Manage adds window open");
         }
+    }
+    //Extensions
+    private final FXMLLoader manageExtensionsLoader = new FXMLLoader();
+    private Stage manageExtensions;
+    private Parent manageExtensionParent = null;
+    private ManageExtensionsController manageExtensionsController;
+
+    public void openManageExtensions() throws IOException {
+
+
+        if (manageExtensionParent == null) {
+            manageExtensions = new Stage();
+            try {
+                manageExtensionParent = manageExtensionsLoader.load(getClass().getResourceAsStream("/ManageExtensionsGui.fxml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            manageExtensions.initOwner(mainWindow);
+            manageExtensions.setTitle("Manage Extensions");
+            manageExtensions.setScene(new Scene(manageExtensionParent, 226, 467));
+            manageExtensions.setResizable(false);
+            manageExtensions.initStyle(StageStyle.UTILITY);
+            manageExtensionsController = manageExtensionsLoader.getController();
+        }
+
+
+        manageExtensions.show();
+
+        if (debugMode) {
+            System.out.println("create server window open");
+        }
+
+
 
 
     }
