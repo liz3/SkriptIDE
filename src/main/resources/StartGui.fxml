@@ -11,7 +11,7 @@
     <children>
         <Button fx:id="okBtn" layoutX="332.0" layoutY="303.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="ok" />
         <Button fx:id="cancelBtn" layoutX="260.0" layoutY="303.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Cancel" />
-        <Label layoutX="146.0" layoutY="14.0" text="ScriptIDE">
+        <Label layoutX="76.0" layoutY="14.0" text="Welcome to ScriptIDE">
             <font>
                 <Font size="25.0" />
             </font>
