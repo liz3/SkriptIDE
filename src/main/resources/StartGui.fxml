@@ -11,12 +11,12 @@
     <children>
         <Button fx:id="okBtn" layoutX="332.0" layoutY="303.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="ok" />
         <Button fx:id="cancelBtn" layoutX="260.0" layoutY="303.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Cancel" />
-        <Label layoutX="76.0" layoutY="14.0" text="Welcome to ScriptIDE">
+        <Label layoutX="146.0" layoutY="14.0" text="ScriptIDE">
             <font>
                 <Font size="25.0" />
             </font>
         </Label>
-        <TextArea layoutX="16.0" layoutY="61.0" prefHeight="136.0" prefWidth="360.0" />
+        <TextArea layoutX="16.0" layoutY="61.0" prefHeight="136.0" prefWidth="360.0" text="Please notice that this Project is still in developement, so be aware that,&#10;there may be so errors or bugs.&#10;" />
         <Label layoutX="16.0" layoutY="197.0" text="Please choose the Folder Were you want to Save Projects!" />
         <TextField fx:id="projectsPathField" layoutX="16.0" layoutY="214.0" prefHeight="25.0" prefWidth="305.0" promptText="Choose path" />
         <Button fx:id="projectsPathBtn" layoutX="332.0" layoutY="214.0" mnemonicParsing="false" text="Choose" />
