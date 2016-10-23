@@ -463,7 +463,7 @@ public class SceneManager extends Application {
             System.out.println("loaded welcome screen");
         }
         if (debugMode) {
-            System.out.println("Welcome scrren open");
+            System.out.println("Welcome screen open");
         }
 
         StartGuiController startGuiController = welcomeLoader.getController();
@@ -494,7 +494,7 @@ public class SceneManager extends Application {
 
             createNewProjectWindow.initOwner(mainWindow);
             createNewProjectWindow.setTitle("Create new Project");
-            createNewProjectWindow.setScene(new Scene(createNewProjectWindowParent, 560, 280));
+            createNewProjectWindow.setScene(new Scene(createNewProjectWindowParent, 580, 300));
             createNewProjectWindow.setResizable(false);
             createNewProjectWindow.initStyle(StageStyle.UTILITY);
             createProjectGuiController = createNewProjectLoader.getController();
