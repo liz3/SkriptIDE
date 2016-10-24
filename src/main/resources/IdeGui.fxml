@@ -64,6 +64,20 @@
                       <MenuItem fx:id="manageExtensions" mnemonicParsing="false" text="Manage Extensions" />
                     </items>
                   </Menu>
+                  <Menu mnemonicParsing="false" text="VCS">
+                    <items>
+                       <MenuItem fx:id="commit" mnemonicParsing="false" text="Commit Changes" />
+                       <MenuItem fx:id="pull" mnemonicParsing="false" text="Update Project" />
+                       <MenuItem fx:id="revert" mnemonicParsing="false" text="Revert Project" />
+                       <MenuItem fx:id="compare" mnemonicParsing="false" text="Compare Project" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="VCS2">
+                     <items>
+                        <MenuItem fx:id="share" mnemonicParsing="false" text="Share Project" />
+                        <MenuItem fx:id="link" mnemonicParsing="false" text="Update Project" />
+                     </items>
+                  </Menu>
                </menus>
             </MenuBar>
          </top>
