@@ -130,6 +130,8 @@ public class CompleteList {
 
 
         area.caretPositionProperty().addListener((obs, oldPosition, newPosition) -> {
+            System.out.println("Caret position in text: " + area.getCaretPosition());
+
             if(area.isFocused()) {
                 String text = area.getText().substring(0, newPosition);
 
@@ -260,11 +262,10 @@ public class CompleteList {
 
             pos = area.getCaretPosition() - before.length();
         }
-        addonDepenencies.perfomCeckAndSet();
 
         System.out.println(pos);
         area.moveTo(pos);
-
+        addonDepenencies.perfomCeckAndSet();
 
         if (win.isShowing()) {
             win.hide();

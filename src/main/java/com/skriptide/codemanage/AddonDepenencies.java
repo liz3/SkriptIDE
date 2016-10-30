@@ -8,6 +8,7 @@ import org.fxmisc.richtext.CodeArea;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
@@ -28,10 +29,10 @@ public class AddonDepenencies {
 
         this.area = area;
         this.list = list;
-         conditions = skUnity.getConditions();
-         effects = skUnity.getEffects();
-         events = skUnity.getEvents();
-         expressions = skUnity.getExpressions();
+        conditions = skUnity.getConditions();
+        effects = skUnity.getEffects();
+        events = skUnity.getEvents();
+        expressions = skUnity.getExpressions();
         types = skUnity.getTypes();
 
         list.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -40,7 +41,7 @@ public class AddonDepenencies {
                 String selected = list.getSelectionModel().getSelectedItem();
 
                 String line = selected.split(" ")[3];
-                area.moveTo(Integer.valueOf(line));
+                area.moveTo(Integer.parseInt(line));
                 area.requestFocus();
 
             }
@@ -52,60 +53,93 @@ public class AddonDepenencies {
         found.clear();
         String text = area.getText();
 
-        String[] lineSplit = text.split(System.getProperty("line.separator"));
-        int l = 0;
-        for(String line : lineSplit) {
-            if(!line.startsWith("#")) {
+        System.out.println(text.replace(" ", "-"));
 
-                String[] spaces = line.split(" ");
-                for (String str : spaces) {
+        Scanner sc = new Scanner(text);
+
+        int all = 0;
+        while (sc.hasNextLine()) {
+
+            String line = sc.nextLine();
+
+            if (isValid(line)) {
+
+                while (line.startsWith("\t")) {
+                    line = line.substring(1);
+                    all++;
+                }
+                for (String str : line.split(" ")) {
+
+
+                    int trueLength = str.length();
+                    String t = str;
+                    while (t.startsWith("\t")) {
+                        t = t.substring(1);
+                    }
+                    System.out.println(str + " " + all);
+
                     for (ApiCondition con : conditions) {
 
                         if (str.toLowerCase().contains(con.getId().toLowerCase().trim())) {
-                            found.add(new Entry(l, l + str.length(), con.getAddon()));
+                            found.add(new Entry(all, con.getAddon()));
+                            break;
                         }
                     }
                     for (ApiEffect effect : effects) {
 
                         if (str.toLowerCase().contains(effect.getId().toLowerCase().trim())) {
 
-                            found.add(new Entry(l, l + str.length(), effect.getAddon()));
+                            found.add(new Entry(all, effect.getAddon()));
+                            break;
                         }
                     }
                     for (ApiEvent event : events) {
 
                         if (str.toLowerCase().contains(event.getId().toLowerCase().trim())) {
 
-                            found.add(new Entry(l, l + str.length(), event.getAddon()));
+                            found.add(new Entry(all, event.getAddon()));
+                            break;
                         }
                     }
                     for (ApiExpression expression : expressions) {
 
                         if (str.toLowerCase().contains(expression.getId().toLowerCase().trim())) {
 
-                            found.add(new Entry(l, l + str.length(), expression.getAddon()));
+                            found.add(new Entry(all, expression.getAddon()));
+                            break;
                         }
                     }
                     for (ApiType type : types) {
 
                         if (str.toLowerCase().contains(type.getId().toLowerCase().trim())) {
 
-                            found.add(new Entry(l, l + str.length(), type.getAddon()));
+                            found.add(new Entry(all, type.getAddon()));
+                            break;
                         }
                     }
-                    l = l + str.length() + 1;
+                    all = all + trueLength + 1;
 
                 }
 
+                while (line.endsWith(" ")) {
+
+                    line = line.substring(0, line.length() - 1);
+                    all++;
+                }
             } else {
-                l = l + line.length() - 1;
+                all = all + line.length() + 1;
             }
         }
+        sc.close();
         list.getItems().clear();
-        for(Entry entry : found) {
-                list.getItems().add(entry.getType() + " [ At " + entry.getStart() + " ]");
-            }
+        System.out.println("lol");
+        for (Entry entry : found) {
+            list.getItems().add(entry.getType() + " [ At " + entry.getStart() + " ]");
+        }
 
+/*
+       
+                        */
 
 
     }
@@ -128,11 +162,30 @@ public class AddonDepenencies {
         private int end;
         private String type;
 
-        public Entry(int start, int end, String type) {
+        public Entry(int start, String type) {
 
             this.start = start;
-            this.end = end;
+
             this.type = type;
         }
+    }
+
+    private boolean isValid(String str) {
+
+        while (str.startsWith("\t")) {
+            str = str.substring(1);
+
+        }
+        while (str.startsWith(" ")) {
+            str = str.substring(1);
+
+        }
+        if (!str.equals("") && !str.equals(" ") && !str.equals("#") && !str.equals("\t")) {
+            if (!str.startsWith("#")) {
+
+                return true;
+            }
+        }
+        return false;
     }
 }

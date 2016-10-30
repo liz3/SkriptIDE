@@ -36,6 +36,7 @@ public class ControlMain {
                 });
         code.replaceText(0, 0, saver);
         toolTip(code);
+
         if (Main.debugMode) {
             System.out.println("Highlighted : " + code.getText());
         }
@@ -88,6 +89,7 @@ public class ControlMain {
                                                                                             matcher.group("SEMICOLON") != null ? "semicolon" :
                                                                                                     matcher.group("STRING") != null ? "string" :
                                                                                                             matcher.group("COMMENT") != null ? "comment" :
+                                                                                                                    matcher.group("SEARCHED") != null ? "marked" :
 
                                                                                                                     null; /* never happens */
             assert styleClass != null;
@@ -101,6 +103,7 @@ public class ControlMain {
         return spansBuilder.create();
     }
 
+    public static String SEARCHED = "";
     private static final String[] CONDITIONS = getCons();
     private static final String[] EFFECTS = getEffects();
     private static final String[] EVENTS = getEvents();
@@ -113,6 +116,7 @@ public class ControlMain {
     private static final String EXPRESSIONS_PATTERN = "\\b(" + String.join("|", EXPRESSIONS) + ")\\b";
     private static final String TYPES_PATTERN = "\\b(" + String.join("|", TYPES) + ")\\b";
     private static final String SUPERS_PATTERN = "\\b(" + String.join("|", SUPERS) + ")\\b";
+    private static final String SEARCHED_PATTERN = "\\b" + SEARCHED + "\\b";
     private static final String PAREN_PATTERN = "\\(|\\)";
     private static final String BRACE_PATTERN = "\\{|\\}";
     private static final String BRACKET_PATTERN = "\\[|\\]";
@@ -134,6 +138,7 @@ public class ControlMain {
                     + "|(?<EXPRESSIONS>" + EXPRESSIONS_PATTERN + ")"
                     + "|(?<TYPES>" + TYPES_PATTERN + ")"
                     + "|(?<SUPERS>" + SUPERS_PATTERN + ")"
+                    + "|(?<SEARCHED>" + SEARCHED_PATTERN + ")"
             , Pattern.CASE_INSENSITIVE);
 
     private static String[] getCons() {

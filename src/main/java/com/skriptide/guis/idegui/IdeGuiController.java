@@ -8,22 +8,31 @@ import com.skriptide.util.DragResizer;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.Project;
 import com.skriptide.util.skunityapi.SkUnityAPI;
+import com.sun.xml.internal.ws.util.StringUtils;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleClassedTextArea;
+import org.fxmisc.richtext.StyleSpans;
+import org.fxmisc.richtext.StyleSpansBuilder;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class IdeGuiController {
@@ -104,7 +113,20 @@ public class IdeGuiController {
 
     public void setUpWin() {
 
-        searchTxTField.setOnKeyReleased(event -> markSearch());
+        searchTxTField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+
+                CodeArea old = (CodeArea) tab.getContent();
+
+                CodeArea newArea = new CodeArea();
+                tab.setContent(newArea);
+
+                newArea.appendText(old.getText());
+                Search.controlCode(newArea, searchTxTField.getText());
+            }
+        });
 
         serverListComboBox.setOnShowing(event -> loadInServers());
         manageAddonsPoint.setOnAction(event -> {
@@ -250,57 +272,6 @@ public class IdeGuiController {
         if (Main.debugMode) {
 
             System.out.println("started project");
-        }
-    }
-
-    public void markSearch() {
-
-        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-        CodeArea area = (CodeArea) tab.getContent();
-        ControlMain.controlCode(area);
-        String text = area.getText();
-        String searched = searchTxTField.getText();
-        if (searched.length() != 0) {
-            final int[] i = {0};
-            while (i[0] != text.length()) {
-                final int[] finalI = {i[0]};
-
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        String currentOfLength = area.getText(finalI[0], finalI[0] + searched.length());
-
-                        if(currentOfLength.equals(searched)) {
-                            System.out.println(currentOfLength);
-                        }
-                        try {
-                            Thread.sleep(1);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        i[0] = i[0] + searched.length();
-                    }
-                });
-
-
-
-
-
-            }
-
-          /*
-          while (i != text.length()) {
-
-                System.out.println(area.getText(i, i + searched.length()));
-
-                if (area.getText(i, i + searched.length()).equals(searched)) {
-
-                    int finalI = i;
-                    Platform.runLater(() -> area.setStyleClass(finalI, finalI + searched.length(), "marked"));
-                }
-
-             i = i + searched.length();
- */
         }
     }
 
@@ -469,7 +440,7 @@ public class IdeGuiController {
 
     }
 
-    private void openExtensions()   {
+    private void openExtensions() {
 
         try {
             sceneManager.openManageExtensions();

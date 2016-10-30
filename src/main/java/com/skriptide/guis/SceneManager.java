@@ -367,6 +367,7 @@ public class SceneManager extends Application {
                 settings.initStyle(StageStyle.UTILITY);
                 settings.setTitle("SkriptIDE Settings");
                 settings.centerOnScreen();
+                settingsController = settingsLoader.getController();
             } catch (IOException e) {
                 e.printStackTrace();
             }
