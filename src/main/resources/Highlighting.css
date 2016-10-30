@@ -60,7 +60,10 @@
     -fx-fill: #680780;
     -fx-font-weight: bold;
 }
-
+.marked {
+    -fx-fill: #035003;
+    -fx-background-color: #035003;
+}
 .console-err {
     -fx-fill: #800b07;
     -fx-font-weight: bold;

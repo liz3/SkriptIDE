@@ -1,0 +1,16 @@
+.root {
+    -fx-font-family: sans-serif;
+    -fx-font-size: 11px;
+}
+
+.code-area {
+    -fx-font-size: 13px;
+}
+.label {
+    -fx-font-size: 10;
+}
+.button {
+
+    -fx-font-size: 9;
+    -fx-fill-height: true;
+}

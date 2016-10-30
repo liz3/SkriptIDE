@@ -1,6 +1,7 @@
 package com.skriptide.codemanage;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
 import org.fxmisc.richtext.CodeArea;
@@ -10,7 +11,8 @@ import org.fxmisc.richtext.CodeArea;
  */
 public class AutoComplete {
 
-    public void setAutoComplete(CodeArea area, CompleteList completeList, TabPane codeTabPane, Button commandSendBtn) {
+    public void setAutoComplete(CodeArea area, CompleteList completeList, TabPane codeTabPane, Button commandSendBtn, AddonDepenencies depenencies) {
+
 
         area.setOnKeyPressed(event -> {
 
@@ -57,7 +59,7 @@ public class AutoComplete {
 
 
             } else if (isChar(code) && !(event.isAltDown()) && !(event.isControlDown()) && !(event.isShortcutDown())) {
-                completeList.chooseList(codeTabPane, commandSendBtn);
+                completeList.chooseList(codeTabPane, commandSendBtn, depenencies);
             }
 
 

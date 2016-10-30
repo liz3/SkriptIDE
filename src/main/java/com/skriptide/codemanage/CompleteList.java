@@ -30,6 +30,8 @@ public class CompleteList {
     public Popup win;
     private final ArrayList<String> all = new ArrayList<>();
     private static CompleteList me;
+    private AddonDepenencies addonDepenencies = null;
+
 
 
     public static CompleteList getCurrentInstance() {
@@ -86,8 +88,9 @@ public class CompleteList {
         }
     }
 
-    void chooseList(TabPane codeTabPane, Button commandSendBtn) {
+    void chooseList(TabPane codeTabPane, Button commandSendBtn, AddonDepenencies depenencies) {
 
+        this.addonDepenencies = depenencies;
         me = this;
 
         Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
@@ -127,60 +130,63 @@ public class CompleteList {
 
 
         area.caretPositionProperty().addListener((obs, oldPosition, newPosition) -> {
-            String text = area.getText().substring(0, newPosition);
+            if(area.isFocused()) {
+                String text = area.getText().substring(0, newPosition);
 
-            prefix[0] = text;
-            if (prefix[0].contains("\n")) {
-                String[] parts = prefix[0].split("\n");
-                prefix[0] = parts[parts.length - 1].trim();
-            }
+                prefix[0] = text;
+                if (prefix[0].contains("\n")) {
+                    String[] parts = prefix[0].split("\n");
+                    prefix[0] = parts[parts.length - 1].trim();
+                }
 
 
-            if (prefix[0].contains(" "))
-                prefix[0] = prefix[0].substring(prefix[0].lastIndexOf(" ") + 1);
+                if (prefix[0].contains(" "))
+                    prefix[0] = prefix[0].substring(prefix[0].lastIndexOf(" ") + 1);
 
-            String completeText = area.getText();
+                String completeText = area.getText();
 
-            Pattern p = Pattern.compile("\"([^\"]*)\"");
-            Matcher m = p.matcher(completeText);
+                Pattern p = Pattern.compile("\"([^\"]*)\"");
+                Matcher m = p.matcher(completeText);
 
-            while (m.find()) {
-                //"test"  10 + 4 = 14
+                while (m.find()) {
+                    //"test"  10 + 4 = 14
 
-                String g = m.group();
-                int start = completeText.indexOf(g);
-                int end = start + g.length();
-                if(newPosition > start && newPosition < end) {
+                    String g = m.group();
+                    int start = completeText.indexOf(g);
+                    int end = start + g.length();
+                    if(newPosition > start && newPosition < end) {
+                        win.hide();
+                        chooseView.setVisible(false);
+                        return;
+                    }
+                }
+
+                if(!win.isShowing()) {
+                    win.show(area.getScene().getWindow());
+                    chooseView.setVisible(true);
+                }
+
+                if (prefix[0].equals("")) {
                     win.hide();
                     chooseView.setVisible(false);
                     return;
                 }
+                if (chooseView.isVisible()) {
+                    ObservableList<String> tempList = FXCollections.observableArrayList();
+                    for (String item : all) {
+                        if (item.toLowerCase().contains(prefix[0].toLowerCase()))
+                            tempList.add(item);
+                    }
+                    if (tempList.size() != chooseView.getItems().size()) {
+                        chooseView.getItems().clear();
+                        chooseView.setItems(tempList);
+                    }
+                    chooseView.scrollTo(0);
+                    chooseView.getSelectionModel().selectFirst();
+                    tempList = null;
+                }
             }
 
-            if(!win.isShowing()) {
-                win.show(area.getScene().getWindow());
-                chooseView.setVisible(true);
-            }
-
-            if (prefix[0].equals("")) {
-                win.hide();
-                chooseView.setVisible(false);
-                return;
-            }
-            if (chooseView.isVisible()) {
-                ObservableList<String> tempList = FXCollections.observableArrayList();
-                for (String item : all) {
-                    if (item.toLowerCase().contains(prefix[0].toLowerCase()))
-                        tempList.add(item);
-                }
-                if (tempList.size() != chooseView.getItems().size()) {
-                    chooseView.getItems().clear();
-                    chooseView.setItems(tempList);
-                }
-                chooseView.scrollTo(0);
-                chooseView.getSelectionModel().selectFirst();
-                tempList = null;
-            }
         });
         chooseView.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
@@ -254,6 +260,7 @@ public class CompleteList {
 
             pos = area.getCaretPosition() - before.length();
         }
+        addonDepenencies.perfomCeckAndSet();
 
         System.out.println(pos);
         area.moveTo(pos);
@@ -265,6 +272,7 @@ public class CompleteList {
 
 
         }
+
         if (Main.debugMode) {
             System.out.println("set word: " + prefix);
         }

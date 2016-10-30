@@ -6,7 +6,7 @@ package com.skriptide.git;
  * <p>
  * Created by Matthew E on 10/23/2016 at 8:29 PM.
  */
-public class GitHub extends Git {
+public class Github extends Git {
 
     @Override
     public void push() {

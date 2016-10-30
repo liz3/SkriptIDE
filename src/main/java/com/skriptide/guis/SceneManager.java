@@ -16,6 +16,8 @@ import com.skriptide.util.IDESystemErr;
 import com.skriptide.util.IDESystemOut;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.skunityapi.SkUnityAPI;
+import com.skriptide.util.systemutils.OperatingSystemType;
+import com.skriptide.util.systemutils.OsUtils;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -88,6 +90,7 @@ public class SceneManager extends Application {
     private ManageServerController manageServerController;
     private DebuggerController debuggerController;
     private SettingsController settingsController;
+
 
 
 
@@ -198,7 +201,17 @@ public class SceneManager extends Application {
 
         Scene mainScene = new Scene(mainParent, 980, 550);
         mainScene.getStylesheets().add("Highlighting.css");
-        mainScene.getStylesheets().add("Style.css");
+        if(OsUtils.getOS() == OperatingSystemType.LINUX) {
+            mainScene.getStylesheets().add("os_styles/LinuxSheet.css");
+
+        }
+        if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
+            mainScene.getStylesheets().add("os_styles/WindowsSheet.css");
+
+        }
+        if(OsUtils.getOS() == OperatingSystemType.OSX) {
+
+        }
         mainWindow.setTitle("SkriptIDE");
         mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
         mainWindow.setScene(mainScene);
@@ -338,7 +351,17 @@ public class SceneManager extends Application {
                 settingsParent = settingsLoader.load(getClass().getResourceAsStream("/SettingsGui.fxml"));
 
                 Scene scene = new Scene(settingsParent, 705, 495);
+                if(OsUtils.getOS() == OperatingSystemType.LINUX) {
+                    scene.getStylesheets().add("os_styles/LinuxSheet.css");
 
+                }
+                if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
+                    scene.getStylesheets().add("os_styles/WindowsSheet.css");
+
+                }
+                if(OsUtils.getOS() == OperatingSystemType.OSX) {
+
+                }
                 settings.setScene(scene);
                 settings.setResizable(false);
                 settings.initStyle(StageStyle.UTILITY);
@@ -457,11 +480,23 @@ public class SceneManager extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         welcomeWindow.initOwner(mainWindow);
         welcomeWindow.setScene(new Scene(welcomeWindowParent, 400, 330));
         welcomeWindow.setResizable(false);
         welcomeWindow.centerOnScreen();
         welcomeWindow.initStyle(StageStyle.UTILITY);
+        if(OsUtils.getOS() == OperatingSystemType.LINUX) {
+            welcomeWindowParent.getScene().getStylesheets().add("os_styles/LinuxSheet.css");
+
+        }
+        if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
+            welcomeWindowParent.getScene().getStylesheets().add("os_styles/WindowsSheet.css");
+
+        }
+        if(OsUtils.getOS() == OperatingSystemType.OSX) {
+
+        }
         welcomeWindow.show();
         if (debugMode) {
             System.out.println("loaded welcome screen");
@@ -499,6 +534,17 @@ public class SceneManager extends Application {
             createNewProjectWindow.initOwner(mainWindow);
             createNewProjectWindow.setTitle("Create new Project");
             createNewProjectWindow.setScene(new Scene(createNewProjectWindowParent, 580, 300));
+            if(OsUtils.getOS() == OperatingSystemType.LINUX) {
+                createNewProjectWindowParent.getScene().getStylesheets().add("os_styles/LinuxSheet.css");
+
+            }
+            if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
+                createNewProjectWindowParent.getScene().getStylesheets().add("os_styles/WindowsSheet.css");
+
+            }
+            if(OsUtils.getOS() == OperatingSystemType.OSX) {
+
+            }
             createNewProjectWindow.setResizable(false);
             createNewProjectWindow.initStyle(StageStyle.UTILITY);
             createProjectGuiController = createNewProjectLoader.getController();
@@ -527,6 +573,17 @@ public class SceneManager extends Application {
             createNewServerWindow.initOwner(mainWindow);
             createNewServerWindow.setTitle("Create new Server");
             createNewServerWindow.setScene(new Scene(createNewServerWindowParent, 545, 318));
+            if(OsUtils.getOS() == OperatingSystemType.LINUX) {
+                createNewServerWindowParent.getScene().getStylesheets().add("os_styles/LinuxSheet.css");
+
+            }
+            if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
+                createNewServerWindowParent.getScene().getStylesheets().add("os_styles/WindowsSheet.css");
+
+            }
+            if(OsUtils.getOS() == OperatingSystemType.OSX) {
+
+            }
             createNewServerWindow.setResizable(false);
             createNewServerWindow.initStyle(StageStyle.UTILITY);
             createServerGuiController = createNewServerLoader.getController();
@@ -555,6 +612,17 @@ public class SceneManager extends Application {
             addsManager.setTitle("Manage Addons");
             addsManager.initStyle(StageStyle.UTILITY);
             addsManager.setScene(new Scene(addsManagerParent, 670, 455));
+            if(OsUtils.getOS() == OperatingSystemType.LINUX) {
+                addsManagerParent.getScene().getStylesheets().add("os_styles/LinuxSheet.css");
+
+            }
+            if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
+                addsManagerParent.getScene().getStylesheets().add("os_styles/WindowsSheet.css");
+
+            }
+            if(OsUtils.getOS() == OperatingSystemType.OSX) {
+
+            }
             addsManager.setResizable(false);
             ManageAddsGuiController manageAddsGuiController;
             manageAddsGuiController = addManagerLoader.getController();
@@ -587,6 +655,17 @@ public class SceneManager extends Application {
             manageExtensions.initOwner(mainWindow);
             manageExtensions.setTitle("Manage Extensions");
             manageExtensions.setScene(new Scene(manageExtensionParent, 226, 467));
+            if(OsUtils.getOS() == OperatingSystemType.LINUX) {
+                manageExtensionParent.getScene().getStylesheets().add("os_styles/LinuxSheet.css");
+
+            }
+            if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
+                manageExtensionParent.getScene().getStylesheets().add("os_styles/WindowsSheet.css");
+
+            }
+            if(OsUtils.getOS() == OperatingSystemType.OSX) {
+
+            }
             manageExtensions.setResizable(false);
             manageExtensions.initStyle(StageStyle.UTILITY);
             manageExtensionsController = manageExtensionsLoader.getController();
@@ -621,6 +700,17 @@ public class SceneManager extends Application {
             manageServer.initOwner(mainWindow);
             manageServer.setTitle("Manage Servers");
             manageServer.setScene(new Scene(manageServerParent, 820, 550));
+            if(OsUtils.getOS() == OperatingSystemType.LINUX) {
+                manageServerParent.getScene().getStylesheets().add("os_styles/LinuxSheet.css");
+
+            }
+            if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
+                manageServerParent.getScene().getStylesheets().add("os_styles/WindowsSheet.css");
+
+            }
+            if(OsUtils.getOS() == OperatingSystemType.OSX) {
+
+            }
             manageServer.initStyle(StageStyle.UTILITY);
             manageServer.setResizable(false);
             manageServer.centerOnScreen();

@@ -7,6 +7,8 @@ import com.skriptide.util.ConfigManager;
 import com.skriptide.util.DragResizer;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.Project;
+import com.skriptide.util.skunityapi.SkUnityAPI;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -20,24 +22,26 @@ import org.fxmisc.richtext.StyleClassedTextArea;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class IdeGuiController {
 
     @FXML
-    public  MenuItem manageAddonsPoint;
+    public MenuItem manageAddonsPoint;
     @FXML
-    public  Button startServerBtn;
+    public Button startServerBtn;
     @FXML
-    public  MenuItem createServerMenuPoint;
+    public MenuItem createServerMenuPoint;
     @FXML
-    public  MenuItem manageServerMenuItem;
+    public MenuItem manageServerMenuItem;
     @FXML
-    public  MenuItem saveMenuPoint;
+    public MenuItem saveMenuPoint;
     @FXML
-    public  MenuItem newProjectMenuPoint;
+    public MenuItem newProjectMenuPoint;
     @FXML
-    public  TabPane codeTabPane;
+    public TabPane codeTabPane;
     @FXML
     public Label searchLabel;
     @FXML
@@ -60,6 +64,8 @@ public class IdeGuiController {
     public MenuItem runPoint;
     @FXML
     public Label pathLabel;
+    @FXML
+    public TextField searchTxTField;
     @FXML
     public MenuItem debuggingPoint;
     @FXML
@@ -85,6 +91,7 @@ public class IdeGuiController {
     @FXML
     public ListView<String> prDependList;
 
+    private HashMap<Map<Long, Long>, String> marked = new HashMap<>();
 
     public SceneManager sceneManager;
     private ContextMenu menu;
@@ -94,7 +101,10 @@ public class IdeGuiController {
 
         sceneManager.openSettings();
     }
+
     public void setUpWin() {
+
+        searchTxTField.setOnKeyReleased(event -> markSearch());
 
         serverListComboBox.setOnShowing(event -> loadInServers());
         manageAddonsPoint.setOnAction(event -> {
@@ -115,7 +125,6 @@ public class IdeGuiController {
         manageServerMenuItem.setOnAction(event -> manageServers());
         saveMenuPoint.setOnAction(event -> saveOpenProjects());
         newProjectMenuPoint.setOnAction(event -> newProject());
-
 
 
         DragResizer.makeResizable(secBox);
@@ -144,7 +153,7 @@ public class IdeGuiController {
                         ObservableList<Project> prs = Project.getProjects();
 
                         CompleteList cl = CompleteList.getCurrentInstance();
-                        if(cl != null && cl.win.isShowing()) {
+                        if (cl != null && cl.win.isShowing()) {
                             cl.win.hide();
                         }
 
@@ -175,8 +184,9 @@ public class IdeGuiController {
 
         CompleteList completeList = new CompleteList();
 
+        AddonDepenencies depenencies = new AddonDepenencies(area, new SkUnityAPI(), prDependList);
 
-        new AutoComplete().setAutoComplete(area, completeList, codeTabPane, commandSendBtn);
+        new AutoComplete().setAutoComplete(area, completeList, codeTabPane, commandSendBtn, depenencies);
 
 
         if (!SceneManager.openProjects.contains("External: " + project.getName())) {
@@ -242,6 +252,59 @@ public class IdeGuiController {
             System.out.println("started project");
         }
     }
+
+    public void markSearch() {
+
+        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+        CodeArea area = (CodeArea) tab.getContent();
+        ControlMain.controlCode(area);
+        String text = area.getText();
+        String searched = searchTxTField.getText();
+        if (searched.length() != 0) {
+            final int[] i = {0};
+            while (i[0] != text.length()) {
+                final int[] finalI = {i[0]};
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        String currentOfLength = area.getText(finalI[0], finalI[0] + searched.length());
+
+                        if(currentOfLength.equals(searched)) {
+                            System.out.println(currentOfLength);
+                        }
+                        try {
+                            Thread.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        i[0] = i[0] + searched.length();
+                    }
+                });
+
+
+
+
+
+            }
+
+          /*
+          while (i != text.length()) {
+
+                System.out.println(area.getText(i, i + searched.length()));
+
+                if (area.getText(i, i + searched.length()).equals(searched)) {
+
+                    int finalI = i;
+                    Platform.runLater(() -> area.setStyleClass(finalI, finalI + searched.length(), "marked"));
+                }
+
+             i = i + searched.length();
+ */
+        }
+    }
+
+
 
     public void loadInProjects() {
 
@@ -429,10 +492,9 @@ public class IdeGuiController {
         CodeArea area = new CodeArea();
 
         CompleteList completeList = new CompleteList();
+        AddonDepenencies depenencies = new AddonDepenencies(area, new SkUnityAPI(), prDependList);
 
-
-        new AutoComplete().setAutoComplete(area, completeList, codeTabPane, commandSendBtn);
-
+        new AutoComplete().setAutoComplete(area, completeList, codeTabPane, commandSendBtn, depenencies);
 
         String selection = projectsList.getSelectionModel().getSelectedItem();
 
