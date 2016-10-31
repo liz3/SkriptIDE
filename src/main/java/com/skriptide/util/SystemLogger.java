@@ -27,11 +27,12 @@ public class SystemLogger {
                     } catch (IOException e) {
 
                     }
-
+					System.out.println("Connection set");
                     OutputStream outputStream = null;
                     try {
                         outputStream = socket.getOutputStream();
                     } catch (IOException e) {
+					System.out.println("Connection-Failed");
 
                     }
 
