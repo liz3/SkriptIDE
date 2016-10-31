@@ -8,8 +8,6 @@ import com.skriptide.util.DragResizer;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.Project;
 import com.skriptide.util.skunityapi.SkUnityAPI;
-import com.sun.xml.internal.ws.util.StringUtils;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,18 +19,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleClassedTextArea;
-import org.fxmisc.richtext.StyleSpans;
-import org.fxmisc.richtext.StyleSpansBuilder;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class IdeGuiController {
