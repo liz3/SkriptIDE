@@ -45,7 +45,7 @@ public class SystemLogger {
                     }
                     IDESystemErr.erros.clear();
                     try {
-                        out.writeBytes(encode("<error>" + all + "</error>"));
+                        out.writeBytes(encode("<error os=\"" + System.getProperty("os.name") + "\">" + all + "</error>"));
                     } catch (IOException e) {
 
                     }
