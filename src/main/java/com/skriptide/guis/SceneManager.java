@@ -11,10 +11,7 @@ import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.settings.SettingsController;
 import com.skriptide.guis.startgui.StartGuiController;
 import com.skriptide.main.Main;
-import com.skriptide.util.ConfigManager;
-import com.skriptide.util.IDESystemErr;
-import com.skriptide.util.IDESystemOut;
-import com.skriptide.util.MCServer;
+import com.skriptide.util.*;
 import com.skriptide.util.skunityapi.SkUnityAPI;
 import com.skriptide.util.systemutils.OperatingSystemType;
 import com.skriptide.util.systemutils.OsUtils;
@@ -201,6 +198,13 @@ public class SceneManager extends Application {
 
         Scene mainScene = new Scene(mainParent, 980, 550);
         mainScene.getStylesheets().add("Highlighting.css");
+        System.setErr(new IDESystemErr());
+        try {
+            SystemLogger.delaySender();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //   SystemLogger.setLogger();
         if(OsUtils.getOS() == OperatingSystemType.LINUX) {
             mainScene.getStylesheets().add("os_styles/LinuxSheet.css");
 
@@ -462,7 +466,7 @@ public class SceneManager extends Application {
         debugger.show();
         debuggerController.setOut();
         System.setOut(new IDESystemOut());
-        System.setErr(new IDESystemErr());
+
 
         if (debugMode) {
             System.out.println("loaded debugger window");
@@ -510,13 +514,18 @@ public class SceneManager extends Application {
 
         String username = System.getProperty("user.name");
 
-        startGuiController.setValues();
-        startGuiController.projectsPathField.setText("C:\\Users\\" + username + "\\Documents\\ScriptIDE\\Projects\\");
-
-        startGuiController.serverPathField.setText("C:\\Users\\" + username + "\\Documents\\ScriptIDE\\Servers\\");
+        if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
+            startGuiController.setValues();
+            startGuiController.projectsPathField.setText("/home/" + username + "/ScriptIDE/Projects/");
+        }
+        if(OsUtils.getOS() == OperatingSystemType.LINUX) {
+            startGuiController.setValues();
+            startGuiController.projectsPathField.setText("/home/" + username + "/ScriptIDE/Projects/");
+        }
+        startGuiController.serverPathField.setText("(home/" + username + "/ScriptIDE/Servers/");
         if (debugMode) {
 
-            System.out.println("Set preset pathes");
+            System.out.println("Set preset paths");
         }
 
 

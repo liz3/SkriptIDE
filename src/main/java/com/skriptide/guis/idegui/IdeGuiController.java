@@ -118,14 +118,7 @@ public class IdeGuiController {
             public void handle(KeyEvent event) {
                 Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
 
-                CodeArea old = (CodeArea) tab.getContent();
-
-                CodeArea newArea = new CodeArea();
-                tab.setContent(newArea);
-
-                newArea.appendText(old.getText());
-                Search.controlCode(newArea, searchTxTField.getText());
-            }
+;}
         });
 
         serverListComboBox.setOnShowing(event -> loadInServers());

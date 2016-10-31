@@ -2,8 +2,10 @@ package com.skriptide.util;
 
 import com.skriptide.guis.SceneManager;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -11,6 +13,7 @@ import java.util.Calendar;
  */
 public class IDESystemErr extends PrintStream {
 
+	public static ArrayList<String> erros = new ArrayList<>();
 
 	public IDESystemErr() {
 		super(System.err);
@@ -27,6 +30,8 @@ public class IDESystemErr extends PrintStream {
 			SceneManager.debugArea.appendText(f + System.getProperty("line.separator"));
 		}
 
+
+		erros.add(f);
 		super.println(f);
 
 	}
