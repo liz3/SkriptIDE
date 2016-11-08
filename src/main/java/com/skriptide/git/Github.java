@@ -8,13 +8,28 @@ package com.skriptide.git;
  */
 public class Github extends Git {
 
-    @Override
-    public void push() {
+    private String email;
+    private String username;
 
+    public Github(String email, String username) {
+        this.email = email;
+        this.username = username;
+    }
+
+    @Override
+    public void push(String message) {
+        executeCommand("git commit -m \"" + message + "\"");
+        executeCommand("git push master");
+    }
+
+    @Override
+    public void config() {
+        executeCommand("git config --global user.email " + email);
+        executeCommand("git config --global user.name " + username);
     }
 
     @Override
     public void pull() {
-
+        executeCommand("git pull");
     }
 }
