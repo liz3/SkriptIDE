@@ -516,13 +516,15 @@ public class SceneManager extends Application {
 
         if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
             startGuiController.setValues();
-            startGuiController.projectsPathField.setText("/home/" + username + "/ScriptIDE/Projects/");
+            startGuiController.projectsPathField.setText("C:\\Users\\" + username + "\\SkriptIDE-Projects");
+            startGuiController.serverPathField.setText("C:\\Users\\" + username + "\\SkriptIDE-Servers");
         }
         if(OsUtils.getOS() == OperatingSystemType.LINUX) {
             startGuiController.setValues();
             startGuiController.projectsPathField.setText("/home/" + username + "/ScriptIDE/Projects/");
+            startGuiController.serverPathField.setText("/home/" + username + "/ScriptIDE/Servers/");
         }
-        startGuiController.serverPathField.setText("(home/" + username + "/ScriptIDE/Servers/");
+
         if (debugMode) {
 
             System.out.println("Set preset paths");
