@@ -1,5 +1,7 @@
 package com.skriptide.util;
 
+import com.skriptide.codemanage.CodeReader;
+import com.skriptide.codemanage.CodeWriter;
 import com.skriptide.config.Config;
 import com.skriptide.guis.SceneManager;
 import com.skriptide.main.Main;
@@ -17,19 +19,21 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 /**
  * Created by Liz3ga on 23.08.2016.
  */
 public class Project {
 
-    private final String name;
-    private final String skriptPath;
+    private String name;
+    private String skriptPath;
     private String infoPath;
-    private final Skript sk;
-    private final String outPath;
-    private final MCServer server;
-    private final String folder;
-    private final String notes;
+    private Skript sk;
+    private String outPath;
+    private MCServer server;
+    private String folder;
+    private String notes;
 
 
     public Project(String name) {
@@ -268,7 +272,7 @@ public class Project {
         File jarOutPut = new File(outPath + "/" + name + ".sk");
         Path path = jarOutPut.toPath();
         try {
-            Files.copy(jarInPut, path, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(jarInPut, path, REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -283,10 +287,19 @@ public class Project {
     private void updateProject(String newName) {
 
         File oldfolder = new File(this.folderPath());
-        String newPath = oldfolder.getAbsolutePath().substring(0, oldfolder.getAbsolutePath().length() - this.name.length()) + newName + "/";
-        oldfolder.renameTo(new File(newPath));
-        File sk = new File(newPath, this.name + ".sk");
-        sk.renameTo(new File(newPath, newName + ".sk"));
+        String newPath = oldfolder.getAbsolutePath().substring(0, oldfolder.getAbsolutePath().length() - this.name.length()) + newName;
+        new File(newPath).mkdir();
+        try {
+            new File(newPath  + File.separator + newName + ".sk").createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            Files.move(new File(this.skriptPath).toPath(), new File(newPath  + File.separator + newName + ".sk").toPath(), REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         String outPath = "";
         File dir = null;
@@ -294,7 +307,7 @@ public class Project {
         File info = null;
 
 
-        info = new File(newPath + "SkriptIDE-Project.yaml");
+        info = new File(newPath + File.separator +  "SkriptIDE-Project.yaml");
 
         Config config = new Config(info.getAbsolutePath());
 
@@ -310,6 +323,8 @@ public class Project {
         config.set("notes", notes);
 
         config.save();
+
+        this.skriptPath = new File(newPath, newName + ".sk").getAbsolutePath();
         String current = null;
 
 
@@ -319,14 +334,14 @@ public class Project {
             File configFile = new File(current + "/Config.yaml");
 
             Config con = new Config(configFile.getAbsolutePath());
-            con.set("project." + newName, newPath + "SkriptIDE-Project.yaml");
+            con.set("project." + newName, newPath + File.separator +  "SkriptIDE-Project.yaml");
             con.remove("project." + this.name);
             con.save();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+       oldfolder.delete();
     }
 
 

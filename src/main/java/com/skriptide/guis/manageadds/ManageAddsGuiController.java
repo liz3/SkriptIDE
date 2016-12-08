@@ -273,7 +273,7 @@ public class ManageAddsGuiController {
 
 		addonsTable.getProperties().put(TableViewSkinBase.REFRESH, Boolean.TRUE);//refresh();
 		scriptTable.getProperties().put(TableViewSkinBase.REFRESH, Boolean.TRUE);//refresh();
-		serverTable.getProperties().put(TableViewSkinBase.REFRESH, Boolean.TRUE);//refresh();
+		serverTable.refresh();
 
 		serverTable.setItems(ServerVersion.getServerVersions());
 		scriptTable.setItems(Skript.getSkriptVersions());

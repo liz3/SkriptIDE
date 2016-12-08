@@ -285,6 +285,7 @@ public class IdeGuiController {
             MouseButton btn = event.getButton();
 
             if (projectsList.getSelectionModel().getSelectedItem() != null) {
+
                 if (btn == MouseButton.SECONDARY) {
                     if (menu == null || !menu.isShowing()) {
                         menu = new ContextMenu();
