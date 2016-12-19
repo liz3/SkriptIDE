@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.skriptide</groupId>
     <artifactId>SkriptIDE</artifactId>
     <version>1.0.33-ALPHA</version>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <build>
         <resources>
             <resource>
@@ -41,7 +37,7 @@
             </resource>
         </resources>
         <plugins>
-            <plugin>
+         <!--   <plugin>
                 <groupId>com.github.wvengen</groupId>
                 <artifactId>proguard-maven-plugin</artifactId>
                 <version>2.0.11</version>
@@ -62,16 +58,12 @@
                         <option>-keep public class com.skriptide.guis.SceneManager { public static void
                             main(java.lang.String[]); }
                         </option>
-
                         <option>-adaptclassstrings</option>
                         <option>-adaptresourcefilecontents ***.fxml</option>
-
-                        <option>-keepclassmembernames class * {
-                            @javafx.fxml.FXML *;
-                            }</option>
-                        <option>-keepclasseswithmembers public class com.javafx.main.Main {
-                            public *; public static *;
-                            }</option>
+                        <option>-keepclassmembernames class * { @javafx.fxml.FXML *; }</option>
+                        <option>-keepclasseswithmembers public class com.javafx.main.Main { public *; public static *;
+                            }
+                        </option>
                         <option>-keepattributes Signature,*Annotation*,Exceptions</option>
                     </options>
                     <libs>
@@ -134,7 +126,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
             <plugin>
                 <groupId>com.coderplus.maven.plugins</groupId>
                 <artifactId>copy-rename-maven-plugin</artifactId>
@@ -152,7 +143,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>  -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -204,35 +195,23 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
-
     </repositories>
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.ini4j/ini4j -->
-        <!-- https://mvnrepository.com/artifact/org.fxmisc.richtext/richtextfx -->
-        <!--<dependency>
-            <groupId>org.fxmisc.richtext</groupId>
-            <artifactId>richtextfx-demos</artifactId>
-            <version>0.6.10</version>
-        </dependency>-->
-
+    <dependencies>         <!-- https://mvnrepository.com/artifact/org.ini4j/ini4j -->         <!-- https://mvnrepository.com/artifact/org.fxmisc.richtext/richtextfx -->         <!--<dependency>             <groupId>org.fxmisc.richtext</groupId>             <artifactId>richtextfx-demos</artifactId>             <version>0.6.10</version>         </dependency>-->
         <dependency>
             <groupId>org.fxmisc.richtext</groupId>
             <artifactId>richtextfx</artifactId>
             <version>0.6.10</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        </dependency>         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20160212</version>
         </dependency>
-
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
             <version>1.17</version>
         </dependency>
-
     </dependencies>
 </project>
+
