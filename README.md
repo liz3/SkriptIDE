@@ -1,14 +1,20 @@
 # SkriptIDE
 An IDE for Bukkit Skript written in Java.
 
+
+
 ## FEATURES
 - Syntax Highlighting
 - complete integrated Test-Server System
 - A huge autocomplete base trough the SkUnity API
+- Very
 
 ## INFORMATION
 SkriptIDE is most written in OOP style.
 Maven dependency management
+
+Main class: guis.SceneManager(The actually Main class is only for the Debugger)
+
 
 ## BASIC USAGE GUIDE
 
@@ -22,7 +28,7 @@ After that step, in the lower panel of the ide switch to the server tab, the ser
 be starting, now you can create Projects. For that navigate to File -> New Projekt.
 
 ## DOWNLOAD
-[Lasted Jar](https://api.liz3.de/get/skide/ide/SkriptIDE-final.jar)
+[Latest Jar](https://api.liz3.de/get/skide/ide/SkriptIDE-final.jar)
 
 
 ## KNOWN BUGS

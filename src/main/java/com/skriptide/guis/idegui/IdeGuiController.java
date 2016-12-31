@@ -1,6 +1,7 @@
 package com.skriptide.guis.idegui;
 
 import com.skriptide.codemanage.*;
+import com.skriptide.guis.ExternWindow;
 import com.skriptide.guis.SceneManager;
 import com.skriptide.main.Main;
 import com.skriptide.util.ConfigManager;
@@ -9,14 +10,11 @@ import com.skriptide.util.MCServer;
 import com.skriptide.util.Project;
 import com.skriptide.util.skunityapi.SkUnityAPI;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleClassedTextArea;
 
@@ -27,6 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * Created by Liz3
+ * <p>
+ * This class ist the main Controller, it is the fxml controller for the Main Window
+ * From here all action directly related to the gui are performed
+ */
 public class IdeGuiController {
 
     @FXML
@@ -76,8 +80,6 @@ public class IdeGuiController {
     @FXML
     public TabPane lowerTabPane;
     @FXML
-    public VBox secBox;
-    @FXML
     public Label prNameLbl;
     @FXML
     public Label prSkVersionLbl;
@@ -92,10 +94,9 @@ public class IdeGuiController {
     @FXML
     public ListView<String> prDependList;
 
-    private HashMap<Map<Long, Long>, String> marked = new HashMap<>();
-
-    public SceneManager sceneManager;
+    public static SceneManager sceneManager;
     private ContextMenu menu;
+    private ContextMenu tabMenu;
 
 
     private void openSettings() {
@@ -103,17 +104,86 @@ public class IdeGuiController {
         sceneManager.openSettings();
     }
 
+    /**
+     * This method is called first in the Scene manager before showing the actual gui
+     * <p>
+     * Mainly its setting action listeners and loadings of the projects, see more in the method
+     */
     public void setUpWin() {
 
-        searchTxTField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+        /**
+        This listeners fires of the search of a specific char sequence in the currently visible Project in the window
+        @see com.skriptide.codemanage.Search
+         */
+        searchTxTField.setOnKeyReleased(event -> {
+            Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
 
-;}
+            if (searchTxTField.getText() != null && !searchTxTField.getText().equals("")) {
+                Search.search(tab, searchTxTField.getText());
+            } else {
+                ControlMain.controlCode((CodeArea) tab.getContent(), tab);
+            }
         });
 
+        /**
+        This listener is showing a little menu on the TabPane of the projects,
+        to provide the option do open the current project in a extra window
+         @see com.skriptide.guis.ExternWindow
+         */
+        codeTabPane.setOnMouseClicked(event -> {
+
+
+            if (event.getButton().name().equals("SECONDARY") && codeTabPane.getTabs().size() != 0) {
+
+                tabMenu = new ContextMenu();
+
+                MenuItem item = new MenuItem("Open in new Tab");
+                tabMenu.getItems().add(item);
+
+                item.setOnAction(event1 -> {
+
+                    Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+                    String name = tab.getText();
+                    ObservableList<Project> prs = Project.getProjects();
+
+
+                    assert prs != null;
+                    for (Project project : prs.sorted()) {
+                        if (project.getName().equalsIgnoreCase(name)) {
+
+                            new ExternWindow(tab, project);
+
+                            codeTabPane.getTabs().remove(tab);
+
+                        }
+                    }
+                });
+
+                tabMenu.show(codeTabPane, event.getScreenX(), event.getScreenY());
+            } else if (tabMenu != null && tabMenu.isShowing()) {
+                tabMenu.hide();
+            }
+
+        });
+        /**
+         * This listeners is loading in all Servers for several Gui components,
+         * when it is showed
+         *
+         */
         serverListComboBox.setOnShowing(event -> loadInServers());
+
+        /**
+         * The following 8 listeners do all server the option do open the other Windows,
+         * for example the Windows for the management of the servers
+         * @see manageAddons()
+         * @see openSettings()
+         * @see openExtensions()
+         * @see startServer()
+         * @see triggerDebugger()
+         * @see newServer()
+         * @see manageServer()
+         * @see newProject()
+         */
         manageAddonsPoint.setOnAction(event -> {
             try {
                 manageAddons();
@@ -121,35 +191,69 @@ public class IdeGuiController {
                 e.printStackTrace();
             }
         });
-
         ideSettingsPoint.setOnAction(event -> openSettings());
         manageExtensions.setOnAction(event -> openExtensions());
-        commandSendBtn.setOnAction(event -> sendCommand());
         startServerBtn.setOnAction(event -> startServer());
         debuggingPoint.setOnAction(event -> triggerDebugger());
         createServerMenuPoint.setOnAction(event -> newServer());
-        runPoint.setOnAction(event -> runProject());
         manageServerMenuItem.setOnAction(event -> manageServers());
-        saveMenuPoint.setOnAction(event -> saveOpenProjects());
         newProjectMenuPoint.setOnAction(event -> newProject());
 
+        /**
+         * This listener triggers the method sendCommand()
+         * @see sendCommand()
+         * @param text
+         */
+        commandSendBtn.setOnAction(event -> sendCommand(null));
 
-        DragResizer.makeResizable(secBox);
+        /**
+         * This listener triggers the method to run a project
+         * @see runProject()
+         */
+        runPoint.setOnAction(event -> runProject());
+
+        /**
+         * This listener triggers the method which saves all open projects
+         * @see saveOpenProjects()
+         */
+        saveMenuPoint.setOnAction(event -> saveOpenProjects());
+
+        /**
+         * This objects invokes the method which makes the Bottom part of the Gui response
+         * @see com.skriptide.util.DragResizer
+         * @param bottomSec
+         */
+        DragResizer resizer = new DragResizer();
+        resizer.makeResizable(lowerTabPane);
+
+        /**
+         * This listener invokes the method to send a command to the currently running server
+         * @param text
+         */
         comandSendTextField.setOnKeyPressed(event -> {
 
             KeyCode code = event.getCode();
 
             if (code == KeyCode.ENTER) {
-                sendCommand();
+                sendCommand(null);
             }
         });
+
+        /**
+         * In the Scene manage class are some Objects of type Gui,
+         * because the are needed outsite the controller, there are public and static
+         * and set here to the elements of the actual gui
+         */
         SceneManager.procBar = this.mainProcessBar;
         SceneManager.consoleOut = consoleOutputTextArea;
         SceneManager.runningServerLabel = runningServerLabel;
         SceneManager.projectsList = this.projectsList;
         SceneManager.runninServerList = this.serverListComboBox;
 
-
+        /**
+         * This listeners sets the Information in the bottom of the
+         * Gui when another tab is selected trough those labels are not bound to the TabPane
+         */
         codeTabPane.getSelectionModel().selectedItemProperty().addListener(
                 (ov, t, t1) -> {
                     Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
@@ -184,16 +288,11 @@ public class IdeGuiController {
         }
     }
 
+
     public void openFromFile(String path) {
 
         File project = new File(path);
         CodeArea area = new CodeArea();
-
-        CompleteList completeList = new CompleteList();
-
-        AddonDepenencies depenencies = new AddonDepenencies(area, new SkUnityAPI(), prDependList);
-
-        new AutoComplete().setAutoComplete(area, completeList, codeTabPane, commandSendBtn, depenencies);
 
 
         if (!SceneManager.openProjects.contains("External: " + project.getName())) {
@@ -211,7 +310,7 @@ public class IdeGuiController {
 
             SceneManager.openProjects.add("External: " + project.getName());
 
-            ControlMain.controlCode(area);
+            ControlMain.controlCode(area, tab);
 
 
         }
@@ -221,17 +320,20 @@ public class IdeGuiController {
 
     }
 
-    public void sendCommand() {
+    public void sendCommand(String text) {
         if (SceneManager.runningServer != null) {
             try {
                 BufferedWriter writer = SceneManager.runningServer.getWriter();
 
-
-                writer.write(comandSendTextField.getText());
+                if (text == null) {
+                    writer.write(comandSendTextField.getText());
+                    comandSendTextField.clear();
+                } else {
+                    writer.write(text);
+                }
                 writer.newLine();
                 System.out.println("wrote:" + comandSendTextField.getText());
                 writer.flush();
-                comandSendTextField.clear();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -259,7 +361,6 @@ public class IdeGuiController {
             System.out.println("started project");
         }
     }
-
 
 
     public void loadInProjects() {
@@ -437,6 +538,14 @@ public class IdeGuiController {
 
     }
 
+    public void reAttach(ExternWindow window) {
+
+        ExternWindow.windows.remove(window);
+
+        codeTabPane.getTabs().add(window.getTab());
+
+    }
+
     private void manageServers() {
 
         sceneManager.openManageServer();
@@ -445,13 +554,19 @@ public class IdeGuiController {
         }
     }
 
-    private void openProject() {
-        CodeArea area = new CodeArea();
+    public void setAutoComplete(CodeArea area) {
 
         CompleteList completeList = new CompleteList();
         AddonDepenencies depenencies = new AddonDepenencies(area, new SkUnityAPI(), prDependList);
 
         new AutoComplete().setAutoComplete(area, completeList, codeTabPane, commandSendBtn, depenencies);
+
+    }
+
+    private void openProject() {
+
+        CodeArea area = new CodeArea();
+
 
         String selection = projectsList.getSelectionModel().getSelectedItem();
 
@@ -491,7 +606,7 @@ public class IdeGuiController {
                 prNotesArea.setText(project.getNotes());
                 SceneManager.openProjects.add(project.getName());
 
-                ControlMain.controlCode(area);
+                ControlMain.controlCode(area, tab);
 
             }
 
@@ -514,6 +629,12 @@ public class IdeGuiController {
             System.out.println("saver called");
             writer.write();
         });
+        if (ExternWindow.windows.size() != 0) {
+            for (ExternWindow win : ExternWindow.windows) {
+
+                new CodeWriter(win.getArea().getText(), win.getProject()).write();
+            }
+        }
         if (Main.debugMode) {
             System.out.println("Saved open projects!");
         }

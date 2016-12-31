@@ -38,7 +38,7 @@ public class CompleteList {
         return me;
     }
 
-    private void setList(Popup win, ListView<String> chooseView, TabPane codeTabPane) {
+    private void setList(Popup win, ListView<String> chooseView, CodeArea area) {
         SkUnityAPI skUnity = new SkUnityAPI();
 
         if (win == null) {
@@ -73,14 +73,14 @@ public class CompleteList {
 
         chooseView.setPrefSize(180, 200);
 
-        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-        CodeArea area = (CodeArea) tab.getContent();
+
+
         win.getContent().add(chooseView);
 
         area.setPopupWindow(win);
 
 
-        updateList(codeTabPane, win, chooseView);
+        updateList(area, win, chooseView);
 
 
         if (Main.debugMode) {
@@ -88,18 +88,18 @@ public class CompleteList {
         }
     }
 
-    void chooseList(TabPane codeTabPane, Button commandSendBtn, AddonDepenencies depenencies) {
+    void chooseList( Button commandSendBtn, AddonDepenencies depenencies, CodeArea area) {
 
         this.addonDepenencies = depenencies;
         me = this;
 
-        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-        CodeArea area = (CodeArea) tab.getContent();
+
+
 
         if (win == null) {
             win = new Popup();
             chooseView = new ListView<>();
-            setList(win, chooseView, codeTabPane);
+            setList(win, chooseView, area);
 
             area.setOnMouseClicked(event -> {
                 if (win.isShowing()) {
@@ -122,15 +122,15 @@ public class CompleteList {
         }
     }
 
-    private void updateList(TabPane codeTabPane, Popup win, ListView<String> chooseView) {
+    private void updateList(CodeArea area, Popup win, ListView<String> chooseView) {
 
-        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-        CodeArea area = (CodeArea) tab.getContent();
+
+
         final String[] prefix = new String[1];
 
 
         area.caretPositionProperty().addListener((obs, oldPosition, newPosition) -> {
-            System.out.println("Caret position in text: " + area.getCaretPosition());
+
 
             if(area.isFocused()) {
                 String text = area.getText().substring(0, newPosition);
@@ -162,13 +162,17 @@ public class CompleteList {
                         return;
                     }
                 }
-
+                if(prefix[0].startsWith("/")) {
+                    win.hide();
+                    chooseView.setVisible(false);
+                    return;
+                }
                 if(!win.isShowing()) {
                     win.show(area.getScene().getWindow());
                     chooseView.setVisible(true);
                 }
 
-                if (prefix[0].equals("")) {
+                if (prefix[0] == null || prefix[0].equalsIgnoreCase("")) {
                     win.hide();
                     chooseView.setVisible(false);
                     return;
@@ -185,7 +189,6 @@ public class CompleteList {
                     }
                     chooseView.scrollTo(0);
                     chooseView.getSelectionModel().selectFirst();
-                    tempList = null;
                 }
             }
 
@@ -200,21 +203,20 @@ public class CompleteList {
             } else if (code == KeyCode.ENTER) {
                 if (win.isShowing()) {
 
-                    setWord(codeTabPane, win, chooseView, prefix[0]);
+                    setWord(area, win, chooseView, prefix[0]);
                 }
             }
         });
-        chooseView.setOnMouseClicked(event -> setWord(codeTabPane, win, chooseView, prefix[0]));
+        chooseView.setOnMouseClicked(event -> setWord(area, win, chooseView, prefix[0]));
         if (Main.debugMode) {
             System.out.println("Updatet list");
         }
     }
 
-    private void setWord(TabPane codeTabPane, Popup win, ListView<String> chooseView, String prefix) {
+    private void setWord(CodeArea area, Popup win, ListView<String> chooseView, String prefix) {
 
 
-        Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-        CodeArea area = (CodeArea) tab.getContent();
+
 
 
         String seletion;

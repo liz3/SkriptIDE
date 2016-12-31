@@ -14,7 +14,10 @@ public class AutoComplete {
     public void setAutoComplete(CodeArea area, CompleteList completeList, TabPane codeTabPane, Button commandSendBtn, AddonDepenencies depenencies) {
 
 
-        area.setOnKeyPressed(event -> {
+
+        area.setOnKeyReleased(event -> {
+
+
 
             KeyCode code = event.getCode();
             if (event.isShiftDown()) {
@@ -59,7 +62,9 @@ public class AutoComplete {
 
 
             } else if (isChar(code) && !(event.isAltDown()) && !(event.isControlDown()) && !(event.isShortcutDown())) {
-                completeList.chooseList(codeTabPane, commandSendBtn, depenencies);
+
+
+                completeList.chooseList( commandSendBtn, depenencies,area);
             }
 
 

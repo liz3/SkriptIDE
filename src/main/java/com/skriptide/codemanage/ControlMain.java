@@ -1,9 +1,11 @@
 package com.skriptide.codemanage;
 
+import com.skriptide.guis.SceneManager;
 import com.skriptide.main.Main;
 import com.skriptide.util.skunityapi.*;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.stage.Popup;
 import org.fxmisc.richtext.*;
 
@@ -21,25 +23,31 @@ public class ControlMain {
     private static final SkUnityAPI skUnity = new SkUnityAPI();
 
 
-    public static void controlCode(CodeArea code) {
+    public static void controlCode(CodeArea code, Tab tab) {
+
 
 
         String saver = code.getText();
 
 
         code.clear();
+        code = new CodeArea();
+
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
 
+        CodeArea finalCode = code;
         code.richChanges()
                 .filter(ch -> !ch.getInserted().equals(ch.getRemoved())).subscribe(change -> {
-            code.setStyleSpans(0, computeHighlighting(code.getText()));
+            finalCode.setStyleSpans(0, computeHighlighting(finalCode.getText()));
                 });
         code.replaceText(0, 0, saver);
+        tab.setContent(code);
         toolTip(code);
 
         if (Main.debugMode) {
             System.out.println("Highlighted : " + code.getText());
         }
+        SceneManager.mainWindowController.setAutoComplete(code);
     }
 
     private static void toolTip(CodeArea area) {

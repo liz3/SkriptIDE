@@ -45,7 +45,11 @@ import java.util.Optional;
 import static com.skriptide.main.Main.debugMode;
 
 /**
- * Created by Liz3ga on 27.07.2016.
+ * Created by Liz3 on 27.07.2016.
+ * This is the main class of the SkriptIDE, its containg methods to startup all additional Windows
+ * The main method is only casting the JavaFX start method.
+ * From there the software ist started.
+ *
  */
 public class SceneManager extends Application {
 
@@ -58,6 +62,8 @@ public class SceneManager extends Application {
     public static ComboBox<String> runninServerList;
     public static TextArea debugArea;
     public static ProgressBar procBar;
+    public static IdeGuiController mainWindowController;
+
     private boolean fast = false;
     private boolean v;
     private Pane splashLayout;
@@ -88,13 +94,12 @@ public class SceneManager extends Application {
     private DebuggerController debuggerController;
     private SettingsController settingsController;
 
+    public static SceneManager manager;
 
 
-
-    public SceneManager() {
+    public void sendCommand(String text) {
+        ideGuiController.sendCommand(text);
     }
-
-
     public static void cleanUP() {
 
         runningServer = null;
@@ -137,6 +142,8 @@ public class SceneManager extends Application {
     @Override
     public void start(final Stage initStage) throws Exception {
 
+        manager = this;
+        IdeGuiController.sceneManager = this;
         final String[] path = {""};
         final Task<Runnable> load = new Task<Runnable>() {
             @Override
@@ -231,7 +238,7 @@ public class SceneManager extends Application {
             }
         });
         ideGuiController = mainLoader.getController();
-        ideGuiController.sceneManager = this;
+        mainWindowController = ideGuiController;
         ideGuiController.setUpWin();
         if (!v) {
             ideGuiController.loadInProjects();
@@ -272,8 +279,8 @@ public class SceneManager extends Application {
             if (runningServer != null) {
                 boolean save = infoCheck("Stop Server", "Stop running Server", "The server: " + runningServer.getname() + " is running, stop the server? Otherwise the process will be killed!");
                 if (save) {
-                    ideGuiController.comandSendTextField.setText("stop");
-                    ideGuiController.sendCommand();
+
+                    ideGuiController.sendCommand("stop");
                     Thread t = new Thread(() -> {
                         try {
                             Thread.sleep(10000);
@@ -513,14 +520,14 @@ public class SceneManager extends Application {
         StartGuiController startGuiController = welcomeLoader.getController();
 
         String username = System.getProperty("user.name");
-
+        startGuiController.setValues();
         if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
-            startGuiController.setValues();
+
             startGuiController.projectsPathField.setText("C:\\Users\\" + username + "\\SkriptIDE-Projects");
             startGuiController.serverPathField.setText("C:\\Users\\" + username + "\\SkriptIDE-Servers");
         }
         if(OsUtils.getOS() == OperatingSystemType.LINUX) {
-            startGuiController.setValues();
+
             startGuiController.projectsPathField.setText("/home/" + username + "/ScriptIDE/Projects/");
             startGuiController.serverPathField.setText("/home/" + username + "/ScriptIDE/Servers/");
         }

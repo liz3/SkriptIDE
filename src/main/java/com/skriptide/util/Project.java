@@ -1,9 +1,8 @@
 package com.skriptide.util;
 
-import com.skriptide.codemanage.CodeReader;
-import com.skriptide.codemanage.CodeWriter;
 import com.skriptide.config.Config;
 import com.skriptide.guis.SceneManager;
+import com.skriptide.guis.idegui.IdeGuiController;
 import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +26,6 @@ public class Project {
 
     private String name;
     private String skriptPath;
-    private String infoPath;
     private Skript sk;
     private String outPath;
     private MCServer server;
@@ -280,8 +277,13 @@ public class Project {
             System.out.println("starting");
         }
 
-        this.server.startServer();
+        if(SceneManager.runningServer == null) {
+            this.server.startServer();
+            System.out.println("test");
+        } else {
 
+            IdeGuiController.sceneManager.sendCommand("skript reload " + this.name);
+        }
     }
 
     private void updateProject(String newName) {
@@ -299,7 +301,6 @@ public class Project {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         String outPath = "";
         File dir = null;

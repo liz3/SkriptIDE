@@ -61,8 +61,9 @@
     -fx-font-weight: bold;
 }
 .marked {
-    -fx-fill: #035003;
-    -fx-background-color: #035003;
+    -fx-fill: #d6030b;
+    -fx-background-color: #500710;
+    -fx-font-weight: bold;
 }
 .console-err {
     -fx-fill: #800b07;

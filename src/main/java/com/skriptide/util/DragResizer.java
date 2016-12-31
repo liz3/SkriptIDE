@@ -1,104 +1,52 @@
 package com.skriptide.util;
 
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
+import javafx.scene.control.TabPane;
 
-/**
- * Created by Liz3ga on 11.09.2016.
- */
+
 public class DragResizer {
 
-	private static final int RESIZE_MARGIN = 5;
+    private double windowHeight = 0;
+    private double mousePosY = 0;
+    private double bottomSecHeight = 0;
 
-	private final Region region;
 
-	private double y;
+    public void makeResizable(TabPane bottomSec) {
+        windowHeight = bottomSec.getScene().getHeight();
 
-	private boolean initMinHeight;
+        bottomSec.setMinHeight(60);
 
-	private boolean dragging;
+        bottomSec.getScene().heightProperty().addListener((observable, oldValue, newValue) -> {
+            if (bottomSec.getHeight() > newValue.doubleValue() - 60) {
+                bottomSec.setMinHeight(newValue.doubleValue() - 60);
+            }
+        });
+        bottomSec.setOnMouseMoved(event -> {
+            windowHeight = bottomSec.getScene().getHeight();
+            mousePosY = event.getSceneY();
+            bottomSecHeight = bottomSec.getHeight();
 
-	private DragResizer(Region aRegion) {
-		region = aRegion;
-	}
+            if(canDrag(windowHeight, mousePosY, bottomSecHeight) && bottomSec.getCursor() != Cursor.S_RESIZE) {
+                bottomSec.setCursor(Cursor.S_RESIZE);
+            } else if(bottomSec.getCursor() == Cursor.S_RESIZE) {
+                bottomSec.setCursor(Cursor.DEFAULT);
+            }
 
-	public static void makeResizable(Region region) {
-		final DragResizer resizer = new DragResizer(region);
+        });
 
-		region.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				resizer.mousePressed(event);
-			}});
-		region.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				resizer.mouseDragged(event);
-			}});
-		region.setOnMouseMoved(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				resizer.mouseOver(event);
-			}});
-		region.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				resizer.mouseReleased();
-			}});
-	}
+        bottomSec.setOnMouseDragged(event -> {
+            windowHeight = bottomSec.getScene().getHeight();
+            mousePosY = event.getSceneY();
+            bottomSecHeight = bottomSec.getHeight();
+            if (canDrag(windowHeight, mousePosY, bottomSecHeight)) {
+                bottomSec.setMinHeight(mousePosY < 60 ? windowHeight - 60 : windowHeight - event.getSceneY());
+            }
+        });
+    }
 
-	private void mouseReleased() {
-		dragging = false;
-		region.setCursor(Cursor.DEFAULT);
-	}
-
-	private void mouseOver(MouseEvent event) {
-		if(isInDraggableZone(event) || dragging) {
-			region.setCursor(Cursor.S_RESIZE);
-		}
-		else {
-			region.setCursor(Cursor.DEFAULT);
-		}
-	}
-
-	private boolean isInDraggableZone(MouseEvent event) {
-		return event.getY() > (region.getHeight() - RESIZE_MARGIN);
-	}
-
-	private void mouseDragged(MouseEvent event) {
-		if(!dragging) {
-			return;
-		}
-
-		double mousey = event.getY();
-
-		double newHeight = region.getMinHeight() + (mousey - y);
-
-		region.setMinHeight(newHeight);
-
-		y = mousey;
-	}
-
-	private void mousePressed(MouseEvent event) {
-
-		// ignore clicks outside of the draggable margin
-		if(!isInDraggableZone(event)) {
-			return;
-		}
-
-		dragging = true;
-
-		// make sure that the minimum height is set to the current height once,
-		// setting a min height that is smaller than the current height will
-		// have no effect
-		if (!initMinHeight) {
-			region.setMinHeight(region.getHeight());
-			initMinHeight = true;
-		}
-
-		y = event.getY();
-	}
-
+    private boolean canDrag(double windowHeight, double mousePosY, double bottomSecHeight) {
+        double bottomSecOffsetTop = windowHeight - bottomSecHeight;
+        double mousePosYRelativeToBottomSec = mousePosY - bottomSecOffsetTop;
+        return mousePosYRelativeToBottomSec <= 10;
+    }
 }
