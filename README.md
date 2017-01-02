@@ -28,7 +28,7 @@ After that step, in the lower panel of the ide switch to the server tab, the ser
 be starting, now you can create Projects. For that navigate to File -> New Projekt.
 
 ## DOWNLOAD
-[Latest Jar](https://api.liz3.de/get/skide/ide/SkriptIDE-final.jar)
+[Releases](https://github.com/liz3/SkriptIDE/releases)
 
 
 ## KNOWN BUGS
