@@ -14,11 +14,11 @@ public class DragResizer {
     public void makeResizable(TabPane bottomSec) {
         windowHeight = bottomSec.getScene().getHeight();
 
-        bottomSec.setMinHeight(60);
+        bottomSec.setMinHeight(55);
 
         bottomSec.getScene().heightProperty().addListener((observable, oldValue, newValue) -> {
-            if (bottomSec.getHeight() > newValue.doubleValue() - 60) {
-                bottomSec.setMinHeight(newValue.doubleValue() - 60);
+            if (bottomSec.getHeight() > newValue.doubleValue() - 55) {
+                bottomSec.setMinHeight(newValue.doubleValue() - 55);
             }
         });
         bottomSec.setOnMouseMoved(event -> {
@@ -39,7 +39,7 @@ public class DragResizer {
             mousePosY = event.getSceneY();
             bottomSecHeight = bottomSec.getHeight();
             if (canDrag(windowHeight, mousePosY, bottomSecHeight)) {
-                bottomSec.setMinHeight(mousePosY < 60 ? windowHeight - 60 : windowHeight - event.getSceneY());
+                bottomSec.setMinHeight(mousePosY < 55 ? windowHeight - 55 : windowHeight - event.getSceneY());
             }
         });
     }

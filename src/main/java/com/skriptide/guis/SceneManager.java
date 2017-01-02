@@ -11,6 +11,8 @@ import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.settings.SettingsController;
 import com.skriptide.guis.startgui.StartGuiController;
 import com.skriptide.main.Main;
+import com.skriptide.theme.ThemeCreator;
+import com.skriptide.theme.themes.Dark;
 import com.skriptide.util.*;
 import com.skriptide.util.skunityapi.SkUnityAPI;
 import com.skriptide.util.systemutils.OperatingSystemType;
@@ -111,7 +113,6 @@ public class SceneManager extends Application {
 
     public static void main(String[] args) throws Exception {
 
-
         launch(args);
     }
 
@@ -204,13 +205,13 @@ public class SceneManager extends Application {
 
 
         Scene mainScene = new Scene(mainParent, 980, 550);
-        mainScene.getStylesheets().add("Highlighting.css");
+        mainScene.getStylesheets().add("DarkHighlighting.css");
         System.setErr(new IDESystemErr());
-        try {
+       /* try {
             SystemLogger.delaySender();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } */
         //   SystemLogger.setLogger();
         if(OsUtils.getOS() == OperatingSystemType.LINUX) {
             mainScene.getStylesheets().add("os_styles/LinuxSheet.css");
@@ -250,9 +251,9 @@ public class SceneManager extends Application {
 
 
 
-	/*For dark theme.
-    ThemeCreator.setTheme(mainScene, new Dark());
-	*/
+
+   // ThemeCreator.setTheme(mainScene, new Dark());
+
 
 
         mainScene.getWindow().setOnCloseRequest(ev -> {
@@ -405,6 +406,7 @@ public class SceneManager extends Application {
         }
         if (configState == 0) {
 
+            ConfigManager.deleteEmpty();
             if (debugMode) {
                 System.out.println("Trying to loading projects to mainGui");
             }

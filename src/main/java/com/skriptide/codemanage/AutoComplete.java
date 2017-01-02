@@ -39,6 +39,7 @@ public class AutoComplete {
                     });
                 }
 
+                event.consume();
             }
             if (event.isShortcutDown()) {
                 if (code == KeyCode.DIGIT7) {
@@ -60,8 +61,9 @@ public class AutoComplete {
                     });
                 }
 
+                event.consume();
+            } else if (isChar(code) && !(event.isAltDown()) && !(event.isControlDown()) && !(event.isShortcutDown()) && code != KeyCode.BACK_SPACE && code != KeyCode.ENTER) {
 
-            } else if (isChar(code) && !(event.isAltDown()) && !(event.isControlDown()) && !(event.isShortcutDown())) {
 
 
                 completeList.chooseList( commandSendBtn, depenencies,area);

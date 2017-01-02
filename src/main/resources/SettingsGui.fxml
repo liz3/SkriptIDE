@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="705.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.settings.SettingsController">
     <children>
         <Label layoutX="14.0" layoutY="14.0" text="SkriptIDE Settings">
@@ -79,7 +82,7 @@
         </TabPane>
         <ListView fx:id="settingsList" disable="true" layoutX="14.0" layoutY="47.0" prefHeight="427.0" prefWidth="203.0" />
         <Button fx:id="saveBtn" layoutX="641.0" layoutY="14.0" mnemonicParsing="false" text="Save" />
-        <Button fx:id="cnlBtn" layoutX="567.0" layoutY="14.0" mnemonicParsing="false" text="Cancel" />
-        <Button fx:id="applyBtn" layoutX="503.0" layoutY="14.0" mnemonicParsing="false" text="Apply" />
+        <Button fx:id="cnlBtn" layoutX="575.0" layoutY="14.0" mnemonicParsing="false" text="Cancel" />
+        <Button fx:id="applyBtn" layoutX="517.0" layoutY="14.0" mnemonicParsing="false" text="Apply" />
     </children>
 </Pane>

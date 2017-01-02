@@ -6,12 +6,13 @@ import com.skriptide.guis.idegui.IdeGuiController;
 import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputDialog;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -177,6 +178,20 @@ public class Project {
 
     public static void createProject(String name, Skript skript, MCServer server, String path, String notes) {
 
+        for(File f :  new File( ConfigManager.getProjectsPath()).listFiles()) {
+
+            if(f.getName().equalsIgnoreCase(name) && f.isDirectory()) {
+
+               boolean t =  new SceneManager().infoCheck("Failed to create project","Cannot create new project",
+                       "Please restart SkriptIDE to create a project with this name trough " +
+                       "there has been a project with this name before the last restart.\n" +
+                               "For developers: Sadly the folder of the old project is still locked in the ide somewhere, " +
+                               "so i Liz3(SkriptIDE Author (31.12.2016)) tried a lot of things to delete it, but nothing worked, the old folder will be deleted on the " +
+                               "restart so please restart the ide :D");
+
+               return;
+            }
+        }
         String outPath = "";
         File dir = null;
         File script = null;
@@ -289,7 +304,9 @@ public class Project {
     private void updateProject(String newName) {
 
         File oldfolder = new File(this.folderPath());
+        String oldPath = oldfolder.getAbsolutePath();
         String newPath = oldfolder.getAbsolutePath().substring(0, oldfolder.getAbsolutePath().length() - this.name.length()) + newName;
+        System.out.println("Path is " + newPath);
         new File(newPath).mkdir();
         try {
             new File(newPath  + File.separator + newName + ".sk").createNewFile();
@@ -301,14 +318,19 @@ public class Project {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.gc();
+        System.out.println("tying to delete: "  + oldfolder.getAbsolutePath());
 
+
+        oldfolder.setWritable(true);
+        deleteDirectory(oldfolder);
         String outPath = "";
         File dir = null;
         File script = null;
         File info = null;
 
 
-        info = new File(newPath + File.separator +  "SkriptIDE-Project.yaml");
+        info = new File(newPath , "SkriptIDE-Project.yaml");
 
         Config config = new Config(info.getAbsolutePath());
 
@@ -342,7 +364,7 @@ public class Project {
         } catch (IOException e) {
             e.printStackTrace();
         }
-       oldfolder.delete();
+
     }
 
 
@@ -378,19 +400,40 @@ public class Project {
         }
     }
 
-    public void reNameProject() {
+    public void reNameProject(TabPane pane) {
 
         TextInputDialog input = new TextInputDialog();
         input.setGraphic(null);
         input.setTitle("Rename project");
         input.setHeaderText("Rename Project: " + this.name);
         Optional<String> out = input.showAndWait();
+
         if (out != null) {
             String trueStr = out.get();
 
+            for(File f :  new File( ConfigManager.getProjectsPath()).listFiles() ) {
 
+                if(f.getName().equalsIgnoreCase(trueStr) && f.isDirectory()) {
+
+                new SceneManager().infoCheck("Failed to rename project","Cannot rename  project",
+                            "Please restart SkriptIDE to rename this project with this name trough " +
+                                    "there has been a project with this name before the last restart." +
+                                    "For developers: Sadly the folder of the old project is still locked in the ide somewhere, " +
+                                    "so i Liz3(SkriptIDE Author (31.12.2016)) tried a lot of things to delete it, but nothing worked, the old folder will be deleted on the " +
+                                    "restart so please restart the ide :D");
+
+                    return;
+                }
+            }
+            for(Tab tab : pane.getTabs()) {
+                if(tab.getText().equals(this.name)) {
+                    tab.setText(trueStr);
+                    break;
+                }
+            }
             updateProject(trueStr);
             updateProjects();
+            ConfigManager.deleteEmpty();
 
         }
 
@@ -400,7 +443,7 @@ public class Project {
         //TODO
     }
 
-    public static void deleteDirectory(File directory) {
+    private static void deleteDirectory(File directory) {
         FileUtils.deleteDirectory(directory, true);
     }
 

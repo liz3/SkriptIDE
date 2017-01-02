@@ -405,8 +405,9 @@ public class IdeGuiController {
                         item1.setOnAction(event13 -> {
                             ObservableList<Project> prs = Project.getProjects();
                             for (Project pr : prs) {
+
                                 if (pr.getName().equals(projectsList.getSelectionModel().getSelectedItem())) {
-                                    pr.reNameProject();
+                                    pr.reNameProject(codeTabPane);
                                 }
                             }
                         });

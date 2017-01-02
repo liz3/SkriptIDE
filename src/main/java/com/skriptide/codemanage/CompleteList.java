@@ -114,7 +114,7 @@ public class CompleteList {
             Stage stage = (Stage) commandSendBtn.getScene().getWindow();
             area.setPopupAlignment(PopupAlignment.CARET_BOTTOM);
             win.show(stage);
-            chooseView.setVisible(true);
+
             if (Main.debugMode) {
                 System.out.println("showed list");
             }
@@ -136,7 +136,8 @@ public class CompleteList {
                 String text = area.getText().substring(0, newPosition);
 
                 prefix[0] = text;
-                if (prefix[0].contains("\n")) {
+                if (prefix[0].contains("\n") && !prefix[0].equals("\n")) {
+
                     String[] parts = prefix[0].split("\n");
                     prefix[0] = parts[parts.length - 1].trim();
                 }
@@ -177,6 +178,8 @@ public class CompleteList {
                     chooseView.setVisible(false);
                     return;
                 }
+                //Moved on 21.12.2016 to prevent the popup if in "" or starting with a /
+                chooseView.setVisible(true);
                 if (chooseView.isVisible()) {
                     ObservableList<String> tempList = FXCollections.observableArrayList();
                     for (String item : all) {
@@ -189,6 +192,10 @@ public class CompleteList {
                     }
                     chooseView.scrollTo(0);
                     chooseView.getSelectionModel().selectFirst();
+                    if(chooseView.getItems().isEmpty()) {
+                        win.hide();
+                        chooseView.setVisible(false);
+                    }
                 }
             }
 

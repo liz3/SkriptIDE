@@ -1,8 +1,10 @@
 package com.skriptide.guis;
 
 import com.skriptide.util.Project;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
@@ -64,8 +66,20 @@ public class ExternWindow {
         this.area = area;
 
 
-    }
 
+    }
+    private void setShortCuts() {
+
+        this.area.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+
+
+
+            }
+        });
+
+    }
     public CodeArea getArea() {
         return area;
     }

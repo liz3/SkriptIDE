@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="488.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.idegui.IdeGuiController">
+<BorderPane fx:id="absolutePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="488.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.idegui.IdeGuiController">
    <center>
       <BorderPane fx:id="mainBorderPane" BorderPane.alignment="CENTER">
          <center>
@@ -85,7 +85,7 @@
             <HBox prefHeight="28.0" prefWidth="234.0" BorderPane.alignment="CENTER">
                <children>
                   <Label fx:id="searchLabel" maxWidth="1.7976931348623157E308" prefHeight="24.0" prefWidth="48.0" text="Search" />
-                  <TextField fx:id="searchTxTField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="190.0" />
+                  <TextField fx:id="searchTxTField" maxWidth="1.7976931348623157E308" prefHeight="28.0" prefWidth="202.0" />
                </children>
             </HBox>
          </right>
@@ -95,7 +95,7 @@
       </BorderPane>
    </top>
    <bottom>
-      <TabPane fx:id="lowerTabPane" prefHeight="79.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="lowerTabPane" prefHeight="180.0" prefWidth="950.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Project">
                <content>
@@ -137,10 +137,9 @@
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>
                         <TableView fx:id="errorTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
-                          </columns>
+                           <columns>
+                              <TableColumn prefWidth="949.0" text="Column X" />
+                           </columns>
                         </TableView>
                      </center>
                   </BorderPane>
