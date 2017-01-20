@@ -207,7 +207,14 @@
             </releases>
         </repository>
     </repositories>
-    <dependencies>         <!-- https://mvnrepository.com/artifact/org.ini4j/ini4j -->         <!-- https://mvnrepository.com/artifact/org.fxmisc.richtext/richtextfx -->         <!--<dependency>             <groupId>org.fxmisc.richtext</groupId>             <artifactId>richtextfx-demos</artifactId>             <version>0.6.10</version>         </dependency>-->
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.jcraft/jsch -->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.54</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.ini4j/ini4j -->         <!-- https://mvnrepository.com/artifact/org.fxmisc.richtext/richtextfx -->         <!--<dependency>             <groupId>org.fxmisc.richtext</groupId>             <artifactId>richtextfx-demos</artifactId>             <version>0.6.10</version>         </dependency>-->
         <dependency>
             <groupId>org.fxmisc.richtext</groupId>
             <artifactId>richtextfx</artifactId>

@@ -3,6 +3,7 @@ package com.skriptide.guis;
 import com.skriptide.codemanage.CompleteList;
 import com.skriptide.guis.createprojectgui.CreateProjectGuiController;
 import com.skriptide.guis.createserver.CreateServerGuiController;
+import com.skriptide.guis.exportgui.ExportSettingsGuiController;
 import com.skriptide.guis.extension.ManageExtensionsController;
 import com.skriptide.guis.idegui.IdeGuiController;
 
@@ -50,7 +51,7 @@ import static com.skriptide.main.Main.debugMode;
  * Created by Liz3 on 27.07.2016.
  * This is the main class of the SkriptIDE, its containg methods to startup all additional Windows
  * The main method is only casting the JavaFX start method.
- * From there the software ist started.
+ * From there the software is started.
  *
  */
 public class SceneManager extends Application {
@@ -80,6 +81,7 @@ public class SceneManager extends Application {
     private Stage manageServer;
     private Stage debugger;
     private Stage settings;
+    private Stage exportSettings;
     private final FXMLLoader mainLoader = new FXMLLoader();
     private final FXMLLoader welcomeLoader = new FXMLLoader();
     private final FXMLLoader createNewProjectLoader = new FXMLLoader();
@@ -88,13 +90,17 @@ public class SceneManager extends Application {
     private final FXMLLoader manageServerLoader = new FXMLLoader();
     private final FXMLLoader debuggerLoader = new FXMLLoader();
     private final FXMLLoader settingsLoader = new FXMLLoader();
-    private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null, createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null, debuggerParent = null, settingsParent = null;
+    private final FXMLLoader exportSettingsLoader = new FXMLLoader();
+    private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null,
+            createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null,
+            debuggerParent = null, settingsParent = null, exportSettingsParent;
     private CreateProjectGuiController createProjectGuiController;
     private CreateServerGuiController createServerGuiController;
     private IdeGuiController ideGuiController;
     private ManageServerController manageServerController;
     private DebuggerController debuggerController;
     private SettingsController settingsController;
+    private ExportSettingsGuiController exportSettingsGuiController;
 
     public static SceneManager manager;
     private boolean isDarkTheme;
@@ -361,6 +367,29 @@ public class SceneManager extends Application {
 
     }
 
+    public void openExportSettings() {
+
+        if(exportSettings == null) {
+            try {
+                exportSettingsParent = exportSettingsLoader.load(getClass().getResourceAsStream("/ExportSettingsGui.fxml"));
+
+                exportSettings = new Stage();
+
+                exportSettings.setScene(new Scene(exportSettingsParent));
+
+                exportSettings.setResizable(false);
+                exportSettings.setTitle("Export Settings");
+                exportSettings.initStyle(StageStyle.UTILITY);
+                exportSettings.centerOnScreen();
+                exportSettingsGuiController = exportSettingsLoader.getController();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        exportSettingsGuiController.initGui();
+        exportSettings.show();
+    }
     public void openSettings() {
 
         if (settings == null) {
@@ -400,7 +429,7 @@ public class SceneManager extends Application {
 
 
         int configState = ConfigManager.checkConfig();
-
+        ExportSettings.checkFile();
 
         if (configState == 1) {
 

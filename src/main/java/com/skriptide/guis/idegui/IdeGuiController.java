@@ -4,12 +4,11 @@ import com.skriptide.codemanage.*;
 import com.skriptide.guis.ExternWindow;
 import com.skriptide.guis.SceneManager;
 import com.skriptide.main.Main;
-import com.skriptide.util.ConfigManager;
-import com.skriptide.util.DragResizer;
-import com.skriptide.util.MCServer;
-import com.skriptide.util.Project;
+import com.skriptide.util.*;
 import com.skriptide.util.skunityapi.SkUnityAPI;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -93,6 +92,10 @@ public class IdeGuiController {
     public MenuItem manageExtensions;
     @FXML
     public ListView<String> prDependList;
+    @FXML
+    public MenuItem exportSettingsPoint;
+    @FXML
+    public Menu exportPoint;
 
     public static SceneManager sceneManager;
     private ContextMenu menu;
@@ -170,7 +173,22 @@ public class IdeGuiController {
          * when it is showed
          *
          */
-        serverListComboBox.setOnShowing(event -> loadInServers());
+        HashMap<String, ExportSettings> all = ExportSettings.getAll();
+        for(String s : all.keySet()) {
+
+            MenuItem item = new MenuItem(s);
+            item.setOnAction(event -> {
+                Tab active = codeTabPane.getSelectionModel().getSelectedItem();
+
+                CodeArea area = (CodeArea)active.getContent();
+
+                ExportSettings settings = all.get(s);
+
+                settings.deploy(area.getText(), active.getText());
+            });
+            exportPoint.getItems().add(item);
+        }
+
 
         /**
          * The following 8 listeners do all server the option do open the other Windows,
@@ -184,6 +202,8 @@ public class IdeGuiController {
          * @see manageServer()
          * @see newProject()
          */
+        exportSettingsPoint.setOnAction(event -> openExportSettings()
+        );
         manageAddonsPoint.setOnAction(event -> {
             try {
                 manageAddons();
@@ -289,6 +309,10 @@ public class IdeGuiController {
     }
 
 
+    public void openExportSettings() {
+
+        sceneManager.openExportSettings();
+    }
     public void openFromFile(String path) {
 
         File project = new File(path);

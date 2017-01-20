@@ -498,7 +498,7 @@ public class MCServer {
     public void startServer() {
 
 
-        SceneManager.cleanUP();
+         SceneManager.cleanUP();
 
         Thread t = new Thread(() -> {
 

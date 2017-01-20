@@ -34,11 +34,12 @@
                               <MenuItem mnemonicParsing="false" text="Skript" />
                               <MenuItem mnemonicParsing="false" text="Txt File" />
                               <MenuItem mnemonicParsing="false" text="Skript to Jar" />
-                              <MenuItem mnemonicParsing="false" text="FTP/SFTP Upload" />
+                              <Menu fx:id="exportPoint" mnemonicParsing="false" text="FTP/SFTP Upload" />
                            </items>
                         </Menu>
                         <MenuItem fx:id="manageAddonsPoint" mnemonicParsing="false" text="Versions" />
                         <MenuItem fx:id="ideSettingsPoint" mnemonicParsing="false" text="IDE Settings" />
+                        <MenuItem fx:id="exportSettingsPoint" mnemonicParsing="false" text="SFTP/FTP Settings" />
                         <MenuItem fx:id="closeMenuPoint" mnemonicParsing="false" text="Close" />
                      </items>
                   </Menu>
