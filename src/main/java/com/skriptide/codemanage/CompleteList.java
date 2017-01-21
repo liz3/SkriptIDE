@@ -1,14 +1,12 @@
 package com.skriptide.codemanage;
 
-import com.skriptide.main.Main;
+import com.skriptide.guis.SceneManager;
 import com.skriptide.util.skunityapi.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -83,7 +81,7 @@ public class CompleteList {
         updateList(area, win, chooseView);
 
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("loaded list");
         }
     }
@@ -115,7 +113,7 @@ public class CompleteList {
             area.setPopupAlignment(PopupAlignment.CARET_BOTTOM);
             win.show(stage);
 
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
                 System.out.println("showed list");
             }
 
@@ -215,7 +213,7 @@ public class CompleteList {
             }
         });
         chooseView.setOnMouseClicked(event -> setWord(area, win, chooseView, prefix[0]));
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Updatet list");
         }
     }
@@ -283,7 +281,7 @@ public class CompleteList {
 
         }
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("set word: " + prefix);
         }
     }

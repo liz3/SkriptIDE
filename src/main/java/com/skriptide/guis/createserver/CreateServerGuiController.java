@@ -1,7 +1,6 @@
 package com.skriptide.guis.createserver;
 
 import com.skriptide.guis.SceneManager;
-import com.skriptide.main.Main;
 import com.skriptide.util.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -83,7 +82,7 @@ public class CreateServerGuiController {
 		for (ServerVersion srv : srvVersions.sorted()) {
 			serverVersionComboBox.getItems().add(srv.getVersion());
 		}
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 			System.out.println("Loaded values for create server");
 		}
 
@@ -167,14 +166,14 @@ public class CreateServerGuiController {
 			Stage stage = (Stage) createServerBtn.getScene().getWindow();
 			// do what you have to do
 			stage.close();
-			if(Main.debugMode) {
+			if(SceneManager.debugMode) {
 
 				System.out.println("sucessfzlly created Server, starting to load");
 			}
 
 		} else {
 			infoLabel.setText(error);
-			if(Main.debugMode) {
+			if(SceneManager.debugMode) {
 
 				System.out.println("Could not create server because: " + error);
 			}
@@ -188,7 +187,7 @@ public class CreateServerGuiController {
 		Stage stage = (Stage) createServerBtn.getScene().getWindow();
 		// do what you have to do
 		stage.close();
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 			System.out.println("Cancel create server");
 		}
 	}
@@ -203,7 +202,7 @@ public class CreateServerGuiController {
 		serverPathTextField.setText(dir.getAbsolutePath());
 
 		truePath = dir.getAbsolutePath();
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 			System.out.println("changed the save path");
 		}
 	}
@@ -227,7 +226,7 @@ public class CreateServerGuiController {
 				serverVersionComboBox.getSelectionModel().select(srv.getVersion());
 			}
 		}
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 
 			System.out.println("Set custom server version");
 		}
@@ -252,7 +251,7 @@ public class CreateServerGuiController {
 				scriptVersionComboBox.getSelectionModel().select(srv.getVersion());
 			}
 		}
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 
 			System.out.println("custom skript version");
 		}

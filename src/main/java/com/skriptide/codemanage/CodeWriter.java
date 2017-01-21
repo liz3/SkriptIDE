@@ -1,6 +1,6 @@
 package com.skriptide.codemanage;
 
-import com.skriptide.main.Main;
+import com.skriptide.guis.SceneManager;
 import com.skriptide.util.Project;
 
 import java.io.BufferedWriter;
@@ -38,7 +38,7 @@ public class CodeWriter {
 		try {
 
 			bw.write(inputCode);
-			if(Main.debugMode) {
+			if(SceneManager.debugMode) {
 				System.out.println("Wrote code: " + projFile.getAbsolutePath());
 			}
 		} catch (IOException e) {

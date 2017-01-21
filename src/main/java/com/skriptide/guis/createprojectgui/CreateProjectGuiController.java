@@ -1,7 +1,6 @@
 package com.skriptide.guis.createprojectgui;
 
 import com.skriptide.guis.SceneManager;
-import com.skriptide.main.Main;
 import com.skriptide.util.ConfigManager;
 import com.skriptide.util.MCServer;
 import com.skriptide.util.Project;
@@ -111,7 +110,7 @@ public class CreateProjectGuiController {
 				for (Project project : projects.sorted()) {
 					if (project.getName() != null) {
 						SceneManager.projectsList.getItems().addAll(project.getName());
-						if(Main.debugMode) {
+						if(SceneManager.debugMode) {
 							System.out.println("Project created!");
 						}
 					}
@@ -122,7 +121,7 @@ public class CreateProjectGuiController {
 			// do what you have to do
 			stage.close();
 		} else {
-			if(Main.debugMode) {
+			if(SceneManager.debugMode) {
 				System.out.println("Could not create Project because: " + error);
 			}
 		}
@@ -133,7 +132,7 @@ public class CreateProjectGuiController {
 		Stage stage = (Stage) createBtn.getScene().getWindow();
 		// do what you have to do
 		stage.close();
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 			System.out.println("Canceled create project");
 		}
 
@@ -143,7 +142,7 @@ public class CreateProjectGuiController {
 
 		SceneManager sceneManager = new SceneManager();
 		sceneManager.openCreateServer();
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 			System.out.println("Started create server");
 		}
 	}
@@ -170,7 +169,7 @@ public class CreateProjectGuiController {
 		for (MCServer server : servers.sorted()) {
 			loadOnServerComboBox.getItems().add(server.getname());
 		}
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 			System.out.println("Loaded create project");
 		}
 
@@ -194,7 +193,7 @@ public class CreateProjectGuiController {
 
 		updatePath();
 
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 			System.out.println("Project save path changed");
 		}
 

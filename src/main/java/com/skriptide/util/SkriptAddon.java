@@ -1,7 +1,7 @@
 package com.skriptide.util;
 
 import com.skriptide.config.Config;
-import com.skriptide.main.Main;
+import com.skriptide.guis.SceneManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.File;
@@ -38,7 +38,7 @@ public class SkriptAddon {
             this.path = config.getString("addon." + childName + ".path");
 
 
-			if (Main.debugMode) {
+			if (SceneManager.debugMode) {
 				System.out.println("loaded skript addon");
 			}
 
@@ -73,7 +73,7 @@ public class SkriptAddon {
 			}
 		}
 
-		if (Main.debugMode) {
+		if (SceneManager.debugMode) {
 			System.out.println("compared and loaded addons");
 		}
 	}
@@ -95,7 +95,7 @@ public class SkriptAddon {
 				values.add(new SkriptAddon(n));
 			}
 
-			if (Main.debugMode) {
+			if (SceneManager.debugMode) {
 				System.out.println("compared and loaded addons");
 			}
 			return values;
@@ -126,7 +126,7 @@ public class SkriptAddon {
 
 		config.save();
 
-        if(Main.debugMode) {
+        if(SceneManager.debugMode) {
             System.out.println("added Addon");
         }
 
@@ -150,7 +150,7 @@ public class SkriptAddon {
             if(config.contains("addon." + path.replace(".", "_"))) {
                 config.remove("addon." + path.replace(".", "_"));
             }
-			if(Main.debugMode) {
+			if(SceneManager.debugMode) {
 				System.out.println("Removed addon");
 			}
 

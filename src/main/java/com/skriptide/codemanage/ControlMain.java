@@ -1,7 +1,6 @@
 package com.skriptide.codemanage;
 
 import com.skriptide.guis.SceneManager;
-import com.skriptide.main.Main;
 import com.skriptide.util.skunityapi.*;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
@@ -44,7 +43,7 @@ public class ControlMain {
         tab.setContent(code);
         toolTip(code);
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Highlighted : " + code.getText());
         }
         SceneManager.mainWindowController.setAutoComplete(code);

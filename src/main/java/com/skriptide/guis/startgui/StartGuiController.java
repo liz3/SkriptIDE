@@ -1,6 +1,6 @@
 package com.skriptide.guis.startgui;
 
-import com.skriptide.main.Main;
+import com.skriptide.guis.SceneManager;
 import com.skriptide.util.ConfigManager;
 import com.skriptide.util.skunityapi.SkUnityAPI;
 import javafx.fxml.FXML;
@@ -59,7 +59,7 @@ public class StartGuiController {
 		}
 
 		projectsPathField.setText(dir.getAbsolutePath());
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 			System.out.println("changed projects path");
 		}
 
@@ -76,7 +76,7 @@ public class StartGuiController {
 			return;
 		}
 		serverPathField.setText(dir.getAbsolutePath());
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 
 			System.out.println("changed servers path");
 		}
@@ -105,7 +105,7 @@ public class StartGuiController {
 
 		});
 		t.start();
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
 
 			System.out.println("proceeded to start");
 		}

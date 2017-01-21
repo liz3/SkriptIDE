@@ -1,7 +1,7 @@
 package com.skriptide.util.skunityapi;
 
 
-import com.skriptide.main.Main;
+import com.skriptide.guis.SceneManager;
 import com.skriptide.util.WebUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,7 +48,7 @@ public class SkUnityAPI {
 		} else {
 			downloadAPI();
 		}
-		if (Main.debugMode) {
+		if (SceneManager.debugMode) {
 			System.out.println("SK api created");
 		}
 
@@ -75,7 +75,7 @@ public class SkUnityAPI {
         }
 		//	WebUtils.downloadFile(new URL("https://download-cf.jetbrains.com/idea/ideaIC-2016.2.4.exe"), new File(folder.getAbsolutePath() + "/hallo.exe"));
 		unZip(new File(folder.getAbsolutePath() + "/api.zip").getAbsolutePath(), folder.getAbsolutePath() + "/output");
-		if (Main.debugMode) {
+		if (SceneManager.debugMode) {
             System.out.println("Downloaded api");
         }
 
@@ -92,7 +92,7 @@ public class SkUnityAPI {
 
 
 		File folder = new File(current + "/SkUnity");
-		if (Main.debugMode) {
+		if (SceneManager.debugMode) {
 			System.out.println("scheck skunity api");
 		}
 		return folder.exists();
@@ -146,7 +146,7 @@ public class SkUnityAPI {
 			events = new File(outputFolder + File.separator + "/events.json");
 			expressions = new File(outputFolder + File.separator + "/expressions.json");
 			types = new File(outputFolder + File.separator + "/types.json");
-			if (Main.debugMode) {
+			if (SceneManager.debugMode) {
 				System.out.println("unzipped files");
 			}
 		} catch (IOException ex) {
@@ -215,7 +215,7 @@ public class SkUnityAPI {
 			values.add(new ApiCondition(id, feature, addon, pattern, description, example, requirements));
 		}
 
-		if (Main.debugMode) {
+		if (SceneManager.debugMode) {
 			System.out.println("returning conditions");
 		}
 		return values;
@@ -281,7 +281,7 @@ public class SkUnityAPI {
 			values.add(new ApiEffect(id, feature, addon, pattern, description, example, requirements));
 		}
 
-		if (Main.debugMode) {
+		if (SceneManager.debugMode) {
 			System.out.println("returning Api Effects");
 		}
 		return values;
@@ -345,7 +345,7 @@ public class SkUnityAPI {
 
 			values.add(new ApiEvent(id, feature, addon, pattern, description, example, requirements));
 		}
-		if (Main.debugMode) {
+		if (SceneManager.debugMode) {
 			System.out.println("returning Api Events");
 		}
 
@@ -412,7 +412,7 @@ public class SkUnityAPI {
 
 			values.add(new ApiExpression(id, feature, addon, pattern, description, example, requirements));
 		}
-		if (Main.debugMode) {
+		if (SceneManager.debugMode) {
 			System.out.println("returning Api Expressions");
 		}
 
@@ -479,7 +479,7 @@ public class SkUnityAPI {
 
 			values.add(new ApiType(id, feature, addon, pattern, description, example, requirements));
 		}
-		if (Main.debugMode) {
+		if (SceneManager.debugMode) {
 			System.out.println("returning Api Types");
 		}
 
