@@ -1,7 +1,7 @@
 package com.skriptide.util;
 
 import com.skriptide.config.Config;
-import com.skriptide.main.Main;
+import com.skriptide.guis.SceneManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,12 +26,12 @@ public class ConfigManager {
             Config con = new Config(configFile.getAbsolutePath());
 
             if (con.contains("settings.main.lang")) {
-                if (Main.debugMode) {
+                if (SceneManager.debugMode) {
                     System.out.println("ConfigManager exists");
                 }
                 return 0;
             } else {
-                if (Main.debugMode) {
+                if (SceneManager.debugMode) {
                     System.out.println("ConfigManager does not exists");
                 }
                 return 1;
@@ -129,7 +129,7 @@ public class ConfigManager {
 
             config.save();
 
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
 
                 System.out.println("ConfigManager created without errors");
             }
@@ -157,7 +157,7 @@ public class ConfigManager {
             String path = new Config(configFile.getAbsolutePath()).getString("main.paths.projects");
 
 
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
 
                 System.out.println("Projects-Path called");
             }

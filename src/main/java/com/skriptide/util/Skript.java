@@ -1,7 +1,7 @@
 package com.skriptide.util;
 
 import com.skriptide.config.Config;
-import com.skriptide.main.Main;
+import com.skriptide.guis.SceneManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -35,7 +35,7 @@ public class Skript {
 			this.version = config.getString("skripts." + path.replace(".", "_") + ".version");
 			this.path = config.getString("skripts." + path.replace(".", "_") + ".path");
 
-			if(Main.debugMode) {
+			if(SceneManager.debugMode) {
 				System.out.println("loaded Skript version");
 			}
 
@@ -67,7 +67,7 @@ public class Skript {
             values.add(new Skript(str));
         }
 
-		if(Main.debugMode) {
+		if(SceneManager.debugMode) {
             System.out.println("returning skript versions");
         }
 		return values;
@@ -102,7 +102,7 @@ public class Skript {
 
 
 
-			if(Main.debugMode) {
+			if(SceneManager.debugMode) {
 				System.out.println("added skript version");
 			}
 		} catch (IOException e) {
@@ -133,7 +133,7 @@ public class Skript {
 
             }
 
-			if(Main.debugMode) {
+			if(SceneManager.debugMode) {
 				System.out.println("removed skript version");
 			}
 		} catch (IOException e) {

@@ -3,7 +3,6 @@ package com.skriptide.util;
 import com.skriptide.config.Config;
 import com.skriptide.guis.SceneManager;
 import com.skriptide.guis.idegui.IdeGuiController;
-import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
@@ -11,8 +10,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputDialog;
 
 import java.io.*;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -61,12 +58,12 @@ public class Project {
         this.server = new MCServer(project.getString("server-name"));
         this.folder = project.getString("folder-path");
         this.notes = project.getString("notes");
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Project called");
         }
 
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Loaded project");
         }
     }
@@ -92,11 +89,11 @@ public class Project {
                 System.out.println(n);
                 values.add(new Project(n));
             }
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
                 System.out.println("project list called");
             }
 
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
                 System.out.println("returning projects");
             }
             return values;
@@ -231,14 +228,14 @@ public class Project {
 
         config.save();
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
 
             System.out.println("A Project file has been created");
         }
 
         addProject(name, info);
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("crated project");
         }
 
@@ -288,7 +285,7 @@ public class Project {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("starting");
         }
 

@@ -2,7 +2,6 @@ package com.skriptide.util;
 
 import com.skriptide.config.Config;
 import com.skriptide.guis.SceneManager;
-import com.skriptide.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -80,7 +79,7 @@ public class MCServer {
         this.notes = notes;
         this.startArgs = startArgs;
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Server values set");
         }
     }
@@ -128,12 +127,12 @@ public class MCServer {
         }
 
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
 
             System.out.println("Loaded Server from path" + path);
         }
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Loaded settings from server");
         }
 
@@ -156,7 +155,7 @@ public class MCServer {
                 System.out.println(n);
                 values.add(new MCServer(n));
             }
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
                 System.out.println("Returning all servers");
             }
             return values;
@@ -192,7 +191,7 @@ public class MCServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Added server");
         }
 
@@ -404,7 +403,7 @@ public class MCServer {
             }
             sc.close();
 
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
 
                 System.out.println("Loaded propeties File for a minecraft Server from path:" + props.getAbsolutePath());
             }
@@ -485,7 +484,7 @@ public class MCServer {
             updateServer(this.name, this.version.getVersion(), new File(this.path));
             SkriptAddon.compareAndSet(skriptAddons, new File(this.plFolderPath));
 
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
                 System.out.println("uptaded server" + this.getname());
             }
         } catch (IOException e) {
@@ -512,7 +511,7 @@ public class MCServer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
                 System.out.println("Server Process started");
             }
             SceneManager.runningServer = MCServer.this;
@@ -590,10 +589,10 @@ public class MCServer {
     public void createServer() {
 
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Create Server called");
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
 
             System.out.println("Try to create Data-File for a minecraft-server");
         }
@@ -620,10 +619,10 @@ public class MCServer {
 
 
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Data file for a minecraft server has been created");
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
 
             System.out.println("Trying to create a spigot.jar file for a Server");
         }
@@ -641,7 +640,7 @@ public class MCServer {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Spigot.jar for a server has been created");
         }
 
@@ -713,7 +712,7 @@ public class MCServer {
 
         startServer();
         addServer(this.name, new File(this.path));
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Server created: " + this.getname());
         }
     }
@@ -738,7 +737,7 @@ public class MCServer {
 
                 deleteDirectory(folder);
                 removeServer(this.path);
-                if (Main.debugMode) {
+                if (SceneManager.debugMode) {
                     System.out.println("Deleted server!");
                 }
             } else {
@@ -750,7 +749,7 @@ public class MCServer {
 
             deleteDirectory(folder);
             removeServer(this.name);
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
                 System.out.println("Deleted server!");
             }
         }
@@ -1111,7 +1110,7 @@ public class MCServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Removed server from config");
         }
     }

@@ -1,7 +1,7 @@
 package com.skriptide.config;
 
 //import com.google.common.io.Files;
-import com.skriptide.main.Main;
+import com.skriptide.guis.SceneManager;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
@@ -43,7 +43,7 @@ public abstract class BaseConfig {
             }
 
         } catch (FileNotFoundException e) {
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
                 System.out.println("An error occurred loading: " + getConfFile());
             }
         }
@@ -63,7 +63,7 @@ public abstract class BaseConfig {
             }
 
         } catch (IOException e) {
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
                 System.out.println("An error occurred creating: " + getConfFile());
             }
 
@@ -78,7 +78,7 @@ public abstract class BaseConfig {
             writer.close();
 
         } catch (IOException e) {
-            if (Main.debugMode) {
+            if (SceneManager.debugMode) {
                 System.out.println("An error occurred saving: " + getConfFile());
             }
 

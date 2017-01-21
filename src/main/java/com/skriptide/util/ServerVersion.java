@@ -1,7 +1,7 @@
 package com.skriptide.util;
 
 import com.skriptide.config.Config;
-import com.skriptide.main.Main;
+import com.skriptide.guis.SceneManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -34,7 +34,7 @@ public class ServerVersion {
 			this.version = config.getString("engine-version." + childName.replace(".", "_") + ".version");
 			this.path = config.getString("engine-version." + childName.replace(".", "_") + ".path");
             System.out.printf(config.getString("engine-version." + childName.replace(".", "_") + ".name"));
-            if(Main.debugMode) {
+            if(SceneManager.debugMode) {
 				System.out.println("Server version test");
 			}
 
@@ -64,7 +64,7 @@ public class ServerVersion {
 				values.add(new ServerVersion(n));
 			}
 
-            if(Main.debugMode) {
+            if(SceneManager.debugMode) {
 				System.out.println("returing server versions");
 			}
 			return values;
@@ -93,7 +93,7 @@ public class ServerVersion {
 			config.set("engine-version." + path.getAbsolutePath().replace(".","_") + ".path", path.getAbsolutePath());
 
 			config.save();
-			if(Main.debugMode) {
+			if(SceneManager.debugMode) {
 				System.out.println("Added versions");
 			}
 		} catch (IOException e) {
@@ -123,7 +123,7 @@ public class ServerVersion {
 
 
             config.save();
-			if(Main.debugMode) {
+			if(SceneManager.debugMode) {
 				System.out.println("removed server version");
 			}
 

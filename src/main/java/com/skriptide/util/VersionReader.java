@@ -1,6 +1,6 @@
 package com.skriptide.util;
 
-import com.skriptide.main.Main;
+import com.skriptide.guis.SceneManager;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -36,7 +36,7 @@ public class VersionReader {
 						is.close();
 						input.close();
 						System.out.println(split[1]);
-						if(Main.debugMode) {
+						if(SceneManager.debugMode) {
 							System.out.println("got plugin version");
 						}
 						return split[1];
@@ -109,7 +109,7 @@ public class VersionReader {
 			while (line != null);
 
 			reader.close();
-			if(Main.debugMode) {
+			if(SceneManager.debugMode) {
 				System.out.println("Got server version");
 			}
 			return trueVer;
@@ -143,7 +143,7 @@ public class VersionReader {
 						is.close();
 						input.close();
 						System.out.println(split[1]);
-						if(Main.debugMode) {
+						if(SceneManager.debugMode) {
 							System.out.println("Got name of plugin");
 						}
 						return split[1];

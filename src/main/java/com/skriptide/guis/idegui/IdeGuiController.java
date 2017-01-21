@@ -3,12 +3,9 @@ package com.skriptide.guis.idegui;
 import com.skriptide.codemanage.*;
 import com.skriptide.guis.ExternWindow;
 import com.skriptide.guis.SceneManager;
-import com.skriptide.main.Main;
 import com.skriptide.util.*;
 import com.skriptide.util.skunityapi.SkUnityAPI;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -21,7 +18,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -303,7 +299,7 @@ public class IdeGuiController {
                 }
         );
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Loaded window");
         }
     }
@@ -338,7 +334,7 @@ public class IdeGuiController {
 
 
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Open project");
         }
 
@@ -362,7 +358,7 @@ public class IdeGuiController {
                 e.printStackTrace();
             }
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("sendet command");
         }
     }
@@ -380,7 +376,7 @@ public class IdeGuiController {
                 project.runProject();
             }
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
 
             System.out.println("started project");
         }
@@ -400,7 +396,7 @@ public class IdeGuiController {
                 }
             }
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
 
             System.out.println("Loaded projects");
         }
@@ -504,7 +500,7 @@ public class IdeGuiController {
             serverListComboBox.getItems().add(srv.getname());
         }
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Loaded servers");
         }
 
@@ -518,7 +514,7 @@ public class IdeGuiController {
                 srv.startServer();
             }
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
 
             System.out.println("start server");
         }
@@ -528,7 +524,7 @@ public class IdeGuiController {
 
         sceneManager.openCreateProject();
 
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("open new project");
         }
 
@@ -537,7 +533,7 @@ public class IdeGuiController {
     private void newServer() {
 
         sceneManager.openCreateServer();
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("open new server");
         }
     }
@@ -545,7 +541,7 @@ public class IdeGuiController {
     private void manageAddons() throws IOException {
 
         sceneManager.openManageVersions();
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
 
             System.out.println("open manage addons");
         }
@@ -574,7 +570,7 @@ public class IdeGuiController {
     private void manageServers() {
 
         sceneManager.openManageServer();
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("open manage server");
         }
     }
@@ -636,7 +632,7 @@ public class IdeGuiController {
             }
 
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Open project");
         }
     }
@@ -660,7 +656,7 @@ public class IdeGuiController {
                 new CodeWriter(win.getArea().getText(), win.getProject()).write();
             }
         }
-        if (Main.debugMode) {
+        if (SceneManager.debugMode) {
             System.out.println("Saved open projects!");
         }
     }

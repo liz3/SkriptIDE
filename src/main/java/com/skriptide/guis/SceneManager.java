@@ -11,7 +11,6 @@ import com.skriptide.guis.manageadds.ManageAddsGuiController;
 import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.settings.SettingsController;
 import com.skriptide.guis.startgui.StartGuiController;
-import com.skriptide.main.Main;
 import com.skriptide.theme.ThemeCreator;
 import com.skriptide.theme.themes.Dark;
 import com.skriptide.util.*;
@@ -45,8 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.skriptide.main.Main.debugMode;
-
 /**
  * Created by Liz3 on 27.07.2016.
  * This is the main class of the SkriptIDE, its containg methods to startup all additional Windows
@@ -66,8 +63,9 @@ public class SceneManager extends Application {
     public static TextArea debugArea;
     public static ProgressBar procBar;
     public static IdeGuiController mainWindowController;
+	public static boolean debugMode;
 
-    private boolean fast = false;
+	private boolean fast = false;
     private boolean v;
     private Pane splashLayout;
     private ProgressBar loadProgress;
@@ -236,7 +234,7 @@ public class SceneManager extends Application {
 
         }
         mainWindow.setTitle("SkriptIDE");
-        mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
+        // File unavailable!   mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
         mainWindow.setScene(mainScene);
         mainWindow.setMinWidth(980);
         mainWindow.setMinHeight(550);
@@ -464,7 +462,7 @@ public class SceneManager extends Application {
         }
 
         if (ConfigManager.isDebug()) {
-            Main.debugMode = true;
+            debugMode = true;
             openDebugger();
         }
 
