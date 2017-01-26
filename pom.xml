@@ -24,7 +24,7 @@
                     <exclude>**/version.txt</exclude>
                 </excludes>
             </resource>
-            <resource> 
+            <resource>
                 <targetPath>.</targetPath>
                 <filtering>true</filtering>
                 <directory>${basedir}/src/main/resources/</directory>
