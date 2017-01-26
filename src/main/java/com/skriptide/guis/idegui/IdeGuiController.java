@@ -28,6 +28,7 @@ import java.util.HashMap;
  */
 public class IdeGuiController {
 
+    public static SceneManager sceneManager;
     @FXML
     public MenuItem manageAddonsPoint;
     @FXML
@@ -92,8 +93,6 @@ public class IdeGuiController {
     public MenuItem exportSettingsPoint;
     @FXML
     public Menu exportPoint;
-
-    public static SceneManager sceneManager;
     private ContextMenu menu;
     private ContextMenu tabMenu;
 
@@ -111,8 +110,8 @@ public class IdeGuiController {
     public void setUpWin() {
 
         /**
-        This listeners fires of the search of a specific char sequence in the currently visible Project in the window
-        @see com.skriptide.codemanage.Search
+         This listeners fires of the search of a specific char sequence in the currently visible Project in the window
+         @see com.skriptide.codemanage.Search
          */
         searchTxTField.setOnKeyReleased(event -> {
             Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
@@ -125,8 +124,8 @@ public class IdeGuiController {
         });
 
         /**
-        This listener is showing a little menu on the TabPane of the projects,
-        to provide the option do open the current project in a extra window
+         This listener is showing a little menu on the TabPane of the projects,
+         to provide the option do open the current project in a extra window
          @see com.skriptide.guis.ExternWindow
          */
         codeTabPane.setOnMouseClicked(event -> {
@@ -170,13 +169,13 @@ public class IdeGuiController {
          *
          */
         HashMap<String, ExportSettings> all = ExportSettings.getAll();
-        for(String s : all.keySet()) {
+        for (String s : all.keySet()) {
 
             MenuItem item = new MenuItem(s);
             item.setOnAction(event -> {
                 Tab active = codeTabPane.getSelectionModel().getSelectedItem();
 
-                CodeArea area = (CodeArea)active.getContent();
+                CodeArea area = (CodeArea) active.getContent();
 
                 ExportSettings settings = all.get(s);
 
@@ -184,7 +183,6 @@ public class IdeGuiController {
             });
             exportPoint.getItems().add(item);
         }
-
 
         /**
          * The following 8 listeners do all server the option do open the other Windows,
@@ -264,8 +262,9 @@ public class IdeGuiController {
         SceneManager.consoleOut = consoleOutputTextArea;
         SceneManager.runningServerLabel = runningServerLabel;
         SceneManager.projectsList = this.projectsList;
-        SceneManager.runninServerList = this.serverListComboBox;
+        SceneManager.runningServerList = this.serverListComboBox;
 
+        loadInServers();
         /**
          * This listeners sets the Information in the bottom of the
          * Gui when another tab is selected trough those labels are not bound to the TabPane
@@ -309,6 +308,7 @@ public class IdeGuiController {
 
         sceneManager.openExportSettings();
     }
+
     public void openFromFile(String path) {
 
         File project = new File(path);

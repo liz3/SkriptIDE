@@ -33,6 +33,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -59,7 +60,7 @@ public class SceneManager extends Application {
     public static MCServer runningServer;
     public static Label runningServerLabel;
     public static ListView projectsList;
-    public static ComboBox<String> runninServerList;
+    public static ComboBox<String> runningServerList;
     public static TextArea debugArea;
     public static ProgressBar procBar;
     public static IdeGuiController mainWindowController;
@@ -70,8 +71,8 @@ public class SceneManager extends Application {
     private Pane splashLayout;
     private ProgressBar loadProgress;
     private Label progressText;
-    private static final int SPLASH_WIDTH = 600;
-    private static final int SPLASH_HEIGHT = 300;
+    private static final int SPLASH_WIDTH = 674;
+    private static final int SPLASH_HEIGHT = 393;
     private Stage mainWindow;
     private Stage createNewProjectWindow;
     private Stage createNewServerWindow;
@@ -117,6 +118,8 @@ public class SceneManager extends Application {
 
     public static void main(String[] args) throws Exception {
 
+
+        if(! Updater.checkUpdates())
         launch(args);
     }
 
@@ -127,17 +130,18 @@ public class SceneManager extends Application {
 
         loadProgress = new ProgressBar();
         loadProgress.setPrefWidth(SPLASH_WIDTH);
-        progressText = new Label("Will find friends for peanuts . . .");
+        progressText = new Label("Loading...");
+        progressText.setTextAlignment(TextAlignment.LEFT);
         splashLayout = new Pane();
-        splashLayout.setPrefSize(600, 300);
-        splash.setFitWidth(600);
-        splash.setFitHeight(300);
-        loadProgress.setPrefSize(320, 10);
-        loadProgress.setLayoutX(270);
-        loadProgress.setLayoutY(190);
+        splashLayout.setPrefSize(674, 393);
+        splash.setFitWidth(674);
+        splash.setFitHeight(393);
+        loadProgress.setPrefSize(400, 15);
+        loadProgress.setLayoutX(255);
+        loadProgress.setLayoutY(280);
         progressText.setPrefSize(320, 15);
-        progressText.setLayoutX(270);
-        progressText.setLayoutY(210);
+        progressText.setLayoutX(430);
+        progressText.setLayoutY(300);
         splashLayout.getChildren().addAll(splash, loadProgress, progressText);
         progressText.setAlignment(Pos.CENTER);
 
@@ -173,17 +177,19 @@ public class SceneManager extends Application {
                 updateProgress(15, 100);
 
                 setSkyUnityApi();
-
+                if (!fast)
+                    Thread.sleep(1000);
                 updateMessage("Loading configuration...");
                 updateProgress(35, 100);
-
+                if (!fast)
+                    Thread.sleep(2500);
                 v = checkConfig();
 
                 updateMessage("Loading Gui...");
                 updateProgress(65, 100);
-
                 if (!fast)
-                    Thread.sleep(2500);
+                    Thread.sleep(1500);
+
 
 
                 return null;
@@ -234,7 +240,8 @@ public class SceneManager extends Application {
 
         }
         mainWindow.setTitle("SkriptIDE");
-        // File unavailable!   mainWindow.getIcons().add(new Image("http://www.mediafire.com/convkey/9377/kw4v8cwmcocs6b5zg.jpg?size_id=3"));
+        mainWindow.getIcons().add(new Image(
+                getClass().getResource("/icon.png").toExternalForm()));
         mainWindow.setScene(mainScene);
         mainWindow.setMinWidth(980);
         mainWindow.setMinHeight(550);
@@ -375,6 +382,8 @@ public class SceneManager extends Application {
 
                 exportSettings.setScene(new Scene(exportSettingsParent));
 
+                exportSettings.getIcons().add(new Image(
+                        getClass().getResource("/icon.png").toExternalForm()));
                 exportSettings.setResizable(false);
                 exportSettings.setTitle("Export Settings");
                 exportSettings.initStyle(StageStyle.UTILITY);
@@ -408,6 +417,8 @@ public class SceneManager extends Application {
                 if(OsUtils.getOS() == OperatingSystemType.OSX) {
 
                 }
+                settings.getIcons().add(new Image(
+                        getClass().getResource("/icon.png").toExternalForm()));
                 settings.setScene(scene);
                 settings.setResizable(false);
                 settings.initStyle(StageStyle.UTILITY);
@@ -499,7 +510,8 @@ public class SceneManager extends Application {
             debugger.setScene(debuggerSc);
             debugger.initStyle(StageStyle.UTILITY);
             debugger.setTitle("Skript IDE Debugger");
-
+            debugger.getIcons().add(new Image(
+                    getClass().getResource("/icon.png").toExternalForm()));
             debugger.centerOnScreen();
             debuggerController = debuggerLoader.getController();
 
@@ -529,6 +541,8 @@ public class SceneManager extends Application {
             e.printStackTrace();
         }
 
+        welcomeWindow.getIcons().add(new Image(
+                getClass().getResource("/icon.png").toExternalForm()));
         welcomeWindow.initOwner(mainWindow);
         welcomeWindow.setScene(new Scene(welcomeWindowParent, 400, 330));
         welcomeWindow.setResizable(false);
@@ -586,6 +600,8 @@ public class SceneManager extends Application {
                 e.printStackTrace();
             }
 
+            createNewProjectWindow.getIcons().add(new Image(
+                    getClass().getResource("/icon.png").toExternalForm()));
             createNewProjectWindow.initOwner(mainWindow);
             createNewProjectWindow.setTitle("Create new Project");
             createNewProjectWindow.setScene(new Scene(createNewProjectWindowParent, 580, 300));
@@ -625,6 +641,8 @@ public class SceneManager extends Application {
                 e.printStackTrace();
             }
 
+            createNewServerWindow.getIcons().add(new Image(
+                    getClass().getResource("/icon.png").toExternalForm()));
             createNewServerWindow.initOwner(mainWindow);
             createNewServerWindow.setTitle("Create new Server");
             createNewServerWindow.setScene(new Scene(createNewServerWindowParent, 545, 318));
@@ -662,6 +680,8 @@ public class SceneManager extends Application {
 
             addsManager = new Stage();
 
+            addsManager.getIcons().add(new Image(
+                    getClass().getResource("/icon.png").toExternalForm()));
             addsManagerParent = addManagerLoader.load(getClass().getResourceAsStream("/ManageAddsGui.fxml"));
             addsManager.initOwner(mainWindow);
             addsManager.setTitle("Manage Addons");
@@ -707,6 +727,8 @@ public class SceneManager extends Application {
                 e.printStackTrace();
             }
 
+            manageExtensions.getIcons().add(new Image(
+                    getClass().getResource("/icon.png").toExternalForm()));
             manageExtensions.initOwner(mainWindow);
             manageExtensions.setTitle("Manage Extensions");
             manageExtensions.setScene(new Scene(manageExtensionParent, 226, 467));
@@ -752,6 +774,8 @@ public class SceneManager extends Application {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            manageServer.getIcons().add(new Image(
+                    getClass().getResource("/icon.png").toExternalForm()));
             manageServer.initOwner(mainWindow);
             manageServer.setTitle("Manage Servers");
             manageServer.setScene(new Scene(manageServerParent, 820, 550));

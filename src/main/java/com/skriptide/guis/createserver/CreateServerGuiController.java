@@ -161,7 +161,7 @@ public class CreateServerGuiController {
 
 			server.createServer();
 
-			SceneManager.runninServerList.getSelectionModel().select(server.getname());
+			SceneManager.runningServerList.getSelectionModel().select(server.getname());
 
 			Stage stage = (Stage) createServerBtn.getScene().getWindow();
 			// do what you have to do

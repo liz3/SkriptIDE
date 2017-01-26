@@ -17,6 +17,7 @@ public class WebUtils {
 		StringBuilder result = new StringBuilder();
 		URL url = new URL(urlToRead);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.addRequestProperty("user-agent", " Mozilla/5.0 (Windows NT x.y; rv:10.0) Gecko/20100101 Firefox/10.0");
 		conn.setRequestMethod("GET");
 		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		String line;
@@ -50,6 +51,7 @@ public class WebUtils {
 		}
 
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.addRequestProperty("user-agent", " Mozilla/5.0 (Windows NT x.y; rv:10.0) Gecko/20100101 Firefox/10.0");
 		conn.connect();
 		BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
 		FileOutputStream fis = new FileOutputStream(f);

@@ -96,6 +96,7 @@ public class CompleteList {
 
         if (win == null) {
             win = new Popup();
+
             chooseView = new ListView<>();
             setList(win, chooseView, area);
 
@@ -158,22 +159,26 @@ public class CompleteList {
                     if(newPosition > start && newPosition < end) {
                         win.hide();
                         chooseView.setVisible(false);
+
                         return;
                     }
                 }
                 if(prefix[0].startsWith("/")) {
                     win.hide();
                     chooseView.setVisible(false);
+
                     return;
                 }
                 if(!win.isShowing()) {
                     win.show(area.getScene().getWindow());
                     chooseView.setVisible(true);
+
                 }
 
                 if (prefix[0] == null || prefix[0].equalsIgnoreCase("")) {
                     win.hide();
                     chooseView.setVisible(false);
+
                     return;
                 }
                 //Moved on 21.12.2016 to prevent the popup if in "" or starting with a /
@@ -193,6 +198,7 @@ public class CompleteList {
                     if(chooseView.getItems().isEmpty()) {
                         win.hide();
                         chooseView.setVisible(false);
+
                     }
                 }
             }
@@ -204,6 +210,7 @@ public class CompleteList {
                 if (win.isShowing()) {
                     win.hide();
                     chooseView.setVisible(false);
+
                 }
             } else if (code == KeyCode.ENTER) {
                 if (win.isShowing()) {

@@ -69,7 +69,7 @@ public class SkUnityAPI {
 			folder.mkdirs();
 		}
 		try {
-            WebUtils.downloadFile(new URL("http://nfell2009.uk/skunity/api/zip/skunity.zip"), new File(folder.getAbsolutePath() + "/api.zip"));
+            WebUtils.downloadFile(new URL("http://nfell2009.uk/skunity/apiii/zip/skunity.zip"), new File(folder.getAbsolutePath() + "/api.zip"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,7 +93,7 @@ public class SkUnityAPI {
 
 		File folder = new File(current + "/SkUnity");
 		if (SceneManager.debugMode) {
-			System.out.println("scheck skunity api");
+			System.out.println("check skunity api");
 		}
 		return folder.exists();
 	}
