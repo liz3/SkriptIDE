@@ -1,5 +1,6 @@
 package com.skriptide.guis;
 
+import com.skriptide.codemanage.AutoSaver;
 import com.skriptide.codemanage.CompleteList;
 import com.skriptide.guis.createprojectgui.CreateProjectGuiController;
 import com.skriptide.guis.createserver.CreateServerGuiController;
@@ -11,6 +12,7 @@ import com.skriptide.guis.manageadds.ManageAddsGuiController;
 import com.skriptide.guis.manageserver.ManageServerController;
 import com.skriptide.guis.settings.SettingsController;
 import com.skriptide.guis.startgui.StartGuiController;
+import com.skriptide.guis.versioncontrol.VersionControlController;
 import com.skriptide.theme.ThemeCreator;
 import com.skriptide.theme.themes.Dark;
 import com.skriptide.util.*;
@@ -54,7 +56,7 @@ import java.util.Optional;
  */
 public class SceneManager extends Application {
 
-
+    public static AutoSaver autoSaver = null;
     public static final ArrayList<String> openProjects = new ArrayList<>();
     public static CodeArea consoleOut;
     public static MCServer runningServer;
@@ -102,6 +104,7 @@ public class SceneManager extends Application {
     private DebuggerController debuggerController;
     private SettingsController settingsController;
     private ExportSettingsGuiController exportSettingsGuiController;
+    private VersionControlController vcController;
 
     public static SceneManager manager;
     private boolean isDarkTheme;
@@ -121,7 +124,7 @@ public class SceneManager extends Application {
     public static void main(String[] args) throws Exception {
 
 
-        if(! Updater.checkUpdates())
+       // if(! Updater.checkUpdates())
         launch(args);
     }
 
@@ -274,7 +277,7 @@ public class SceneManager extends Application {
             ThemeCreator.setTheme(mainScene, new Dark());
         }
 
-
+        autoSaver = new AutoSaver();
 
         mainScene.getWindow().setOnCloseRequest(ev -> {
 
@@ -407,7 +410,7 @@ public class SceneManager extends Application {
             try {
                 versionControlParent = versionControlLoader.load(getClass().getResourceAsStream("/VersionControlSetupGUI.fxml"));
 
-                Scene scene = new Scene(versionControlParent, 705, 495);
+                Scene scene = new Scene(versionControlParent);
                 if(OsUtils.getOS() == OperatingSystemType.LINUX) {
                     scene.getStylesheets().add("os_styles/LinuxSheet.css");
 
@@ -419,6 +422,8 @@ public class SceneManager extends Application {
                 if(OsUtils.getOS() == OperatingSystemType.OSX) {
 
                 }
+                versionControl.sizeToScene();
+                versionControl.setScene(scene);
                 versionControl.getIcons().add(new Image(
                         getClass().getResource("/icon.png").toExternalForm()));
                 versionControl.setScene(scene);
@@ -426,14 +431,14 @@ public class SceneManager extends Application {
                 versionControl.initStyle(StageStyle.UTILITY);
                 versionControl.setTitle("SkriptIDE Version Control Setup");
                 versionControl.centerOnScreen();
-                versionControl = versionControlLoader.getController();
+                vcController = versionControlLoader.getController();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
 
-        settings.show();
+        versionControl.show();
     }
 
     public void openSettings() {

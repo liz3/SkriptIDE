@@ -153,6 +153,8 @@ public class ManageServerController {
 	@FXML
 	public Button confirmBtn;
 
+	private String last = "";
+
 
 	public void setValues() {
 
@@ -203,14 +205,14 @@ public class ManageServerController {
 
 	private void saveChangesToServer() {
 
-		String selection = serversList.getSelectionModel().getSelectedItem();
+
 
 		ObservableList<MCServer> servers = MCServer.getAllServers();
 
 		MCServer trueServ = null;
 		for (MCServer server : servers.sorted()) {
 
-			if (server.getname().equals(selection)) {
+			if (server.getname().equals(last)) {
 				trueServ = server;
 			}
 		}
@@ -348,7 +350,7 @@ public class ManageServerController {
 		}
 		if (srv != null) {
 			srv.loadServer();
-
+			last = srv.getname();
 			nameTextField.setText(srv.getname());
 			portTextField.setText(String.valueOf(srv.getport()));
 

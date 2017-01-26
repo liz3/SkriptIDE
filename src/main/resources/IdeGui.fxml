@@ -23,7 +23,7 @@
          <top>
             <MenuBar fx:id="mainMenuMenuBar" BorderPane.alignment="CENTER">
                <menus>
-                  <Menu mnemonicParsing="false" text="File">
+                  <Menu fx:id="filePoint" mnemonicParsing="false" text="File">
                      <items>
                         <MenuItem fx:id="newProjectMenuPoint" mnemonicParsing="false" text="New Project" />
                         <Menu fx:id="openResentMenu" mnemonicParsing="false" text="Open Recent" />
@@ -67,11 +67,11 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="VCS">
                     <items>
-                       <MenuItem visible="true" fx:id="setupVCS" mnemonicParsing="false" text="Configure VCS"> </MenuItem>
-                       <MenuItem visible="false" fx:id="commit" mnemonicParsing="false" text="Commit Changes" />
-                       <MenuItem visible="false" fx:id="pull" mnemonicParsing="false" text="Update Project" />
-                       <MenuItem visible="false" fx:id="revert" mnemonicParsing="false" text="Revert Project" />
-                       <MenuItem visible="false" fx:id="compare" mnemonicParsing="false" text="Compare Project" />
+                       <MenuItem fx:id="setupVCS" mnemonicParsing="false" text="Configure VCS" visible="true"> </MenuItem>
+                       <MenuItem fx:id="commit" mnemonicParsing="false" text="Commit Changes" visible="false" />
+                       <MenuItem fx:id="pull" mnemonicParsing="false" text="Update Project" visible="false" />
+                       <MenuItem fx:id="revert" mnemonicParsing="false" text="Revert Project" visible="false" />
+                       <MenuItem fx:id="compare" mnemonicParsing="false" text="Compare Project" visible="false" />
                     </items>
                   </Menu>
                </menus>

@@ -95,6 +95,9 @@ public class IdeGuiController {
     public Menu exportPoint;
     @FXML
     public MenuItem setupVCS;
+    @FXML
+    public Menu filePoint;
+
     private ContextMenu menu;
     private ContextMenu tabMenu;
 
@@ -117,11 +120,13 @@ public class IdeGuiController {
          */
         searchTxTField.setOnKeyReleased(event -> {
             Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
+            if (tab != null) {
+                if (searchTxTField.getText() != null && !searchTxTField.getText().equals("")) {
 
-            if (searchTxTField.getText() != null && !searchTxTField.getText().equals("")) {
-                Search.search(tab, searchTxTField.getText());
-            } else {
-                ControlMain.controlCode((CodeArea) tab.getContent(), tab);
+                    Search.search(tab, searchTxTField.getText());
+                } else {
+                    ControlMain.controlCode((CodeArea) tab.getContent(), tab);
+                }
             }
         });
 
@@ -170,21 +175,30 @@ public class IdeGuiController {
          * when it is showed
          *
          */
-        HashMap<String, ExportSettings> all = ExportSettings.getAll();
-        for (String s : all.keySet()) {
+        filePoint.setOnShown(event -> {
 
-            MenuItem item = new MenuItem(s);
-            item.setOnAction(event -> {
-                Tab active = codeTabPane.getSelectionModel().getSelectedItem();
 
-                CodeArea area = (CodeArea) active.getContent();
+            exportPoint.getItems().clear();
 
-                ExportSettings settings = all.get(s);
+            HashMap<String, ExportSettings> all = ExportSettings.getAll();
+            for (String s : all.keySet()) {
 
-                settings.deploy(area.getText(), active.getText());
-            });
-            exportPoint.getItems().add(item);
-        }
+
+                MenuItem item = new MenuItem(s);
+                item.setOnAction(eve2 -> {
+                    Tab active = codeTabPane.getSelectionModel().getSelectedItem();
+
+                    CodeArea area = (CodeArea) active.getContent();
+
+                    ExportSettings settings = all.get(s);
+
+                    settings.deploy(area.getText(), active.getText());
+                });
+                exportPoint.getItems().add(item);
+            }
+
+
+        });
 
         /**
          * The following 8 listeners do all server the option do open the other Windows,
@@ -600,18 +614,7 @@ public class IdeGuiController {
             if (!SceneManager.openProjects.contains(project.getName())) {
                 Tab tab = new Tab(project.getName());
 
-                tab.setOnCloseRequest(event -> {
 
-
-                    boolean toSave = new SceneManager().infoCheck("Save project?", tab.getText(), "Save the project: " + tab.getText());
-                    if (toSave) {
-                        CodeWriter writer = new CodeWriter(area.getText(), project);
-                        System.out.println("saver called");
-                        writer.write();
-                    }
-
-                    SceneManager.openProjects.remove(project.getName());
-                });
                 codeTabPane.getTabs().add(tab);
 
                 tab.setContent(area);
@@ -630,7 +633,22 @@ public class IdeGuiController {
                 prNotesArea.setText(project.getNotes());
                 SceneManager.openProjects.add(project.getName());
 
+                SceneManager.autoSaver.getOpenProjects().put(project, tab);
                 ControlMain.controlCode(area, tab);
+
+                tab.setOnCloseRequest(event -> {
+
+                    boolean toSave = new SceneManager().infoCheck("Save project?", tab.getText(), "Save the project: " + tab.getText());
+                    if (toSave) {
+                        CodeArea c = (CodeArea) codeTabPane.getSelectionModel().getSelectedItem().getContent();
+                        CodeWriter writer = new CodeWriter(c.getText(), project);
+                        System.out.println("saver called");
+                        writer.write();
+                    }
+
+                    SceneManager.openProjects.remove(project.getName());
+                });
+
 
             }
 

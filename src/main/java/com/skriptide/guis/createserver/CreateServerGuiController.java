@@ -239,7 +239,9 @@ public class CreateServerGuiController {
 		FileChooser fileChooser = new FileChooser();
 		fileChooserWindow.setTitle("Choose Path for the Plugin File");
 		scriptPluginVersionFile = fileChooser.showOpenDialog(fileChooserWindow);
-
+		if(scriptPluginVersionFile == null) {
+			return;
+		}
 		Skript.addScript(VersionReader.getNameOfPlugin(scriptPluginVersionFile),
 				VersionReader.getVersionOfPlugin(scriptPluginVersionFile), scriptPluginVersionFile);
 		ObservableList<Skript> srvVersions = Skript.getSkriptVersions();

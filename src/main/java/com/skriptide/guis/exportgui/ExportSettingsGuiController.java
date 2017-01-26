@@ -55,12 +55,15 @@ public class ExportSettingsGuiController {
                 }
 
             }
+            if(!wantedName.equals("")) {
 
-            ExportSettings.addEntry(new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()), customPath.getText());
-            entriesList.getItems().add(customPath.getText());
 
-            all.put(customPath.getText(), new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()));
-            customPath.clear();
+                ExportSettings.addEntry(new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()), customPath.getText());
+                entriesList.getItems().add(customPath.getText());
+
+                all.put(customPath.getText(), new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()));
+                customPath.clear();
+            }
         });
 
         delBtn.setOnAction(event -> {
