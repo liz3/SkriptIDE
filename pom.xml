@@ -57,7 +57,7 @@
                        <options>
                            <option>-keep public class com.skriptide.guis.SceneManager { public static void
                                main(java.lang.String[]); }
-                           </option>
+                            </option>
                            <option>-adaptclassstrings</option>
                            <option>-adaptresourcefilecontents ***.fxml</option>
                            <option>-keepclassmembernames class * { @javafx.fxml.FXML *; }</option>
