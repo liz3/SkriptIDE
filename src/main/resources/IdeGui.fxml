@@ -67,17 +67,12 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="VCS">
                     <items>
-                       <MenuItem fx:id="commit" mnemonicParsing="false" text="Commit Changes" />
-                       <MenuItem fx:id="pull" mnemonicParsing="false" text="Update Project" />
-                       <MenuItem fx:id="revert" mnemonicParsing="false" text="Revert Project" />
-                       <MenuItem fx:id="compare" mnemonicParsing="false" text="Compare Project" />
+                       <MenuItem visible="true" fx:id="setupVCS" mnemonicParsing="false" text="Configure VCS"> </MenuItem>
+                       <MenuItem visible="false" fx:id="commit" mnemonicParsing="false" text="Commit Changes" />
+                       <MenuItem visible="false" fx:id="pull" mnemonicParsing="false" text="Update Project" />
+                       <MenuItem visible="false" fx:id="revert" mnemonicParsing="false" text="Revert Project" />
+                       <MenuItem visible="false" fx:id="compare" mnemonicParsing="false" text="Compare Project" />
                     </items>
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="VCS2">
-                     <items>
-                        <MenuItem fx:id="share" mnemonicParsing="false" text="Share Project" />
-                        <MenuItem fx:id="link" mnemonicParsing="false" text="Update Project" />
-                     </items>
                   </Menu>
                </menus>
             </MenuBar>

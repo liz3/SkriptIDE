@@ -93,6 +93,8 @@ public class IdeGuiController {
     public MenuItem exportSettingsPoint;
     @FXML
     public Menu exportPoint;
+    @FXML
+    public MenuItem setupVCS;
     private ContextMenu menu;
     private ContextMenu tabMenu;
 
@@ -196,6 +198,7 @@ public class IdeGuiController {
          * @see manageServer()
          * @see newProject()
          */
+        setupVCS.setOnAction(event -> sceneManager.openVersionControlSetup());
         exportSettingsPoint.setOnAction(event -> openExportSettings()
         );
         manageAddonsPoint.setOnAction(event -> {

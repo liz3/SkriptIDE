@@ -80,6 +80,7 @@ public class SceneManager extends Application {
     private Stage manageServer;
     private Stage debugger;
     private Stage settings;
+    private Stage versionControl = null;
     private Stage exportSettings;
     private final FXMLLoader mainLoader = new FXMLLoader();
     private final FXMLLoader welcomeLoader = new FXMLLoader();
@@ -89,9 +90,10 @@ public class SceneManager extends Application {
     private final FXMLLoader manageServerLoader = new FXMLLoader();
     private final FXMLLoader debuggerLoader = new FXMLLoader();
     private final FXMLLoader settingsLoader = new FXMLLoader();
+    private final FXMLLoader versionControlLoader = new FXMLLoader();
     private final FXMLLoader exportSettingsLoader = new FXMLLoader();
     private Parent mainParent = null, welcomeWindowParent = null, createNewProjectWindowParent = null,
-            createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null,
+            createNewServerWindowParent = null, addsManagerParent = null, manageServerParent = null, versionControlParent = null,
             debuggerParent = null, settingsParent = null, exportSettingsParent;
     private CreateProjectGuiController createProjectGuiController;
     private CreateServerGuiController createServerGuiController;
@@ -397,6 +399,43 @@ public class SceneManager extends Application {
         exportSettingsGuiController.initGui();
         exportSettings.show();
     }
+
+    public void openVersionControlSetup() {
+        if (versionControl == null) {
+
+            versionControl = new Stage();
+            try {
+                versionControlParent = versionControlLoader.load(getClass().getResourceAsStream("/VersionControlSetupGUI.fxml"));
+
+                Scene scene = new Scene(versionControlParent, 705, 495);
+                if(OsUtils.getOS() == OperatingSystemType.LINUX) {
+                    scene.getStylesheets().add("os_styles/LinuxSheet.css");
+
+                }
+                if(OsUtils.getOS() == OperatingSystemType.WINDOWS) {
+                    scene.getStylesheets().add("os_styles/WindowsSheet.css");
+
+                }
+                if(OsUtils.getOS() == OperatingSystemType.OSX) {
+
+                }
+                versionControl.getIcons().add(new Image(
+                        getClass().getResource("/icon.png").toExternalForm()));
+                versionControl.setScene(scene);
+                versionControl.setResizable(false);
+                versionControl.initStyle(StageStyle.UTILITY);
+                versionControl.setTitle("SkriptIDE Version Control Setup");
+                versionControl.centerOnScreen();
+                versionControl = versionControlLoader.getController();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        settings.show();
+    }
+
     public void openSettings() {
 
         if (settings == null) {

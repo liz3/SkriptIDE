@@ -1,6 +1,7 @@
 package com.skriptide.util;
 
 import com.skriptide.config.Config;
+import com.skriptide.git.VersionControl;
 import com.skriptide.guis.SceneManager;
 import com.skriptide.guis.idegui.IdeGuiController;
 import javafx.collections.FXCollections;
@@ -29,6 +30,7 @@ public class Project {
     private MCServer server;
     private String folder;
     private String notes;
+    private VersionControl versionControl;
 
 
     public Project(String name) {
@@ -444,4 +446,15 @@ public class Project {
         FileUtils.deleteDirectory(directory, true);
     }
 
+    public VersionControl getVersionControl() {
+        return versionControl;
+    }
+
+    public void setVersionControl(VersionControl versionControl) {
+        this.versionControl = versionControl;
+    }
+
+    public void setupVersionControl() {
+
+    }
 }

@@ -69,3 +69,15 @@
 -fx-fill: #800b07;
 -fx-font-weight: bold;
 }
+
+.github-green {
+    -fx-fill: green;
+}
+
+.github-red {
+    -fx-fill: darkred;
+}
+
+.github-blue {
+    -fx-fill: dodgerblue;
+}
