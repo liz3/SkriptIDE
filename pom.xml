@@ -233,6 +233,12 @@
             <artifactId>snakeyaml</artifactId>
             <version>1.17</version>
         </dependency>
+        <dependency>
+            <groupId>org.kohsuke</groupId>
+            <artifactId>github-api</artifactId>
+            <version>1.84</version>
+        </dependency>
+
     </dependencies>
 </project>
 
