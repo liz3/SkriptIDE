@@ -7,7 +7,6 @@ An IDE for Bukkit Skript written in Java.
 - Syntax Highlighting
 - complete integrated Test-Server System
 - A huge autocomplete base trough the SkUnity API
-- Very
 
 ## INFORMATION
 SkriptIDE is most written in OOP style.
