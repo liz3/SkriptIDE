@@ -5,7 +5,17 @@ package com.skriptide.git;
  */
 public enum VCType {
 
-    GITHUB(),
-    BITBUCKET(),
-    GITLAB();
+    GITHUB("GitHub"),
+    BITBUCKET("BitBucket"),
+    GITLAB("GitLab");
+
+    private String name;
+
+    VCType(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

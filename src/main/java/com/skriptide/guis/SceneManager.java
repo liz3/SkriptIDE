@@ -432,6 +432,7 @@ public class SceneManager extends Application {
                 versionControl.setTitle("SkriptIDE Version Control Setup");
                 versionControl.centerOnScreen();
                 vcController = versionControlLoader.getController();
+                vcController.init();
             } catch (IOException e) {
                 e.printStackTrace();
             }

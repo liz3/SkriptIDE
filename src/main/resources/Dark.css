@@ -58,7 +58,7 @@
 .code-area {
 
     -fx-background-color: #2c2c2c;
-    -fx-text-fill: #7a8080
+    -fx-text-fill: #7a8080;
 
 }
 
@@ -112,4 +112,9 @@
 
     -fx-background-color: #484848;
     -fx-text-fill: #7a8080;
+}
+
+.code-area {
+    -fx-text-fill: white;
+    -fx-fill: white;
 }
