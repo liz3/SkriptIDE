@@ -470,6 +470,7 @@ public class SceneManager extends Application {
                 settings.setTitle("SkriptIDE Settings");
                 settings.centerOnScreen();
                 settingsController = settingsLoader.getController();
+                settingsController.init();
             } catch (IOException e) {
                 e.printStackTrace();
             }

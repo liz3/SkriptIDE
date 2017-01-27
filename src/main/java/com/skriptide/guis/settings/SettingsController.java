@@ -1,5 +1,7 @@
 package com.skriptide.guis.settings;
 
+import com.skriptide.theme.Theme;
+import com.skriptide.theme.ThemeCreator;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -71,5 +73,7 @@ public class SettingsController {
     @FXML
     public Button applyBtn;
 
+    public void init() {
 
+    }
 }
