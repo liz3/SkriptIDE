@@ -2,6 +2,7 @@ package com.skriptide.util;
 
 import com.jcraft.jsch.*;
 import com.skriptide.config.Config;
+import com.skriptide.include.Project;
 
 import java.io.*;
 import java.util.HashMap;

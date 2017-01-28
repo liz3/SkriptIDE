@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="absolutePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="488.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.idegui.IdeGuiController">
+<BorderPane fx:id="absolutePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="488.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.gui.controller.IdeGuiController">
    <center>
       <BorderPane fx:id="mainBorderPane" BorderPane.alignment="CENTER">
          <center>
@@ -23,7 +23,7 @@
          <top>
             <MenuBar fx:id="mainMenuMenuBar" BorderPane.alignment="CENTER">
                <menus>
-                  <Menu mnemonicParsing="false" text="File">
+                  <Menu fx:id="filePoint" mnemonicParsing="false" text="File">
                      <items>
                         <MenuItem fx:id="newProjectMenuPoint" mnemonicParsing="false" text="New Project" />
                         <Menu fx:id="openResentMenu" mnemonicParsing="false" text="Open Recent" />

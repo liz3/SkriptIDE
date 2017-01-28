@@ -1,6 +1,8 @@
 package com.skriptide.codemanage;
 
-import com.skriptide.guis.SceneManager;
+import com.skriptide.Main;
+import com.skriptide.gui.OpenProject;
+import com.skriptide.gui.SceneManager;
 import com.skriptide.util.skunityapi.*;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
@@ -9,7 +11,10 @@ import javafx.stage.Popup;
 import org.fxmisc.richtext.*;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,10 +24,10 @@ import java.util.regex.Pattern;
 public class ControlMain {
 
 
-    private static final SkUnityAPI skUnity = new SkUnityAPI();
+    private final SkUnityAPI skUnity = new SkUnityAPI();
 
 
-    public static void controlCode(CodeArea code, Tab tab) {
+    public void controlCode(CodeArea code, Tab tab, OpenProject openProject) {
 
 
 
@@ -43,13 +48,15 @@ public class ControlMain {
         tab.setContent(code);
         toolTip(code);
 
-        if (SceneManager.debugMode) {
+        if (Main.debugMode) {
             System.out.println("Highlighted : " + code.getText());
         }
-        SceneManager.mainWindowController.setAutoComplete(code);
+       openProject.setArea(code);
+
+        openProject.setAutoConplete();
     }
 
-    private static void toolTip(CodeArea area) {
+    private  void toolTip(CodeArea area) {
 
 
         Popup popup = new Popup();
@@ -76,7 +83,7 @@ public class ControlMain {
 
 
     }
-    private static StyleSpans<Collection<String>> computeHighlighting(String text) {
+    private StyleSpans<Collection<String>> computeHighlighting(String text) {
         Matcher matcher = PATTERN.matcher(text);
         int lastKwEnd = 0;
         StyleSpansBuilder<Collection<String>> spansBuilder
@@ -110,29 +117,29 @@ public class ControlMain {
         return spansBuilder.create();
     }
 
-    public static String SEARCHED = "";
-    private static final String[] CONDITIONS = getCons();
-    private static final String[] EFFECTS = getEffects();
-    private static final String[] EVENTS = getEvents();
-    private static final String[] EXPRESSIONS = getExpressions();
-    private static final String[] TYPES = getTypes();
-    private static final String[] SUPERS = getSupers();
-    private static final String CONDITIONS_PATTERN = "\\b(" + String.join("|", CONDITIONS) + ")\\b";
-    private static final String EFFECTS_PATTERN = "\\b(" + String.join("|", EFFECTS) + ")\\b";
-    private static final String EVENTS_PATTERN = "\\b(" + String.join("|", EVENTS) + ")\\b";
-    private static final String EXPRESSIONS_PATTERN = "\\b(" + String.join("|", EXPRESSIONS) + ")\\b";
-    private static final String TYPES_PATTERN = "\\b(" + String.join("|", TYPES) + ")\\b";
-    private static final String SUPERS_PATTERN = "\\b(" + String.join("|", SUPERS) + ")\\b";
-    private static final String SEARCHED_PATTERN = "\\b" + SEARCHED + "\\b";
-    private static final String PAREN_PATTERN = "\\(|\\)";
-    private static final String BRACE_PATTERN = "\\{|\\}";
-    private static final String BRACKET_PATTERN = "\\[|\\]";
-    private static final String SEMICOLON_PATTERN = "\\;";
-    private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
-    private static final String COMMENT_PATTERN = "#[^\n]*";
+    public String SEARCHED = "";
+    private final String[] CONDITIONS = getCons();
+    private final String[] EFFECTS = getEffects();
+    private final String[] EVENTS = getEvents();
+    private final String[] EXPRESSIONS = getExpressions();
+    private final String[] TYPES = getTypes();
+    private final String[] SUPERS = getSupers();
+    private final String CONDITIONS_PATTERN = "\\b(" + String.join("|", CONDITIONS) + ")\\b";
+    private final String EFFECTS_PATTERN = "\\b(" + String.join("|", EFFECTS) + ")\\b";
+    private final String EVENTS_PATTERN = "\\b(" + String.join("|", EVENTS) + ")\\b";
+    private final String EXPRESSIONS_PATTERN = "\\b(" + String.join("|", EXPRESSIONS) + ")\\b";
+    private final String TYPES_PATTERN = "\\b(" + String.join("|", TYPES) + ")\\b";
+    private final String SUPERS_PATTERN = "\\b(" + String.join("|", SUPERS) + ")\\b";
+    private final String SEARCHED_PATTERN = "\\b" + SEARCHED + "\\b";
+    private final String PAREN_PATTERN = "\\(|\\)";
+    private final String BRACE_PATTERN = "\\{|\\}";
+    private final String BRACKET_PATTERN = "\\[|\\]";
+    private final String SEMICOLON_PATTERN = "\\;";
+    private final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
+    private final String COMMENT_PATTERN = "#[^\n]*";
 
 
-    private static final Pattern PATTERN = Pattern.compile(
+    private final Pattern PATTERN = Pattern.compile(
             "(?<CONDITIONS>" + CONDITIONS_PATTERN + ")"
                     + "|(?<PAREN>" + PAREN_PATTERN + ")"
                     + "|(?<BRACE>" + BRACE_PATTERN + ")"
@@ -148,7 +155,7 @@ public class ControlMain {
                     + "|(?<SEARCHED>" + SEARCHED_PATTERN + ")"
             , Pattern.CASE_INSENSITIVE);
 
-    private static String[] getCons() {
+    private String[] getCons() {
 
         String[] cnsArray;
         ArrayList<ApiCondition> conditions = skUnity.getConditions();
@@ -164,7 +171,7 @@ public class ControlMain {
         return cnsArray;
     }
 
-    private static String[] getEffects() {
+    private String[] getEffects() {
 
         String[] cnsArray;
         ArrayList<ApiEffect> effects = skUnity.getEffects();
@@ -180,7 +187,7 @@ public class ControlMain {
         return cnsArray;
     }
 
-    private static String[] getEvents() {
+    private String[] getEvents() {
 
         String[] cnsArray;
         ArrayList<ApiEvent> events = skUnity.getEvents();
@@ -196,7 +203,7 @@ public class ControlMain {
         return cnsArray;
     }
 
-    private static String[] getExpressions() {
+    private String[] getExpressions() {
 
         String[] cnsArray;
         ArrayList<ApiExpression> expressions = skUnity.getExpressions();
@@ -212,7 +219,7 @@ public class ControlMain {
         return cnsArray;
     }
 
-    private static String[] getTypes() {
+    private String[] getTypes() {
 
         String[] cnsArray;
         ArrayList<ApiType> types = skUnity.getTypes();
@@ -228,7 +235,7 @@ public class ControlMain {
         return cnsArray;
     }
 
-    private static String[] getSupers() {
+    private String[] getSupers() {
 
         Supers supers = new Supers();
 

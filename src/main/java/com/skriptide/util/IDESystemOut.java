@@ -1,6 +1,5 @@
 package com.skriptide.util;
 
-import com.skriptide.guis.SceneManager;
 
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
@@ -23,9 +22,10 @@ public class IDESystemOut extends PrintStream {
 		if (!msg.startsWith("["))
 			msg = " " + msg;
 		String f = "[" + sdf.format(cal.getTime()) + " | INFO]" + msg;
-		if(SceneManager.debugArea != null) {
+		//TODO Add the DebugArea to the main class or so
+	/*	if(IdeGuiController.controller. != null) {
 			SceneManager.debugArea.appendText(f + System.getProperty("line.separator"));
-		}
+		} */
 		super.println(f);
 
 	}

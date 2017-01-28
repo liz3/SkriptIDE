@@ -1,6 +1,7 @@
 package com.skriptide.codemanage;
 
-import com.skriptide.guis.SceneManager;
+import com.skriptide.Main;
+import com.skriptide.gui.SceneManager;
 
 /**
  * Created by Liz3ga on 01.09.2016.
@@ -16,7 +17,7 @@ class Supers {
 		};
 		supervArray = list;
 
-		if(SceneManager.debugMode) {
+		if(Main.debugMode) {
 			System.out.println("Loaded supers!");
 		}
 

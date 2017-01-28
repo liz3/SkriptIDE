@@ -1,4 +1,4 @@
-package com.skriptide.guis.exportgui;
+package com.skriptide.gui.controller;
 
 import com.skriptide.util.ExportSettings;
 import javafx.fxml.FXML;
@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 import java.util.HashMap;
 
 /**
- * Created by yannh on 20.01.2017.
+ * Created by yannh on 28.01.2017.
  */
 public class ExportSettingsGuiController {
 
@@ -55,12 +55,15 @@ public class ExportSettingsGuiController {
                 }
 
             }
+            if(!wantedName.equals("")) {
 
-            ExportSettings.addEntry(new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()), customPath.getText());
-            entriesList.getItems().add(customPath.getText());
 
-            all.put(customPath.getText(), new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()));
-            customPath.clear();
+                ExportSettings.addEntry(new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()), customPath.getText());
+                entriesList.getItems().add(customPath.getText());
+
+                all.put(customPath.getText(), new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()));
+                customPath.clear();
+            }
         });
 
         delBtn.setOnAction(event -> {
@@ -72,7 +75,7 @@ public class ExportSettingsGuiController {
 
                 if (n.equalsIgnoreCase(selected)) {
 
-                        t = n;
+                    t = n;
 
                 }
             }
@@ -90,7 +93,7 @@ public class ExportSettingsGuiController {
 
                 if (n.equalsIgnoreCase(selected)) {
 
-                  truePath = n;
+                    truePath = n;
 
                 }
             }
@@ -122,4 +125,5 @@ public class ExportSettingsGuiController {
             }
         });
     }
+
 }

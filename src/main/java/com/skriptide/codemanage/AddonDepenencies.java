@@ -7,9 +7,7 @@ import javafx.scene.input.MouseEvent;
 import org.fxmisc.richtext.CodeArea;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 /**
  * Created by liz3 on 29.10.16.
