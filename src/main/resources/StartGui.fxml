@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="342.0" prefWidth="391.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.startgui.StartGuiController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="342.0" prefWidth="397.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.gui.controller.StartGuiController">
     <children>
         <Button fx:id="okBtn" layoutX="332.0" layoutY="303.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="ok" />
         <Button fx:id="cancelBtn" layoutX="260.0" layoutY="303.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Cancel" />
