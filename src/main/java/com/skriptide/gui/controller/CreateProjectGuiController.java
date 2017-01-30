@@ -66,8 +66,12 @@ public class CreateProjectGuiController {
             if(dir.exists()) {
                 return;
             }
+
             String current = pluginVersionComboBox.getSelectionModel().getSelectedItem();
             Skript s = null;
+            if(current == null) {
+                return;
+            }
             for(Skript sk : Main.manager.getSkripts().values()) {
 
                 String b = sk.getName() + " - " + sk.getVersion();

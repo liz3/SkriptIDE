@@ -2,7 +2,6 @@ package com.skriptide.gui;
 
 import com.skriptide.Main;
 import com.skriptide.gui.controller.*;
-import com.skriptide.util.ExportSettings;
 import com.skriptide.util.skunityapi.SkUnityAPI;
 import com.skriptide.util.systemutils.OperatingSystemType;
 import com.skriptide.util.systemutils.OsUtils;
@@ -42,9 +41,7 @@ import java.util.Optional;
 public class SceneManager extends Application {
 
 
-    public void setMainController(IdeGuiController mainController) {
-        this.mainController = mainController;
-    }
+
 
     private IdeGuiController mainController;
     private static final int SPLASH_WIDTH = 674;
@@ -211,8 +208,7 @@ public class SceneManager extends Application {
         }
         stage.setScene(scene);
         IdeGuiController controller = loader.getController();
-        controller.initGui(this);
-
+        controller.initGui();
         this.mainController = controller;
 
 
@@ -229,6 +225,9 @@ public class SceneManager extends Application {
     public void openCreateProjectGui() {
 
         if(activeGuis.containsKey(GuiType.CREATE_PROJECT)) {
+
+            CreateProjectGuiController c = activeGuis.get(GuiType.CREATE_PROJECT).getController();
+            c.initGui();
 
             activeGuis.get(GuiType.CREATE_PROJECT).getStage().show();
             return;

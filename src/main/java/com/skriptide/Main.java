@@ -1,5 +1,6 @@
 package com.skriptide;
 
+import com.skriptide.codemanage.AutoSaver;
 import com.skriptide.gui.SceneManager;
 
 /**
@@ -7,6 +8,7 @@ import com.skriptide.gui.SceneManager;
  */
 public class Main {
 
+    public static AutoSaver saver = null;
     public static SceneManager sceneManager;
     public static Manager manager;
     public static boolean debugMode;

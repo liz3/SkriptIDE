@@ -22,6 +22,8 @@ public class AutoComplete {
             KeyCode code = event.getCode();
 
             if (event.isShiftDown()) {
+                event.consume();
+
                 if (code == KeyCode.DIGIT8) {
 
                     javafx.application.Platform.runLater(() -> {
@@ -43,6 +45,7 @@ public class AutoComplete {
                 event.consume();
             }
             if (event.isShortcutDown()) {
+                event.consume();
                 if (code == KeyCode.DIGIT7) {
 
 
@@ -55,6 +58,7 @@ public class AutoComplete {
                 }
                 if (code == KeyCode.DIGIT8) {
 
+
                     javafx.application.Platform.runLater(() -> {
 
                         area.replaceText(area.getCaretPosition(), area.getCaretPosition(), area.getText(area.getCaretPosition(), area.getCaretPosition()) + "]");
@@ -62,7 +66,7 @@ public class AutoComplete {
                     });
                 }
 
-                event.consume();
+
             } else if (isChar(code) && !(event.isAltDown()) && !(event.isControlDown()) && !(event.isShortcutDown()) && code != KeyCode.BACK_SPACE && code != KeyCode.ENTER) {
 
 

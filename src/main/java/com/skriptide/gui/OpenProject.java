@@ -30,16 +30,19 @@ public class OpenProject {
     private AddonDepenencies depenencies;
     private TabPane tabPane;
     private Button cmdSendBtn;
+    private ListView<String> dependecieList;
+    private ExternWindow externWindow;
 
     public void setTab(Tab tab) {
         this.tab = tab;
     }
 
     public OpenProject(Tab tab, Project project, CodeArea area, ListView<String> dependecieList, TabPane tabPane, Button cmdSendBtn) {
+        externWindow = null;
         this.tab = tab;
         this.project = project;
         this.area = area;
-
+        this.dependecieList = dependecieList;
         this.tabPane = tabPane;
         this.cmdSendBtn = cmdSendBtn;
 
@@ -47,7 +50,7 @@ public class OpenProject {
         completeList = new CompleteList();
         depenencies = new AddonDepenencies(area, new SkUnityAPI(), dependecieList);
         complete = new AutoComplete();
-        controlMain.controlCode(area, tab, this);
+        controlMain.controlCode(area, tab, this, true);
 
         tab.setOnCloseRequest(event -> {
 
@@ -62,8 +65,27 @@ public class OpenProject {
 
     }
 
+    public void toExtern() {
+
+        externWindow = new ExternWindow(this.tab, this);
+
+    }
+    public void reAttach() {
+
+        if(externWindow == null) {
+            return;
+        }
+        setArea(externWindow.getArea());
+        externWindow.getStage().close();
+        tabPane.getTabs().add(tab);
+    }
     public void resetHighlighting() {
-        controlMain.controlCode(area, tab, this);
+
+        controlMain = new ControlMain();
+        completeList = new CompleteList();
+        depenencies = new AddonDepenencies(area, new SkUnityAPI(), dependecieList);
+        complete = new AutoComplete();
+        controlMain.controlCode(area, tab, this, true);
     }
     public void setAutoConplete() {
         complete.setAutoComplete(area, completeList, tabPane, cmdSendBtn, depenencies);

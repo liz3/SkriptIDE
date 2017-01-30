@@ -1,15 +1,23 @@
 package com.skriptide.gui.controller;
 
 import com.skriptide.Main;
+import com.skriptide.codemanage.AutoSaver;
 import com.skriptide.codemanage.CompleteList;
 import com.skriptide.codemanage.Search;
+import com.skriptide.gui.ExternWindow;
 import com.skriptide.gui.OpenProject;
 import com.skriptide.gui.SceneManager;
 import com.skriptide.include.Project;
+import com.skriptide.util.DragResizer;
 import com.skriptide.util.ExportSettings;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.WindowEvent;
 import org.fxmisc.richtext.CodeArea;
 
 import java.util.HashMap;
@@ -111,6 +119,10 @@ public class IdeGuiController {
     @FXML
     private CodeArea consoleOutputTextArea;
 
+    private ContextMenu menu;
+    private ContextMenu tabMenu;
+
+
     public void addProject(Project project) {
 
         TreeItem<String> projectItem = new TreeItem<>(project.getName());
@@ -123,9 +135,43 @@ public class IdeGuiController {
 
     }
 
-    public void initGui(SceneManager manager) {
+    public void initGui() {
 
 
+        codeTabPane.setOnMouseClicked(event -> {
+
+
+            if (event.getButton().name().equals("SECONDARY") && codeTabPane.getTabs().size() != 0) {
+
+                tabMenu = new ContextMenu();
+
+                MenuItem item = new MenuItem("Open in new Tab");
+                tabMenu.getItems().add(item);
+
+                item.setOnAction(event1 -> {
+
+                    Tab active = codeTabPane.getSelectionModel().getSelectedItem();
+                    OpenProject p = null;
+                    for(OpenProject pr : Main.sceneManager.getOpenProjects()) {
+
+                        if(pr.getTab().equals(active)) {
+                            p = pr;
+                        }
+
+                    }
+                    assert p != null;
+                    p.toExtern();
+                    codeTabPane.getTabs().remove(p.getTab());
+
+
+                });
+
+                tabMenu.show(codeTabPane, event.getScreenX(), event.getScreenY());
+            } else if (tabMenu != null && tabMenu.isShowing()) {
+                tabMenu.hide();
+            }
+
+        });
         exportSettingsPoint.setOnAction(event -> Main.sceneManager.openExportSettings());
         rootItem = new TreeItem<>("Projects");
         rootItem.setExpanded(true);
@@ -134,44 +180,89 @@ public class IdeGuiController {
         newProjectMenuPoint.setOnAction(event -> Main.sceneManager.openCreateProjectGui());
         manageAddonsPoint.setOnAction(event -> Main.sceneManager.openManageVersions());
 
+        codeTabPane.getScene().getWindow().setOnCloseRequest(event -> {
+
+            for(OpenProject op : Main.sceneManager.getOpenProjects()) {
+
+                op.getProject().writeCode(op.getArea().getText());
+            }
+
+            System.exit(0);
+        });
+
         for (Project pr : Main.manager.getProjects().values()) {
             addProject(pr);
         }
 
+       new DragResizer().makeResizable(lowerTabPane);
         projectsList.setOnMouseClicked(event -> {
 
-            if (projectsList.getSelectionModel().getSelectedItem() == null) {
-                return;
-            }
-            String selection = projectsList.getSelectionModel().getSelectedItem().getValue();
+            MouseButton btn = event.getButton();
 
-            if (selection.endsWith(".sk")) {
+            if (projectsList.getSelectionModel().getSelectedItem() != null) {
 
-                String tName = selection.split(Pattern.quote("."))[0];
+                if (btn == MouseButton.SECONDARY) {
+                    if (menu == null || !menu.isShowing()) {
+                        menu = new ContextMenu();
+                        MenuItem item = new MenuItem("Delete");
+                        MenuItem item1 = new MenuItem("Rename");
+                        MenuItem item2 = new MenuItem("Move");
+                        Menu serverList = new Menu("Change server");
 
 
-                Project p = Main.manager.getProjects().get(tName);
+                        menu.getItems().clear();
+                        menu.getItems().addAll(item, item1, item2, serverList);
 
-                for (OpenProject o : Main.sceneManager.getOpenProjects()) {
 
-                    if (o.getProject().equals(p)) {
-                        return;
+                        menu.show(projectsList, event.getScreenX(), event.getScreenY());
                     }
+                } else if (btn == MouseButton.PRIMARY) {
 
-                }
-                if (p != null) {
-                    Tab tab = new Tab(p.getName());
-                    CodeArea area = new CodeArea();
-                    tab.setContent(area);
-                    area.appendText(p.getCurentCode());
-                    codeTabPane.getTabs().add(tab);
+                    if (menu == null || !menu.isShowing()) {
 
-                    OpenProject op = new OpenProject(tab, p, area, prDependList, codeTabPane, commandSendBtn);
-                    Main.sceneManager.getOpenProjects().add(op);
+
+                        if (projectsList.getSelectionModel().getSelectedItem() == null) {
+                            return;
+                        }
+                        String selection = projectsList.getSelectionModel().getSelectedItem().getValue();
+
+                        if (selection.endsWith(".sk")) {
+
+                            String tName = selection.split(Pattern.quote("."))[0];
+
+
+                            Project p = Main.manager.getProjects().get(tName);
+
+                            for (OpenProject o : Main.sceneManager.getOpenProjects()) {
+
+                                if (o.getProject().equals(p)) {
+                                    return;
+                                }
+
+                            }
+                            if (p != null) {
+                                Tab tab = new Tab(p.getName());
+                                CodeArea area = new CodeArea();
+                                tab.setContent(area);
+                                area.appendText(p.getCurentCode());
+                                codeTabPane.getTabs().add(tab);
+
+                                OpenProject op = new OpenProject(tab, p, area, prDependList, codeTabPane, commandSendBtn);
+                                Main.sceneManager.getOpenProjects().add(op);
+                                if(Main.saver == null) {
+                                    Main.saver = new AutoSaver();
+
+                                }
+                            }
+                        }
+                    } else {
+                        if (menu.isShowing() && menu != null) {
+                            menu.hide();
+                        }
+                    }
                 }
+
             }
-
-
         });
         filePoint.setOnShown(event -> {
 
@@ -246,6 +337,8 @@ public class IdeGuiController {
                     Search.search(tOp, searchTxTField.getText());
                 } else {
                     tOp.resetHighlighting();
+
+
                 }
             }
         });

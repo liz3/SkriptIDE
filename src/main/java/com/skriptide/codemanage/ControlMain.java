@@ -27,7 +27,7 @@ public class ControlMain {
     private final SkUnityAPI skUnity = new SkUnityAPI();
 
 
-    public void controlCode(CodeArea code, Tab tab, OpenProject openProject) {
+    public void controlCode(CodeArea code, Tab tab, OpenProject openProject, boolean setAutoComplete) {
 
 
 
@@ -53,6 +53,7 @@ public class ControlMain {
         }
        openProject.setArea(code);
 
+        if(setAutoComplete)
         openProject.setAutoConplete();
     }
 
