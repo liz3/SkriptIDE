@@ -1,14 +1,9 @@
 package com.skriptide.codemanage;
 
 import com.skriptide.Main;
+import com.skriptide.gui.OpenFile;
 import com.skriptide.gui.OpenProject;
-import com.skriptide.gui.SceneManager;
-import com.skriptide.include.Project;
 import javafx.application.Platform;
-import javafx.scene.control.Tab;
-
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 
 /**
  * Created by yannh on 26.01.2017.
@@ -32,10 +27,13 @@ public class AutoSaver {
                  @Override
                  public void run() {
 
-                     for(OpenProject pr : Main.sceneManager.getOpenProjects()) {
+                     for(OpenProject pr : Main.sceneManager.getOpenFiles()) {
 
-                         pr.getProject().writeCode(pr.getArea().getText());
+                         for(OpenFile file : pr.getOpenFiles().values()) {
+                             pr.getProject().writeCode(file.getArea().getText(), file.getProject().getName());
+                         }
                      }
+
                  }
              });
 

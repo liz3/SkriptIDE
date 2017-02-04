@@ -2,11 +2,10 @@ package com.skriptide.include;
 
 import com.skriptide.Main;
 import com.skriptide.config.Config;
-import com.skriptide.gui.GuiType;
-import com.skriptide.gui.controller.IdeGuiController;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 /**
  * Created by yannh on 27.01.2017.
@@ -18,12 +17,21 @@ public class Project {
 
     private File confFile;
     private Config config;
+
+    public String getFolderPath() {
+        return folderPath;
+    }
+
     private String name;
     private Server server;
     private Skript skript;
     private String folderPath;
     private String notes;
+    private HashMap<String, File> skFiles;
 
+    public HashMap<String, File> getSkFiles() {
+        return skFiles;
+    }
 
     public String getName() {
         return name;
@@ -37,21 +45,30 @@ public class Project {
         return hasServer;
     }
 
-    private File skFile;
+
     private boolean hasServer;
     public Project(Config config, File f) {
 
+        this.skFiles = new HashMap<>();
         this.confFile = f;
         this.name = config.getString("name");
         this.folderPath = config.getString("folder-path");
         this.skript = new Skript(config.getString("sk.name"), config.getString("sk.version"), config.getString("sk.version"));
-        skFile = new File(folderPath, this.name + ".sk");
+        ;
         String serverPath = config.getString("server-path");
         if(serverPath != null && !serverPath.equals("")) {
             this.server = new Server(new Config(serverPath), new File(serverPath));
             hasServer = true;
         } else {
             hasServer = false;
+        }
+        for(String str : config.getAll("files")) {
+
+            File file = new File(this.folderPath, config.getString("files." + str));
+
+            if(file.exists()) {
+                skFiles.put(config.getString("files." + str), file);
+            }
         }
     }
 
@@ -66,6 +83,7 @@ public class Project {
         this.folderPath = path;
         this.hasServer = false;
         this.skript = skript;
+        this.skFiles = new HashMap<>();
     }
     public void createProject() {
 
@@ -87,14 +105,18 @@ public class Project {
             this.config.set("sk.name", skript.getName());
             this.config.set("sk.version", skript.getVersion());
             this.config.set("sk.path", skript.getPath());
-            this.config.save();
+            this.config.set("files." + this.name, this.name + ".sk");
 
-            this.skFile = new File(this.folderPath, this.name + ".sk");
+            System.out.println("Name: "+this.name);
+            System.out.println("Path: "+this.folderPath);
+            File newSk = new File(this.folderPath, this.name + ".sk");
             try {
-                this.skFile.createNewFile();
+                newSk.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            this.skFiles.put(this.name + ".sk", newSk);
+            this.config.save();
             Main.manager.addProject(this);
 
 
@@ -103,13 +125,39 @@ public class Project {
         }
 
     }
-    public void writeCode(String code) {
+    public void addSkiptFile(String name) {
+
+        String t = name + ".sk";
+        for(String str : skFiles.keySet()) {
+
+            if(t.equalsIgnoreCase(str)) {
+                return;
+            }
+
+        }
+        File f = new File(folderPath, t);
+        try {
+            if(f.createNewFile()) {
+
+                skFiles.put(t, f);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeCode(String code, String name) {
 
 
-
+        File f = null;
+        if(skFiles.containsKey(name)) {
+            f = skFiles.get(name);
+        } else {
+            return;
+        }
         FileWriter fw = null;
         try {
-            fw = new FileWriter(skFile);
+            fw = new FileWriter(f);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -118,7 +166,7 @@ public class Project {
 
             bw.write(code);
             if(Main.debugMode) {
-                System.out.println("Wrote code: " + skFile.getAbsolutePath());
+                System.out.println("Wrote code: " + f.getAbsolutePath());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -130,11 +178,18 @@ public class Project {
         }
 
     }
-    public String getCurentCode() {
+    public String getCurentCode(String name) {
+
+        File f = null;
+        if(skFiles.containsKey(name)) {
+            f = skFiles.get(name);
+        } else {
+            return null;
+        }
 
         String code = "";
         try {
-            InputStream stream = new FileInputStream(skFile);
+            InputStream stream = new FileInputStream(f);
 
             InputStreamReader input = new InputStreamReader(stream, StandardCharsets.UTF_8);
             BufferedReader reader = new BufferedReader(input);
@@ -153,7 +208,7 @@ public class Project {
                 while (line != null);
 
                 if(Main.debugMode) {
-                    System.out.println("Open code: " + skFile.getAbsolutePath());
+                    System.out.println("Open code: " + f.getAbsolutePath());
                 }
                 reader.close();
                 input.close();
@@ -170,7 +225,6 @@ public class Project {
 
         return null;
     }
-
     public String getNotes() {
         return notes;
     }

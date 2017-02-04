@@ -46,7 +46,7 @@ public class SceneManager extends Application {
     private IdeGuiController mainController;
     private static final int SPLASH_WIDTH = 674;
     private static final int SPLASH_HEIGHT = 393;
-    public static OpenProject selected;
+    public static OpenFile selected;
     public static SceneManager sceneManager;
     private boolean isNew = false;
     private Pane splashLayout;
@@ -55,19 +55,19 @@ public class SceneManager extends Application {
         return activeGuis;
     }
 
-    public List<OpenProject> getOpenProjects() {
-        return openProjects;
+    public List<OpenProject> getOpenFiles() {
+        return openFiles;
     }
 
     private ProgressBar loadProgress;
     private Label progressText;
     private HashMap<GuiType, Gui> activeGuis;
-    private List<OpenProject> openProjects;
+    private List<OpenProject> openFiles;
 
     public SceneManager() {
 
         activeGuis = new HashMap<>();
-        openProjects = new ArrayList<>();
+        openFiles = new ArrayList<>();
         sceneManager = this;
 
 

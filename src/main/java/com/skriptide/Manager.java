@@ -155,7 +155,7 @@ public class Manager {
 
         System.out.println("open");
         if (!new File(this.projectsPath).exists()) {
-            Path pathToFile = Paths.get(this.projectsPath + "\\data.yaml");
+            Path pathToFile = Paths.get(this.projectsPath + "/data.yaml");
             try {
                 Files.createDirectories(pathToFile.getParent());
             } catch (IOException e) {
@@ -170,7 +170,7 @@ public class Manager {
             f.delete();
         }
         if (!new File(this.serversPath).exists()) {
-            Path pathToFile = Paths.get(this.serversPath + "\\data.yaml");
+            Path pathToFile = Paths.get(this.serversPath + "/data.yaml");
             Files.createDirectories(pathToFile.getParent());
             Files.createFile(pathToFile);
             File f = new File(pathToFile.toUri());

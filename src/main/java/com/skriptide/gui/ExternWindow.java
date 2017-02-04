@@ -6,7 +6,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import org.fxmisc.richtext.CodeArea;
 
 import java.util.ArrayList;
@@ -30,16 +29,16 @@ public class ExternWindow {
         return stage;
     }
 
-    public OpenProject getProject() {
+    public OpenFile getProject() {
         return project;
     }
 
     private Tab tab;
     private Stage stage;
-    private OpenProject project;
+    private OpenFile project;
     private CodeArea area;
 
-    public ExternWindow(Tab tab, OpenProject project) {
+    public ExternWindow(Tab tab, OpenFile project) {
 
         this.tab = tab;
         this.project = project;

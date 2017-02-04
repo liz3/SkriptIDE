@@ -1,8 +1,7 @@
 package com.skriptide.codemanage;
 
 import com.skriptide.Main;
-import com.skriptide.gui.OpenProject;
-import com.skriptide.gui.SceneManager;
+import com.skriptide.gui.OpenFile;
 import com.skriptide.util.skunityapi.*;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
@@ -27,7 +26,7 @@ public class ControlMain {
     private final SkUnityAPI skUnity = new SkUnityAPI();
 
 
-    public void controlCode(CodeArea code, Tab tab, OpenProject openProject, boolean setAutoComplete) {
+    public void controlCode(CodeArea code, Tab tab, OpenFile openFile, boolean setAutoComplete) {
 
 
 
@@ -51,12 +50,11 @@ public class ControlMain {
         if (Main.debugMode) {
             System.out.println("Highlighted : " + code.getText());
         }
-       openProject.setArea(code);
+       openFile.setArea(code);
 
         if(setAutoComplete)
-        openProject.setAutoConplete();
+        openFile.setAutoComplete();
     }
-
     private  void toolTip(CodeArea area) {
 
 

@@ -4,24 +4,18 @@ import com.skriptide.Main;
 import com.skriptide.codemanage.AutoSaver;
 import com.skriptide.codemanage.CompleteList;
 import com.skriptide.codemanage.Search;
-import com.skriptide.gui.ExternWindow;
+import com.skriptide.gui.OpenFile;
 import com.skriptide.gui.OpenProject;
-import com.skriptide.gui.SceneManager;
 import com.skriptide.include.Project;
 import com.skriptide.util.DragResizer;
 import com.skriptide.util.ExportSettings;
-import javafx.application.Platform;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.WindowEvent;
 import org.fxmisc.richtext.CodeArea;
 
 import java.util.HashMap;
-import java.util.regex.Pattern;
 
 /**
  * Created by yannh on 27.01.2017.
@@ -127,9 +121,12 @@ public class IdeGuiController {
 
         TreeItem<String> projectItem = new TreeItem<>(project.getName());
 
-        TreeItem<String> item = new TreeItem<>(project.getName() + ".sk");
+        for (String str : project.getSkFiles().keySet()) {
 
-        projectItem.getChildren().add(item);
+            TreeItem<String> item1 = new TreeItem<>(str);
+
+            projectItem.getChildren().add(item1);
+        }
 
         rootItem.getChildren().add(projectItem);
 
@@ -151,12 +148,18 @@ public class IdeGuiController {
                 item.setOnAction(event1 -> {
 
                     Tab active = codeTabPane.getSelectionModel().getSelectedItem();
-                    OpenProject p = null;
-                    for(OpenProject pr : Main.sceneManager.getOpenProjects()) {
+                    OpenFile p = null;
+                    for (OpenProject o : Main.sceneManager.getOpenFiles()) {
 
-                        if(pr.getTab().equals(active)) {
-                            p = pr;
+
+                        for(OpenFile f : o.getOpenFiles().values()) {
+
+                            if (f.getTab().equals(active)) {
+                                p = f;
+                            }
                         }
+
+
 
                     }
                     assert p != null;
@@ -182,19 +185,19 @@ public class IdeGuiController {
 
         codeTabPane.getScene().getWindow().setOnCloseRequest(event -> {
 
-            for(OpenProject op : Main.sceneManager.getOpenProjects()) {
 
-                op.getProject().writeCode(op.getArea().getText());
-            }
+               //TODO save
+
 
             System.exit(0);
         });
+
 
         for (Project pr : Main.manager.getProjects().values()) {
             addProject(pr);
         }
 
-       new DragResizer().makeResizable(lowerTabPane);
+        new DragResizer().makeResizable(lowerTabPane);
         projectsList.setOnMouseClicked(event -> {
 
             MouseButton btn = event.getButton();
@@ -228,31 +231,36 @@ public class IdeGuiController {
 
                         if (selection.endsWith(".sk")) {
 
-                            String tName = selection.split(Pattern.quote("."))[0];
+
+                            String fileName = selection;
+                            String projectName = projectsList.getSelectionModel().getSelectedItem().getParent().getValue();
 
 
-                            Project p = Main.manager.getProjects().get(tName);
+                            Project p = Main.manager.getProjects().get(projectName);
 
-                            for (OpenProject o : Main.sceneManager.getOpenProjects()) {
+                            for (OpenProject o : Main.sceneManager.getOpenFiles()) {
 
                                 if (o.getProject().equals(p)) {
+
+                                    if(p == null) {
+                                        return;
+                                    }
+
+                                    if(o.getOpenFiles().containsKey(selection)){
+                                        return;
+                                    }
+                                    o.openFile(selection);
                                     return;
                                 }
 
                             }
-                            if (p != null) {
-                                Tab tab = new Tab(p.getName());
-                                CodeArea area = new CodeArea();
-                                tab.setContent(area);
-                                area.appendText(p.getCurentCode());
-                                codeTabPane.getTabs().add(tab);
+                            OpenProject openProject = new OpenProject(p, codeTabPane, commandSendBtn, prDependList);
 
-                                OpenProject op = new OpenProject(tab, p, area, prDependList, codeTabPane, commandSendBtn);
-                                Main.sceneManager.getOpenProjects().add(op);
-                                if(Main.saver == null) {
-                                    Main.saver = new AutoSaver();
+                            Main.sceneManager.getOpenFiles().add(openProject);
+                            openProject.openFile(selection);
 
-                                }
+                            if(Main.saver == null) {
+                                Main.saver = new AutoSaver();
                             }
                         }
                     } else {
@@ -292,19 +300,26 @@ public class IdeGuiController {
         codeTabPane.getSelectionModel().selectedItemProperty().addListener(
                 (ov, t, t1) -> {
                     Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-                    OpenProject tOp = null;
-                    for (OpenProject op : Main.sceneManager.getOpenProjects()) {
+                    OpenFile tOp = null;
+                    for (OpenProject o : Main.sceneManager.getOpenFiles()) {
 
-                        if (op.getTab().equals(tab)) {
-                            tOp = op;
+
+                        for(OpenFile f : o.getOpenFiles().values()) {
+
+                            if (f.getTab().equals(tab)) {
+                                tOp = f;
+                            }
                         }
+
+
+
                     }
 
                     if (tab != null) {
                         String name = tab.getText();
 
 
-                        if(tOp == null) {
+                        if (tOp == null) {
                             return;
                         }
                         CompleteList cl = CompleteList.getCurrentInstance();
@@ -312,24 +327,32 @@ public class IdeGuiController {
                             cl.win.hide();
                         }
 
-                        pathLabel.setText(tOp.getProject().getConfFile().getAbsolutePath());
+                        /*
+                        pathLabel.setText(tOp.get);
                         prNameLbl.setText("Name: " + tOp.getProject().getName());
-                        prServerLbl.setText("Server: " /* TODO get server name */);
+                        prServerLbl.setText("Server: " /* TODO get server name );
                         prSkVersionLbl.setText("Skript version: " + tOp.getProject().getSkript().getVersion());
                         prNotesArea.setText(tOp.getProject().getNotes());
-
+        */
 
                     }
                 }
         );
         searchTxTField.setOnKeyReleased(event -> {
             Tab tab = codeTabPane.getSelectionModel().getSelectedItem();
-            OpenProject tOp = null;
-            for (OpenProject op : Main.sceneManager.getOpenProjects()) {
+            OpenFile tOp = null;
+            for (OpenProject o : Main.sceneManager.getOpenFiles()) {
 
-                if (op.getTab().equals(tab)) {
-                    tOp = op;
+
+                for(OpenFile f : o.getOpenFiles().values()) {
+
+                    if (f.getTab().equals(tab)) {
+                        tOp = f;
+                    }
                 }
+
+
+
             }
             if (tab != null) {
                 if (searchTxTField.getText() != null && !searchTxTField.getText().equals("")) {
