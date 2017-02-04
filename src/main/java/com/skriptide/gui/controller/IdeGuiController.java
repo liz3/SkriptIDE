@@ -7,10 +7,15 @@ import com.skriptide.codemanage.Search;
 import com.skriptide.gui.OpenFile;
 import com.skriptide.gui.OpenProject;
 import com.skriptide.include.Project;
+import com.skriptide.include.Server;
 import com.skriptide.util.DragResizer;
 import com.skriptide.util.ExportSettings;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import org.fxmisc.richtext.CodeArea;
@@ -101,7 +106,7 @@ public class IdeGuiController {
     @FXML
     private Label runningServerLabel;
     @FXML
-    private ComboBox serverListComboBox;
+    private ComboBox<String> serverListComboBox;
     @FXML
     private Button startServerBtn;
     @FXML
@@ -152,13 +157,12 @@ public class IdeGuiController {
                     for (OpenProject o : Main.sceneManager.getOpenFiles()) {
 
 
-                        for(OpenFile f : o.getOpenFiles().values()) {
+                        for (OpenFile f : o.getOpenFiles().values()) {
 
                             if (f.getTab().equals(active)) {
                                 p = f;
                             }
                         }
-
 
 
                     }
@@ -175,6 +179,7 @@ public class IdeGuiController {
             }
 
         });
+        createServerMenuPoint.setOnAction(event -> Main.sceneManager.openServerProjectGui());
         exportSettingsPoint.setOnAction(event -> Main.sceneManager.openExportSettings());
         rootItem = new TreeItem<>("Projects");
         rootItem.setExpanded(true);
@@ -182,11 +187,36 @@ public class IdeGuiController {
         controller = this;
         newProjectMenuPoint.setOnAction(event -> Main.sceneManager.openCreateProjectGui());
         manageAddonsPoint.setOnAction(event -> Main.sceneManager.openManageVersions());
+        serverListComboBox.getItems().clear();
+        for(Server server : Main.manager.getServer().values()) {
 
+            serverListComboBox.getItems().add(server.getName());
+        }
+        commandSendBtn.setOnAction(event -> {
+            if(Main.runningServer !=null) {
+                Main.runningServer.sendCommamd(comandSendTextField.getText());
+                comandSendTextField.clear();
+            }
+        });
+        comandSendTextField.setOnKeyReleased(event -> {
+            if(event.getCode() == KeyCode.ENTER ){
+                if(Main.runningServer !=null) {
+                    Main.runningServer.sendCommamd(comandSendTextField.getText());
+                    comandSendTextField.clear();
+                }
+            }
+        });
+        startServerBtn.setOnAction(event -> {
+            consoleOutputTextArea.clear();
+            String selected = serverListComboBox.getSelectionModel().getSelectedItem();
+
+            Server server = Main.manager.getServer().get(selected);
+            server.startServer();
+        });
         codeTabPane.getScene().getWindow().setOnCloseRequest(event -> {
 
 
-               //TODO save
+            //TODO save
 
 
             System.exit(0);
@@ -201,22 +231,111 @@ public class IdeGuiController {
         projectsList.setOnMouseClicked(event -> {
 
             MouseButton btn = event.getButton();
+            if (projectsList.getSelectionModel().getSelectedItem() == null) {
+                return;
+            }
+            String selection = projectsList.getSelectionModel().getSelectedItem().getValue();
 
+            TreeItem<String> selectionItem = projectsList.getSelectionModel().getSelectedItem();
             if (projectsList.getSelectionModel().getSelectedItem() != null) {
 
                 if (btn == MouseButton.SECONDARY) {
                     if (menu == null || !menu.isShowing()) {
                         menu = new ContextMenu();
-                        MenuItem item = new MenuItem("Delete");
-                        MenuItem item1 = new MenuItem("Rename");
-                        MenuItem item2 = new MenuItem("Move");
+
+                        MenuItem newFile = new MenuItem("New File");
+                        MenuItem del = new MenuItem("Delete");
+                        MenuItem rename = new MenuItem("Rename");
+                        MenuItem move = new MenuItem("Move");
+
                         Menu serverList = new Menu("Change server");
 
 
-                        menu.getItems().clear();
-                        menu.getItems().addAll(item, item1, item2, serverList);
+                        if (selectionItem.getParent() != null && selectionItem.getParent().getValue().equals("Projects")) {
+
+                            menu.getItems().addAll(newFile, move, del);
+
+                            Project p = Main.manager.getProjects().get(selection);
 
 
+                            del.setOnAction(event14 -> {
+
+                                if (!Main.sceneManager.infoCheck("Delete", "Delete Project", "Are you sure to delete the project: " + selection + " ?")) {
+                                    return;
+                                }
+                                OpenProject op = null;
+                                for (OpenProject project : Main.sceneManager.getOpenFiles()) {
+                                    if (project.getProject().equals(p)) {
+
+                                        op = project;
+                                        for (OpenFile f : project.getOpenFiles().values()) {
+
+                                            if (f.isExtern())
+                                                f.reAttach();
+
+                                            codeTabPane.getTabs().remove(f.getTab());
+                                        }
+                                    }
+                                }
+
+                                if (p.deleteProject()) {
+
+                                    if (op != null)
+                                        Main.sceneManager.getOpenFiles().remove(op);
+
+                                    projectsList.getRoot().getChildren().remove(selectionItem);
+                                }
+                            });
+                            newFile.setOnAction(event12 -> {
+
+
+                                String name = "";
+                                if (p != null) {
+                                    if ((name = p.addSkiptFile()) != null) {
+
+                                        selectionItem.getChildren().add(new TreeItem<>(name));
+                                    }
+                                }
+                            });
+                        } else if (selectionItem.getParent() != null && selectionItem.getParent().getParent().getValue().equals("Projects")) {
+
+                            menu.getItems().addAll(newFile, move, del, rename);
+
+
+
+                            del.setOnAction(event13 -> {
+                                Project p = Main.manager.getProjects().get(selectionItem.getParent().getValue());
+
+                                if (!Main.sceneManager.infoCheck("Delete", "Delete File", "Are you sure to delete: " + selection + " ?")) {
+                                    return;
+                                }
+                                for (OpenProject project : Main.sceneManager.getOpenFiles()) {
+                                    if (project.getProject().equals(p)) {
+
+
+                                        for (OpenFile f : project.getOpenFiles().values()) {
+
+                                            if(f.getProject().getName().equals(selection)) {
+
+                                                if(f.isExtern()) {
+                                                    f.reAttach();
+
+                                                }
+                                                codeTabPane.getTabs().remove(f.getTab());
+                                            }
+
+                                        }
+                                    }
+                                }
+                                if (p.deleteFile(selection)) {
+
+                                    selectionItem.getParent().getChildren().remove(selectionItem);
+                                }
+                            });
+
+                        } else {
+                            return;
+                        }
                         menu.show(projectsList, event.getScreenX(), event.getScreenY());
                     }
                 } else if (btn == MouseButton.PRIMARY) {
@@ -227,7 +346,7 @@ public class IdeGuiController {
                         if (projectsList.getSelectionModel().getSelectedItem() == null) {
                             return;
                         }
-                        String selection = projectsList.getSelectionModel().getSelectedItem().getValue();
+
 
                         if (selection.endsWith(".sk")) {
 
@@ -242,11 +361,11 @@ public class IdeGuiController {
 
                                 if (o.getProject().equals(p)) {
 
-                                    if(p == null) {
+                                    if (p == null) {
                                         return;
                                     }
 
-                                    if(o.getOpenFiles().containsKey(selection)){
+                                    if (o.getOpenFiles().containsKey(selection)) {
                                         return;
                                     }
                                     o.openFile(selection);
@@ -259,7 +378,7 @@ public class IdeGuiController {
                             Main.sceneManager.getOpenFiles().add(openProject);
                             openProject.openFile(selection);
 
-                            if(Main.saver == null) {
+                            if (Main.saver == null) {
                                 Main.saver = new AutoSaver();
                             }
                         }
@@ -304,13 +423,12 @@ public class IdeGuiController {
                     for (OpenProject o : Main.sceneManager.getOpenFiles()) {
 
 
-                        for(OpenFile f : o.getOpenFiles().values()) {
+                        for (OpenFile f : o.getOpenFiles().values()) {
 
                             if (f.getTab().equals(tab)) {
                                 tOp = f;
                             }
                         }
-
 
 
                     }
@@ -344,13 +462,12 @@ public class IdeGuiController {
             for (OpenProject o : Main.sceneManager.getOpenFiles()) {
 
 
-                for(OpenFile f : o.getOpenFiles().values()) {
+                for (OpenFile f : o.getOpenFiles().values()) {
 
                     if (f.getTab().equals(tab)) {
                         tOp = f;
                     }
                 }
-
 
 
             }
@@ -367,4 +484,7 @@ public class IdeGuiController {
         });
     }
 
+    public CodeArea getConsoleOutputTextArea() {
+        return consoleOutputTextArea;
+    }
 }

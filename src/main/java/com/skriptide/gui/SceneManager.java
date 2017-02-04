@@ -9,6 +9,7 @@ import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -27,6 +28,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -211,7 +213,14 @@ public class SceneManager extends Application {
         controller.initGui();
         this.mainController = controller;
 
+        stage.setOnCloseRequest(event -> {
+            for(OpenProject pr : Main.sceneManager.getOpenFiles()) {
 
+                for(OpenFile file : pr.getOpenFiles().values()) {
+                    pr.getProject().writeCode(file.getArea().getText(), file.getProject().getName());
+                }
+            }
+        });
         stage.show();
 
 
@@ -255,7 +264,40 @@ public class SceneManager extends Application {
 
         activeGuis.put(GuiType.CREATE_PROJECT, new Gui(stage, GuiType.CREATE_PROJECT, loader, controller, root));
     }
+    public void openServerProjectGui() {
 
+        if(activeGuis.containsKey(GuiType.CREATE_SERVER)) {
+
+            CreateProjectGuiController c = activeGuis.get(GuiType.CREATE_SERVER).getController();
+            c.initGui();
+
+            activeGuis.get(GuiType.CREATE_SERVER).getStage().show();
+            return;
+        }
+
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = null;
+        try {
+            root = loader.load(getClass().getResourceAsStream("/CreateServerGui.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        CreateServerGuiController controller = loader.getController();
+        controller.initGui();
+        Scene scene = new Scene(root);
+
+        stage.setScene(scene);
+        stage.sizeToScene();
+        stage.setTitle("Create Server");
+        stage.centerOnScreen();
+        stage.setResizable(false);
+
+        stage.show();
+
+        activeGuis.put(GuiType.CREATE_SERVER, new Gui(stage, GuiType.CREATE_SERVER, loader, controller, root));
+
+    }
     public void openWelcomeGui() {
 
         if(activeGuis.containsKey(GuiType.WELCOME)) {

@@ -2,10 +2,15 @@ package com.skriptide.include;
 
 import com.skriptide.Main;
 import com.skriptide.config.Config;
+import com.skriptide.gui.controller.IdeGuiController;
+import com.skriptide.util.FileUtils;
+import javafx.scene.control.TextInputDialog;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * Created by yannh on 27.01.2017.
@@ -49,12 +54,13 @@ public class Project {
     private boolean hasServer;
     public Project(Config config, File f) {
 
+        this.config = config;
         this.skFiles = new HashMap<>();
         this.confFile = f;
         this.name = config.getString("name");
         this.folderPath = config.getString("folder-path");
         this.skript = new Skript(config.getString("sk.name"), config.getString("sk.version"), config.getString("sk.version"));
-        ;
+
         String serverPath = config.getString("server-path");
         if(serverPath != null && !serverPath.equals("")) {
             this.server = new Server(new Config(serverPath), new File(serverPath));
@@ -100,7 +106,7 @@ public class Project {
             this.config.set("name", this.name);
             this.config.set("folder-path", new File(this.folderPath).getAbsolutePath());
             if(this.server != null) {
-                this.config.set("server-path", this.server.getPath());
+                this.config.set("server-path", this.server.getFolderPath());
             }
             this.config.set("sk.name", skript.getName());
             this.config.set("sk.version", skript.getVersion());
@@ -125,13 +131,63 @@ public class Project {
         }
 
     }
-    public void addSkiptFile(String name) {
+    public boolean deleteProject() {
 
+        this.config = null;
+        this.skript = null;
+        this.skFiles.clear();
+        this.skFiles = null;
+        System.gc();
+        File folder = new File(this.folderPath);
+
+        FileUtils.deleteDirectory(folder, true);
+
+        if(!folder.exists()) {
+
+            Main.manager.deleteProject(this.name);
+
+            return true;
+        }
+        return false;
+    }
+    public boolean deleteFile(String name) {
+
+        if(name.contains(".sk")) {
+
+            File f = null;
+
+            if((f = skFiles.get(name)) != null) {
+
+                System.gc();
+                 if(f.delete()) {
+                     config.remove("files." + name.split(Pattern.quote("."))[0]);
+                     config.save();
+                     return true;
+                 }
+            }
+        }
+
+        return false;
+    }
+    public String addSkiptFile() {
+        TextInputDialog input = new TextInputDialog();
+        input.setGraphic(null);
+        input.setTitle("New Project File");
+        input.setHeaderText("New Project File: ");
+
+        Optional<String> out = input.showAndWait();
+
+
+       String name = out.get();
+        System.out.println(name);
+        if(name == null) {
+            return null;
+        }
         String t = name + ".sk";
         for(String str : skFiles.keySet()) {
 
             if(t.equalsIgnoreCase(str)) {
-                return;
+                return null;
             }
 
         }
@@ -139,11 +195,21 @@ public class Project {
         try {
             if(f.createNewFile()) {
 
+                if(config == null) {
+                    return null;
+                }
+                config.set("files." + name, t);
+                config.save();
                 skFiles.put(t, f);
+               // IdeGuiController.controller.initGui();
+
+                return t;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
     public void writeCode(String code, String name) {

@@ -31,13 +31,16 @@ public class OpenFile {
     private Button cmdSendBtn;
     private ListView<String> dependecieList;
     private ExternWindow externWindow;
+    private boolean extern;
 
     public void setTab(Tab tab) {
         this.tab = tab;
     }
 
     public OpenFile(Tab tab, File project, CodeArea area, ListView<String> dependecieList, TabPane tabPane, Button cmdSendBtn, OpenProject openProject) {
+
         externWindow = null;
+        extern = false;
         this.tab = tab;
         this.project = project;
         this.area = area;
@@ -72,6 +75,8 @@ public class OpenFile {
 
         externWindow = new ExternWindow(this.tab, this);
 
+        extern = true;
+
     }
     public void reAttach() {
 
@@ -81,6 +86,8 @@ public class OpenFile {
         setArea(externWindow.getArea());
         externWindow.getStage().close();
         tabPane.getTabs().add(tab);
+        this.extern = false;
+
     }
     public void resetHighlighting() {
 
@@ -111,4 +118,7 @@ public class OpenFile {
     }
 
 
+    public boolean isExtern() {
+        return extern;
+    }
 }

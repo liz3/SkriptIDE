@@ -10,6 +10,7 @@ public enum GuiType {
     CREATE_SERVER,
     WELCOME,
     MANAGE_VERSIONS,
-    EXPORT_SETTING
+    EXPORT_SETTING,
+
 
 }

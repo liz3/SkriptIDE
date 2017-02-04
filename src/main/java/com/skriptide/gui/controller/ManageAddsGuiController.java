@@ -83,7 +83,7 @@ public class ManageAddsGuiController {
         File f = dirChooser.showOpenDialog(fileChooserWindow);
 
         if (f != null) {
-            VersionReader.getVersionOfServer(f);
+
             Main.manager.addApi(new Api(f.getName().replace(".","-"), VersionReader.getVersionOfServer(f), f.getAbsolutePath()));
             refreshList();
             if (Main.debugMode) {

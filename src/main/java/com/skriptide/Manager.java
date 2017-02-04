@@ -182,6 +182,22 @@ public class Manager {
         projectsPath = settingsConf.getString("paths.projects");
         serversPath = settingsConf.getString("paths.servers");
 
+        for(String str : apisConf.getAll("api")) {
+
+            apis.put(apisConf.getString("api." + str + ".path"), new Api(apisConf.getString("api." + str + ".name"),
+                    apisConf.getString("api." + str + ".version"),apisConf.getString("api." + str + ".path")));
+        }
+        for(String str : skriptsConf.getAll("skript")) {
+
+            skripts.put(skriptsConf.getString("skript." + str + ".path"), new Skript(skriptsConf.getString("skript." + str + ".name"),
+                    skriptsConf.getString("skript." + str + ".version"),skriptsConf.getString("skript." + str + ".path")));
+        }
+        for(String str : addonsConf.getAll("addon")) {
+
+            addons.put(addonsConf.getString("addon." + str + ".path"), new Addon(addonsConf.getString("addon." + str + ".name"),
+                    addonsConf.getString("addon." + str + ".version"),addonsConf.getString("addon." + str + ".path")));
+        }
+
         for(String str : projectsConf.getAll("project")) {
 
             File f = new File(projectsConf.getString("project." + str));
@@ -206,23 +222,8 @@ public class Manager {
             }
 
         }
-        for(String str : apisConf.getAll("api")) {
 
-            apis.put(apisConf.getString("api." + str + ".path"), new Api(apisConf.getString("api." + str + ".name"),
-                    apisConf.getString("api." + str + ".version"),apisConf.getString("api." + str + ".path")));
-        }
-        for(String str : skriptsConf.getAll("skript")) {
 
-            skripts.put(skriptsConf.getString("skript." + str + ".path"), new Skript(skriptsConf.getString("skript." + str + ".name"),
-                    skriptsConf.getString("skript." + str + ".version"),skriptsConf.getString("skript." + str + ".path")));
-        }
-        for(String str : addonsConf.getAll("addon")) {
-
-            addons.put(addonsConf.getString("addon." + str + ".path"), new Addon(addonsConf.getString("addon." + str + ".name"),
-                    addonsConf.getString("addon." + str + ".version"),addonsConf.getString("addon." + str + ".path")));
-        }
-
-        //TODO load in existing project
     }
 
     public void setProjectsPath(String path) {
@@ -261,7 +262,9 @@ public class Manager {
 
     public void addServer(Server server) {
 
-        //TODO make
+        serverConf.set("server." + server.getName(), server.getConfigFile().getAbsolutePath());
+        serverConf.save();
+        servers.put(server.getName(), server);
 
     }
 
@@ -371,5 +374,12 @@ public class Manager {
 
     public HashMap<String, Integer> getErrors() {
         return errors;
+    }
+
+    public void deleteProject(String name) {
+
+        projects.remove(name);
+        projectsConf.remove("project." + name);
+        projectsConf.save();
     }
 }
