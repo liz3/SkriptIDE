@@ -76,52 +76,52 @@ public class CreateServerGuiController {
 
         });
 
-        createServerBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        createServerBtn.setOnAction(event -> {
 
-                String name = serverNameTextField.getText();
-                String path = serverPathTextField.getText();
-                String args = startParameterTextField.getText();
-                String api = serverVersionComboBox.getSelectionModel().getSelectedItem();
-                String skript = scriptVersionComboBox.getSelectionModel().getSelectedItem();
-                int port = Integer.parseInt(serverPortTextField.getText());
+            String name = serverNameTextField.getText();
+            String path = serverPathTextField.getText();
+            String args = startParameterTextField.getText();
+            String api = serverVersionComboBox.getSelectionModel().getSelectedItem();
+            String skript = scriptVersionComboBox.getSelectionModel().getSelectedItem();
+            int port = Integer.parseInt(serverPortTextField.getText());
 
-                Api apii = null;
-                Skript sk = null;
+            Api apii = null;
+            Skript sk = null;
 
-                for(Api a : Main.manager.getApis().values()) {
-                    String s = a.getName() + " - " + a.getVersion();
-                    if(s.equals(api)) {
-                        apii = a;
-                    }
+            for(Api a : Main.manager.getApis().values()) {
+                String s = a.getName() + " - " + a.getVersion();
+                if(s.equals(api)) {
+                    apii = a;
                 }
-                for(Skript a : Main.manager.getSkripts().values()) {
-                    String s = a.getName() + " - " + a.getVersion();
-                    if(s.equals(skript)) {
-                        sk = a;
-                    }
-                }
-                if(apii == null || sk == null) {
-                    return;
-                }
-                System.out.println("lol");
-                for(String str : Main.manager.getServer().keySet()) {
-                    if(str.equalsIgnoreCase(name)) {
-                        return;
-                    }
-                }
-                if(name.equalsIgnoreCase("")) {
-                    return;
-                }
-
-                File folder = new File(path);
-
-
-                Server server = new Server(name, apii, sk, folder, args, port);
-                Main.manager.addServer(server);
-                server.createServer();
             }
+            for(Skript a : Main.manager.getSkripts().values()) {
+                String s = a.getName() + " - " + a.getVersion();
+                if(s.equals(skript)) {
+                    sk = a;
+                }
+            }
+            if(apii == null || sk == null) {
+                return;
+            }
+            System.out.println("lol");
+            for(String str : Main.manager.getServer().keySet()) {
+                if(str.equalsIgnoreCase(name)) {
+                    return;
+                }
+            }
+            if(name.equalsIgnoreCase("")) {
+                return;
+            }
+
+            File folder = new File(path);
+
+
+            Server server = new Server(name, apii, sk, folder, args, port);
+            Main.manager.addServer(server);
+
+            server.createServer();
+
+            IdeGuiController.controller.getServerListComboBox().getItems().add(server.getName());
         });
     }
 

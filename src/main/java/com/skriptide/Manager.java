@@ -198,18 +198,6 @@ public class Manager {
                     addonsConf.getString("addon." + str + ".version"),addonsConf.getString("addon." + str + ".path")));
         }
 
-        for(String str : projectsConf.getAll("project")) {
-
-            File f = new File(projectsConf.getString("project." + str));
-
-            if(f.exists()) {
-
-                projects.put(str, new Project(new Config(f.getAbsolutePath()), f));
-            } else {
-                errors.put(str, 0);
-            }
-
-        }
         for(String str : serverConf.getAll("server")) {
 
             File f = new File(serverConf.getString("server." + str));
@@ -219,6 +207,18 @@ public class Manager {
                 servers.put(str, new Server(new Config(f.getAbsolutePath()), f));
             } else {
                 errors.put(str, 1);
+            }
+
+        }
+        for(String str : projectsConf.getAll("project")) {
+
+            File f = new File(projectsConf.getString("project." + str));
+
+            if(f.exists()) {
+
+                projects.put(str, new Project(new Config(f.getAbsolutePath()), f));
+            } else {
+                errors.put(str, 0);
             }
 
         }

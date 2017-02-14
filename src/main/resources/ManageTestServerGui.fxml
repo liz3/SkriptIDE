@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.manageserver.ManageServerController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.gui.controller.ManageTestServerGuiController">
     <children>
         <ListView fx:id="serversList" layoutX="14.0" layoutY="39.0" prefHeight="158.0" prefWidth="265.0" />
         <Button fx:id="createServerBtn" layoutX="14.0" layoutY="198.0" mnemonicParsing="false" text="Create new Server" />

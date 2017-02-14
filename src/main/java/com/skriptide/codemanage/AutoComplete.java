@@ -1,5 +1,9 @@
 package com.skriptide.codemanage;
 
+import com.skriptide.Main;
+import com.skriptide.gui.OpenFile;
+import com.skriptide.include.Server;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
@@ -13,7 +17,7 @@ import java.util.regex.Pattern;
 public class AutoComplete {
 
 
-    public void setAutoComplete(CodeArea area, CompleteList completeList, TabPane codeTabPane, Button commandSendBtn, AddonDepenencies depenencies) {
+    public void setAutoComplete(CodeArea area, CompleteList completeList, TabPane codeTabPane, Button commandSendBtn, AddonDepenencies depenencies, OpenFile openFile) {
 
 
         area.setOnKeyReleased(event -> {
@@ -21,6 +25,59 @@ public class AutoComplete {
 
             KeyCode code = event.getCode();
 
+
+            if (code == KeyCode.F5) {
+
+                if(Main.runningServer == null) {
+
+                    if(openFile.getOpenProject().getProject().getServer() != null) {
+
+                        openFile.getOpenProject().getProject().writeCode(area.getText(), openFile.getProject().getName());
+
+                        openFile.getOpenProject().getProject().copyToOutput(openFile.getProject(), openFile.getOpenProject().getProject().getServer());
+
+                        openFile.getOpenProject().getProject().getServer().startServer();
+
+                    } else {
+                        Main.sceneManager.infoCheck("Error","Failed to launch project", "Please first set a server to the project or run the the skript trough the: \"Run on\" Menu", Alert.AlertType.ERROR);
+
+                    }
+                } else {
+
+                    if(openFile.getOpenProject().getProject().getServer() != null) {
+
+                        Server r = Main.runningServer;
+                        Server s = openFile.getOpenProject().getProject().getServer();
+
+                        if(r.getName().equals(s.getName())) {
+
+
+                            openFile.getOpenProject().getProject().writeCode(area.getText(), openFile.getProject().getName());
+                            openFile.getOpenProject().getProject().copyToOutput(openFile.getProject(), r);
+                            r.sendCommamd("skript reload " + openFile.getProject().getName());
+
+                        } else {
+
+                            boolean ok = Main.sceneManager.infoCheck("Error", "Failed to launch project",
+                                    "The Running server is not the target server of the skript, do you want to start the skript on the current running serveer?", Alert.AlertType.CONFIRMATION);
+
+                            if(ok) {
+                                openFile.getOpenProject().getProject().writeCode(area.getText(), openFile.getProject().getName());
+                                openFile.getOpenProject().getProject().copyToOutput(openFile.getProject(), r);
+                                r.sendCommamd("skript reload " + openFile.getProject().getName());
+                            }
+                        }
+
+                    } else {
+                        Main.sceneManager.infoCheck("Error","Failed to launch project", "Please first set a server to the project or run the the skript trough the: \"Run on\" Menu", Alert.AlertType.ERROR);
+
+                    }
+
+                }
+
+
+                return;
+            }
             if (event.isShiftDown()) {
                 event.consume();
 

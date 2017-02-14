@@ -8,6 +8,8 @@ import java.io.*;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  * Created by yannh on 27.01.2017.
@@ -59,6 +61,7 @@ public class Server {
     private boolean pvp;
     private boolean allowCMD;
     private boolean onlineMode;
+    private boolean spawnMonsters;
 
     public Server(String name, Api api, Skript skript, File folderPath, String startArgs, int port) {
 
@@ -80,7 +83,7 @@ public class Server {
 
 
         this.config = config;
-        this.folderPath = folder.getAbsolutePath();
+        this.folderPath = new File(config.getString("folder-path")).getAbsolutePath();
         this.name = config.getString("name");
         this.startArgs = config.getString("args");
         this.folderFile = new File(config.getString("folder-path"));
@@ -89,96 +92,298 @@ public class Server {
 
     }
 
+    public void loadConfiguration() {
 
+        File props;
+
+        props = new File(this.folderPath + "/server.properties");
+        try {
+            Scanner sc = new Scanner(props);
+
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                String value;
+                if (line.contains("=")) {
+                    String[] split = line.split(Pattern.quote("="));
+                    String key = split[0];
+                    if (split.length == 2) {
+                        value = split[1];
+                    } else {
+                        value = "";
+                    }
+
+
+                    switch (key) {
+
+                        case "generator-settings":
+                            this.generatorSettings = value;
+                            break;
+
+                        case "op-permission-level":
+                            this.opPermLevel = Integer.parseInt(value);
+                            break;
+
+                        case "allow-nether":
+                            this.allowNether = Boolean.valueOf(value);
+                            break;
+
+                        case "level-name":
+                            this.worldName = value;
+                            break;
+
+                        case "enable-query":
+                            this.query = Boolean.valueOf(value);
+                            break;
+
+                        case "allow-flight":
+                            this.allowFlight = Boolean.valueOf(value);
+                            break;
+
+                        case "announce-player-achievements":
+                            this.announceAchievemnts = Boolean.valueOf(value);
+                            break;
+
+                        case "server-port":
+                            this.port = Integer.parseInt(value);
+                            break;
+
+                        case "max-world-size":
+                            this.maxWorldSize = Long.parseLong(value);
+                            break;
+
+                        case "level-type":
+                            this.lvlType = value;
+                            break;
+
+                        case "enable-rcon":
+                            this.rcon = Boolean.valueOf(value);
+                            break;
+
+                        case "level-seed":
+                            this.levelSeed = value;
+                            break;
+
+                        case "force-gamemode":
+                            this.forceGamemode = Boolean.valueOf(value);
+                            break;
+
+                        case "max-build-height":
+                            this.maxBuildHeight = Integer.parseInt(value);
+                            break;
+
+                        case "spawn-npcs":
+                            this.spawnNPCS = Boolean.valueOf(value);
+
+                            break;
+
+                        case "white-list":
+                            this.whitelist = Boolean.valueOf(value);
+                            break;
+
+                        case "spawn-animals":
+                            this.spawnAnimals = Boolean.valueOf(value);
+                            break;
+
+                        case "hardcore":
+                            this.hardcore = Boolean.valueOf(value);
+                            break;
+
+                        case "snooper-enabled":
+                            this.snooper = Boolean.valueOf(value);
+                            break;
+
+                        case "resource-pack-sha1":
+                            this.packSHA1 = value;
+                            break;
+
+                        case "online-mode":
+                            this.onlineMode = Boolean.valueOf(value);
+                            break;
+
+                        case "resource-pack":
+                            this.pack = value;
+                            break;
+
+                        case "pvp":
+                            this.pvp = Boolean.valueOf(value);
+                            break;
+
+                        case "difficulty":
+                            this.difficulty = Integer.parseInt(value);
+                            break;
+
+                        case "enable-command-block":
+                            this.allowCMD = Boolean.valueOf(value);
+                            break;
+
+                        case "gamemode":
+                            this.defaultGm = Integer.parseInt(value);
+                            break;
+
+                        case "max-players":
+                            this.maxPlayers = Integer.parseInt(value);
+                            break;
+
+                        case "spawn-monsters":
+                            this.spawnMonsters = Boolean.valueOf(value);
+                            break;
+
+                        case "generate-structures":
+                            this.generateStructure = Boolean.valueOf(value);
+                            break;
+
+                        case "view-distance":
+                            this.viewDistance = Integer.parseInt(value);
+                            break;
+
+                        case "motd":
+                            this.modt = value;
+                            break;
+                    }
+                }
+
+            }
+            sc.close();
+
+            if (Main.debugMode) {
+
+                System.out.println("Loaded propeties File for a minecraft Server from path:" + props.getAbsolutePath());
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void updateServer() {
+
+        File props = new File(this.folderPath + "/server.properties");
+        try {
+            PrintWriter pw = new PrintWriter(new FileWriter(props));
+
+            pw.println("generator-settings=" + this.getGeneratorSettings());
+            pw.println("op-permission-level=" + this.opPermLevel);
+            pw.println("allow-nether=" + Boolean.toString(this.allowNether));
+            pw.println("level-name=" + this.worldName);
+            pw.println("enable-query=" + Boolean.toString(this.query));
+            pw.println("allow-flight=" + Boolean.toString(allowFlight));
+            pw.println("announce-player-achievements=" + Boolean.toString(announceAchievemnts));
+            pw.println("server-port=" + this.port);
+            pw.println("max-world-size=" + this.maxWorldSize);
+            pw.println("level-type=" + this.lvlType);
+            pw.println("enable-rcon=" + Boolean.toString(this.rcon));
+            pw.println("level-seed=" + this.levelSeed);
+            pw.println("force-gamemode=" + Boolean.toString(this.forceGamemode));
+            pw.println("max-build-height=" + this.maxBuildHeight);
+            pw.println("spawn-npcs=" + Boolean.toString(this.spawnNPCS));
+            pw.println("white-list=" + Boolean.toString(this.whitelist));
+            pw.println("spawn-animals=" + Boolean.toString(this.spawnAnimals));
+            pw.println("hardcore=" + Boolean.toString(this.hardcore));
+            pw.println("snooper-enabled=" + Boolean.toString(this.snooper));
+            pw.println("resource-pack-sha1=" + this.packSHA1);
+            pw.println("online-mode=" + Boolean.toString(this.onlineMode));
+            pw.println("resource-pack=" + this.pack);
+            pw.println("pvp=" + Boolean.toString(this.pvp));
+            pw.println("difficulty=" + this.difficulty);
+            pw.println("enable-command-block=" + Boolean.toString(this.allowCMD));
+            pw.println("gamemode=" + this.defaultGm);
+            pw.println("max-players=" + this.maxPlayers);
+            pw.println("spawn-monsters=" + Boolean.toString(this.spawnMonsters));
+            pw.println("generate-structures=" + Boolean.toString(this.generateStructure));
+            pw.println("view-distance=" + this.viewDistance);
+            pw.println("motd=" + this.modt);
+            pw.flush();
+            pw.close();
+
+            //TODO Config und addons
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
     public void startServer() {
 
         if(Main.runningServer == null) {
 
             Main.runningServer = this;
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
+            Thread t = new Thread(() -> {
 
-                    int length = startArgs.split(" ").length;
-                    String[] cmd = new String[3];
+                int length = startArgs.split(" ").length;
+                String[] cmd = new String[3];
 
-                    cmd[0] = "java";
-                    cmd[1] = "-jar";
-                    cmd[2] = "Server.jar";
-                   /* for(int i = 3; i != 3 + length; i++) {
+                cmd[0] = "java";
+                cmd[1] = "-jar";
+                cmd[2] = "Server.jar";
+               /* for(int i = 3; i != 3 + length; i++) {
 
-                        cmd[i] = startArgs.split(" ")[i];
-                    } */
-                    ProcessBuilder pb = new ProcessBuilder(cmd);
-                    pb.directory(folderFile);
-                    Process p = null;
+                    cmd[i] = startArgs.split(" ")[i];
+                } */
+                ProcessBuilder pb = new ProcessBuilder(cmd);
+                pb.directory(folderFile);
+                Process p = null;
+
+                try {
+                    p = pb.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Process finalP = p;
+                Thread writer = new Thread(() -> {
+                    assert finalP != null;
+                    Server.this.writer = new BufferedWriter(new OutputStreamWriter(finalP.getOutputStream()));
+                });
+
+
+                Thread reader = new Thread(() -> {
+
+                    assert finalP != null;
+                    Server.this.reader = new BufferedReader(new InputStreamReader(finalP.getInputStream()));
+
+                    String line = "";
 
                     try {
-                        p = pb.start();
+                        while ((line = Server.this.reader.readLine()) != null) {
+                            String finalLine = line;
+                            Thread sender = new Thread(() -> {
+
+                                if (!Objects.equals(finalLine, "")) {
+
+                                    javafx.application.Platform.runLater(() -> {
+                                        IdeGuiController.controller.getConsoleOutputTextArea().appendText(finalLine + System.getProperty("line.separator"));
+                                        if (finalLine.contains("[Skript]")) {
+                                            IdeGuiController.controller.getConsoleOutputTextArea().setStyleClass(IdeGuiController.controller.getConsoleOutputTextArea().getText().length() - finalLine.length(), IdeGuiController.controller.getConsoleOutputTextArea().getText().length(), "console");
+                                        }
+                                    });
+
+
+                                } else {
+                                    System.out.println("");
+                                }
+
+
+                                try {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                            });
+                            sender.start();
+                        }
+                        System.out.println("Server stopped");
+                        Main.runningServer = null;
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Process finalP = p;
-                    Thread writer = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Server.this.writer = new BufferedWriter(new OutputStreamWriter(finalP.getOutputStream()));
-                        }
-                    });
+                });
 
+                reader.setName("Reader Thread");
+                writer.setName("Writer Thread");
+                reader.start();
+                writer.start();
 
-                    Thread reader = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Server.this.reader = new BufferedReader(new InputStreamReader(finalP.getInputStream()));
-
-                            String line = "";
-
-                            try {
-                                while ((line = Server.this.reader.readLine()) != null) {
-                                    String finalLine = line;
-                                    Thread sender = new Thread(() -> {
-
-                                        if (!Objects.equals(finalLine, "")) {
-
-                                            javafx.application.Platform.runLater(() -> {
-                                                IdeGuiController.controller.getConsoleOutputTextArea().appendText(finalLine + System.getProperty("line.separator"));
-                                                if (finalLine.contains("[Skript]")) {
-                                                    IdeGuiController.controller.getConsoleOutputTextArea().setStyleClass(IdeGuiController.controller.getConsoleOutputTextArea().getText().length() - finalLine.length(), IdeGuiController.controller.getConsoleOutputTextArea().getText().length(), "console");
-                                                }
-                                            });
-
-
-                                        } else {
-                                            System.out.println("");
-                                        }
-
-
-                                        try {
-                                            Thread.sleep(500);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    });
-                                    sender.start();
-                                }
-                                System.out.println("Server stopped");
-                                Main.runningServer = null;
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-
-                    reader.setName("Reader Thread");
-                    writer.setName("Writer Thread");
-                    reader.start();
-                    writer.start();
-
-                }
             });
             t.setName("Server-thread");
             t.start();
@@ -531,4 +736,11 @@ public class Server {
         return pluginsPath;
     }
 
+    public boolean isSpawnMonsters() {
+        return spawnMonsters;
+    }
+
+    public void setSpawnMonsters(boolean spawnMonsters) {
+        this.spawnMonsters = spawnMonsters;
+    }
 }

@@ -6,10 +6,7 @@ import com.skriptide.codemanage.AutoComplete;
 import com.skriptide.codemanage.CompleteList;
 import com.skriptide.codemanage.ControlMain;
 import com.skriptide.util.skunityapi.SkUnityAPI;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import org.fxmisc.richtext.CodeArea;
 
 import java.io.File;
@@ -54,20 +51,7 @@ public class OpenFile {
         complete = new AutoComplete();
         controlMain.controlCode(area, tab, this, true);
 
-
-        tab.setOnCloseRequest(event -> {
-
-            this.openProject.close(this.project.getName());
-
-            boolean toSave = new SceneManager().infoCheck("Save project?", tab.getText(), "Save the project: " + tab.getText());
-            if(toSave) {
-
-                this.openProject.getProject().writeCode(this.area.getText(), this.project.getName());
-
-            }
-
-        });
-
+        setEvents();
     }
 
 
@@ -76,6 +60,23 @@ public class OpenFile {
         externWindow = new ExternWindow(this.tab, this);
 
         extern = true;
+
+    }
+    private void setEvents() {
+
+
+        tab.setOnCloseRequest(event -> {
+
+            this.openProject.close(this.project.getName());
+
+            boolean toSave = new SceneManager().infoCheck("Save project?", tab.getText(), "Save the project: " + tab.getText(), Alert.AlertType.CONFIRMATION);
+            if(toSave) {
+
+                this.openProject.getProject().writeCode(this.area.getText(), this.project.getName());
+
+            }
+
+        });
 
     }
     public void reAttach() {
@@ -98,7 +99,7 @@ public class OpenFile {
         controlMain.controlCode(area, tab, this, true);
     }
     public void setAutoComplete() {
-        complete.setAutoComplete(area, completeList, tabPane, cmdSendBtn, depenencies);
+        complete.setAutoComplete(area, completeList, tabPane, cmdSendBtn, depenencies, this);
 
     }
     public Tab getTab() {
@@ -120,5 +121,13 @@ public class OpenFile {
 
     public boolean isExtern() {
         return extern;
+    }
+
+    public OpenProject getOpenProject() {
+        return openProject;
+    }
+
+    public ExternWindow getExternWindow() {
+        return externWindow;
     }
 }

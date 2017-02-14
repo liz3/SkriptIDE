@@ -8,6 +8,7 @@ import javafx.scene.control.TextInputDialog;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -61,10 +62,15 @@ public class Project {
         this.folderPath = config.getString("folder-path");
         this.skript = new Skript(config.getString("sk.name"), config.getString("sk.version"), config.getString("sk.version"));
 
-        String serverPath = config.getString("server-path");
+        String serverPath = config.getString("server-name");
         if(serverPath != null && !serverPath.equals("")) {
-            this.server = new Server(new Config(serverPath), new File(serverPath));
-            hasServer = true;
+            if(Main.manager.getServer().containsKey(serverPath)) {
+                this.server = Main.manager.getServer().get(serverPath);
+                hasServer = true;
+            } else {
+                //TODO Error server deleted
+                hasServer = false;
+            }
         } else {
             hasServer = false;
         }
@@ -81,6 +87,8 @@ public class Project {
     public void setServer(Server server) {
         this.server = server;
         this.hasServer = true;
+        this.config.set("server-name", server.getName());
+        this.config.save();
     }
 
     public Project(String name, String path, Skript skript) {
@@ -105,9 +113,7 @@ public class Project {
 
             this.config.set("name", this.name);
             this.config.set("folder-path", new File(this.folderPath).getAbsolutePath());
-            if(this.server != null) {
-                this.config.set("server-path", this.server.getFolderPath());
-            }
+
             this.config.set("sk.name", skript.getName());
             this.config.set("sk.version", skript.getVersion());
             this.config.set("sk.path", skript.getPath());
@@ -130,6 +136,15 @@ public class Project {
 
         }
 
+    }
+    public void copyToOutput(File f, Server server) {
+
+        if(server != null) {
+
+            File outpath = new File(server.getFolderPath() + "/plugins/Skript/scripts");
+
+            FileUtils.copyFile(f, new File(outpath, f.getName()), StandardCopyOption.REPLACE_EXISTING);
+        }
     }
     public boolean deleteProject() {
 
@@ -244,6 +259,7 @@ public class Project {
         }
 
     }
+
     public String getCurentCode(String name) {
 
         File f = null;

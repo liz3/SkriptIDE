@@ -268,7 +268,7 @@ public class SceneManager extends Application {
 
         if(activeGuis.containsKey(GuiType.CREATE_SERVER)) {
 
-            CreateProjectGuiController c = activeGuis.get(GuiType.CREATE_SERVER).getController();
+            CreateServerGuiController c = activeGuis.get(GuiType.CREATE_SERVER).getController();
             c.initGui();
 
             activeGuis.get(GuiType.CREATE_SERVER).getStage().show();
@@ -397,13 +397,43 @@ public class SceneManager extends Application {
 
         activeGuis.put(GuiType.EXPORT_SETTING, new Gui(stage, GuiType.EXPORT_SETTING, loader, controller, root));
     }
+    public void openManageServer() {
+
+        if(activeGuis.containsKey(GuiType.MANAGE_SERVERS)) {
+
+            activeGuis.get(GuiType.MANAGE_SERVERS).getStage().show();
+            return;
+        }
+
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = null;
+        try {
+            root = loader.load(getClass().getResourceAsStream("/ManageTestServerGui.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ManageTestServerGuiController controller = loader.getController();
+        controller.initGui();
+        Scene scene = new Scene(root);
+
+        stage.setScene(scene);
+        stage.sizeToScene();
+        stage.setTitle("Manage Servers");
+        stage.centerOnScreen();
+        stage.setResizable(false);
+
+        stage.show();
+
+        activeGuis.put(GuiType.MANAGE_SERVERS, new Gui(stage, GuiType.MANAGE_SERVERS, loader, controller, root));
+    }
     private interface InitCompletionHandler {
         void complete();
     }
 
-    public boolean infoCheck(String title, String header, String body) {
+    public boolean infoCheck(String title, String header, String body, Alert.AlertType type) {
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(type);
 
         alert.setTitle(title);
         alert.setHeaderText(header);
