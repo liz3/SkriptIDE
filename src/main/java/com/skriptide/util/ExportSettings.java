@@ -151,7 +151,7 @@ public class ExportSettings {
                         e.printStackTrace();
                     }
 
-                    c.put(new FileInputStream(temp), name + ".sk");
+                    c.put(new FileInputStream(temp), name);
 
                     c.exit();
                     session.disconnect();

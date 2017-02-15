@@ -267,9 +267,9 @@ public class ManageAddsGuiController {
     private void refreshList() {
 
 
-        addonsTable.getProperties().put(TableViewSkinBase.REFRESH, Boolean.TRUE);//refresh();
-        scriptTable.getProperties().put(TableViewSkinBase.REFRESH, Boolean.TRUE);//refresh();
-        serverTable.refresh();
+        addonsTable.getItems().clear();
+        scriptTable.getItems().clear();
+        serverTable.getItems().clear();
 
         serverTable.setItems(Main.manager.getApisForGui());
         scriptTable.setItems(Main.manager.getSkriptsForGui());

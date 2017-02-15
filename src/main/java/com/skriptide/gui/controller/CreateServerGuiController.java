@@ -122,6 +122,12 @@ public class CreateServerGuiController {
             server.createServer();
 
             IdeGuiController.controller.getServerListComboBox().getItems().add(server.getName());
+
+            if(Main.settings.isStartAfterCreate() && Main.runningServer == null) {
+
+                IdeGuiController.controller.getServerListComboBox().getSelectionModel().select(server.getName());
+                server.startServer();
+            }
         });
     }
 

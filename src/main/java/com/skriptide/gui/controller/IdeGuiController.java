@@ -15,7 +15,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import org.fxmisc.richtext.CodeArea;
@@ -122,6 +121,14 @@ public class IdeGuiController {
     private ContextMenu tabMenu;
 
 
+    public void importServers() {
+
+        serverListComboBox.getItems().clear();
+        for(Server server : Main.manager.getServer().values()) {
+
+            serverListComboBox.getItems().add(server.getName());
+        }
+    }
     public void addProject(Project project) {
 
         TreeItem<String> projectItem = new TreeItem<>(project.getName());
@@ -140,12 +147,7 @@ public class IdeGuiController {
     public void initGui() {
 
 
-        manageServerMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Main.sceneManager.openManageServer();
-            }
-        });
+        manageServerMenuItem.setOnAction(event -> Main.sceneManager.openManageServer());
         codeTabPane.setOnMouseClicked(event -> {
 
 
@@ -185,6 +187,7 @@ public class IdeGuiController {
             }
 
         });
+        ideSettingsPoint.setOnAction(event -> Main.sceneManager.openSettingsGui());
         createServerMenuPoint.setOnAction(event -> Main.sceneManager.openServerProjectGui());
         exportSettingsPoint.setOnAction(event -> Main.sceneManager.openExportSettings());
         rootItem = new TreeItem<>("Projects");
@@ -193,21 +196,17 @@ public class IdeGuiController {
         controller = this;
         newProjectMenuPoint.setOnAction(event -> Main.sceneManager.openCreateProjectGui());
         manageAddonsPoint.setOnAction(event -> Main.sceneManager.openManageVersions());
-        serverListComboBox.getItems().clear();
-        for(Server server : Main.manager.getServer().values()) {
-
-            serverListComboBox.getItems().add(server.getName());
-        }
+        importServers();
         commandSendBtn.setOnAction(event -> {
             if(Main.runningServer !=null) {
-                Main.runningServer.sendCommamd(comandSendTextField.getText());
+                Main.runningServer.sendCommand(comandSendTextField.getText());
                 comandSendTextField.clear();
             }
         });
         comandSendTextField.setOnKeyReleased(event -> {
             if(event.getCode() == KeyCode.ENTER ){
                 if(Main.runningServer !=null) {
-                    Main.runningServer.sendCommamd(comandSendTextField.getText());
+                    Main.runningServer.sendCommand(comandSendTextField.getText());
                     comandSendTextField.clear();
                 }
             }
@@ -218,14 +217,6 @@ public class IdeGuiController {
 
             Server server = Main.manager.getServer().get(selected);
             server.startServer();
-        });
-        codeTabPane.getScene().getWindow().setOnCloseRequest(event -> {
-
-
-            //TODO save
-
-
-            System.exit(0);
         });
 
 
@@ -396,6 +387,13 @@ public class IdeGuiController {
                             Main.sceneManager.getOpenFiles().add(openProject);
                             openProject.openFile(selection);
 
+                            pathLabel.setText(openProject.getOpenFiles().get(selection).getProject().getAbsolutePath());
+                            prNameLbl.setText("Name: " + openProject.getProject().getName());
+                            if(openProject.getProject().getServer() != null) {
+                                prServerLbl.setText("Server: " + openProject.getProject().getServer().getName());
+                            }
+                            prSkVersionLbl.setText("Skript version: " + openProject.getProject().getSkript().getVersion());
+                            prNotesArea.setText(openProject.getProject().getNotes());
                             if (Main.saver == null) {
                                 Main.saver = new AutoSaver();
                             }
@@ -463,13 +461,15 @@ public class IdeGuiController {
                             cl.win.hide();
                         }
 
-                        /*
-                        pathLabel.setText(tOp.get);
+
+                        pathLabel.setText(tOp.getProject().getAbsolutePath());
                         prNameLbl.setText("Name: " + tOp.getProject().getName());
-                        prServerLbl.setText("Server: " /* TODO get server name );
-                        prSkVersionLbl.setText("Skript version: " + tOp.getProject().getSkript().getVersion());
-                        prNotesArea.setText(tOp.getProject().getNotes());
-        */
+                        if(tOp.getOpenProject().getProject().getServer() != null) {
+                            prServerLbl.setText("Server: " + tOp.getOpenProject().getProject().getServer().getName());
+                        }
+                        prSkVersionLbl.setText("Skript version: " + tOp.getOpenProject().getProject().getSkript().getVersion());
+                        prNotesArea.setText(tOp.getOpenProject().getProject().getNotes());
+
 
                     }
                 }

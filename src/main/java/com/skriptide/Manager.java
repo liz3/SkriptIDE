@@ -7,6 +7,7 @@ import com.skriptide.gui.SceneManager;
 import com.skriptide.gui.controller.IdeGuiController;
 import com.skriptide.include.*;
 import com.skriptide.util.ExportSettings;
+import com.skriptide.util.IDESettings;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -99,6 +100,7 @@ public class Manager {
             }
         }
         settingsConf = new Config(file.getAbsolutePath());
+
         file = new File("projects.yaml");
         if (!file.exists()) {
             try {
@@ -182,6 +184,7 @@ public class Manager {
         projectsPath = settingsConf.getString("paths.projects");
         serversPath = settingsConf.getString("paths.servers");
 
+
         for(String str : apisConf.getAll("api")) {
 
             apis.put(apisConf.getString("api." + str + ".path"), new Api(apisConf.getString("api." + str + ".name"),
@@ -224,6 +227,37 @@ public class Manager {
         }
 
 
+        System.out.println("Total load in: ");
+        System.out.println("Projects:");
+        for(String s : projects.keySet()) {
+
+            Project pr = projects.get(s);
+            System.out.println("\tProject: " + pr.getName() + " At: " + pr.getFolderPath());
+        }
+        System.out.println("Server:");
+        for(String s : servers.keySet()) {
+
+            Server pr = servers.get(s);
+            System.out.println("\tServer: " + pr.getName() + " At: " + pr.getFolderPath());
+        }
+        System.out.println("Skripts:");
+        for(String s : skripts.keySet()) {
+
+            Skript pr = skripts.get(s);
+            System.out.println("\tSkript: " + pr.getName() + " Version: " + pr.getVersion() + " At: " + s + " Path: " + pr.getPath());
+        }
+        System.out.println("Apis:");
+        for(String s : apis.keySet()) {
+
+            Api pr = apis.get(s);
+            System.out.println("\tApi: " + pr.getName() + " Version: " + pr.getVersion() + " At: " + s + " Path: " + pr.getPath());
+        }
+        System.out.println("Addons:");
+        for(String s : addons.keySet()) {
+
+            Addon pr = addons.get(s);
+            System.out.println("\tAddon: " + pr.getName() + " Version: " + pr.getVersion() + " At: " + s + " Path: " + pr.getPath());
+        }
     }
 
     public void setProjectsPath(String path) {
@@ -381,5 +415,16 @@ public class Manager {
         projects.remove(name);
         projectsConf.remove("project." + name);
         projectsConf.save();
+    }
+
+    public void deleteServer(String name) {
+
+        servers.remove(name);
+        serverConf.remove("server." + name);
+        serverConf.save();
+    }
+
+    public Config getSettingsConf() {
+        return settingsConf;
     }
 }

@@ -40,7 +40,7 @@ public class AutoSaver {
 
              System.out.println("saved");
              try {
-                 Thread.sleep(15000);
+                 Thread.sleep(Main.settings.getDelay() * Main.settings.getDelayMultiPlier());
              } catch (InterruptedException e) {
                  e.printStackTrace();
              }

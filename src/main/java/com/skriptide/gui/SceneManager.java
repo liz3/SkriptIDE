@@ -2,6 +2,7 @@ package com.skriptide.gui;
 
 import com.skriptide.Main;
 import com.skriptide.gui.controller.*;
+import com.skriptide.util.IDESettings;
 import com.skriptide.util.skunityapi.SkUnityAPI;
 import com.skriptide.util.systemutils.OperatingSystemType;
 import com.skriptide.util.systemutils.OsUtils;
@@ -123,6 +124,7 @@ public class SceneManager extends Application {
                 updateProgress(20, 100);
                 updateMessage("Checking config files...");
                 isNew = Main.manager.checkFiles();
+
                 Thread.sleep(50);
 
                 if (!isNew) {
@@ -167,7 +169,7 @@ public class SceneManager extends Application {
                 fadeSplash.play();
 
                 initCompletionHandler.complete();
-            } // todo add code to gracefully handle other task states.
+            }
         });
 
         Scene splashScene = new Scene(splashLayout, Color.TRANSPARENT);
@@ -219,6 +221,7 @@ public class SceneManager extends Application {
                 for(OpenFile file : pr.getOpenFiles().values()) {
                     pr.getProject().writeCode(file.getArea().getText(), file.getProject().getName());
                 }
+                System.exit(0);
             }
         });
         stage.show();
@@ -229,6 +232,8 @@ public class SceneManager extends Application {
         }
 
 
+        Main.settings = new IDESettings();
+        Main.settings.loadIn();
     }
 
     public void openCreateProjectGui() {
@@ -397,11 +402,43 @@ public class SceneManager extends Application {
 
         activeGuis.put(GuiType.EXPORT_SETTING, new Gui(stage, GuiType.EXPORT_SETTING, loader, controller, root));
     }
+    public void openSettingsGui() {
+
+        if(activeGuis.containsKey(GuiType.SETTINGS)) {
+
+            activeGuis.get(GuiType.SETTINGS).getStage().show();
+            return;
+        }
+
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = null;
+        try {
+            root = loader.load(getClass().getResourceAsStream("/SettingsGui.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        SettingsGuiController controller = loader.getController();
+        controller.init();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.sizeToScene();
+        stage.setTitle("Settings");
+        stage.centerOnScreen();
+        stage.setResizable(false);
+
+        stage.show();
+
+        activeGuis.put(GuiType.SETTINGS, new Gui(stage, GuiType.SETTINGS, loader, controller, root));
+    }
     public void openManageServer() {
 
         if(activeGuis.containsKey(GuiType.MANAGE_SERVERS)) {
 
             activeGuis.get(GuiType.MANAGE_SERVERS).getStage().show();
+
+            ManageTestServerGuiController c = activeGuis.get(GuiType.MANAGE_SERVERS).getController();
+            c.initGui();
             return;
         }
 

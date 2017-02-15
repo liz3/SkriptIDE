@@ -6,83 +6,66 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="705.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.settings.SettingsController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="705.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.gui.controller.SettingsGuiController">
     <children>
-        <Label layoutX="14.0" layoutY="14.0" text="SkriptIDE Settings">
+        <Label layoutX="14.0" layoutY="11.0" text="SkriptIDE Settings">
             <font>
                 <Font size="21.0" />
             </font>
         </Label>
-        <TabPane layoutX="184.0" layoutY="47.0" prefHeight="427.0" prefWidth="501.0" rotateGraphic="true" side="LEFT" tabClosingPolicy="UNAVAILABLE">
+        <TabPane fx:id="tabPane" layoutX="167.0" layoutY="42.0" prefHeight="427.0" prefWidth="538.0" rotateGraphic="true" side="LEFT" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab text="Main Settings">
+                <Tab closable="false" text="Main Settings">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="427.0" prefWidth="383.0">
                             <children>
                                 <Label layoutX="14.0" layoutY="14.0" text="Language" />
                                 <ComboBox fx:id="languageComboBox" layoutX="84.0" layoutY="9.0" prefWidth="150.0" />
                                 <Label layoutX="14.0" layoutY="47.0" text="Style" />
                                 <ComboBox fx:id="styleComboBox" layoutX="84.0" layoutY="42.0" prefWidth="150.0" />
                                 <Label layoutX="13.0" layoutY="76.0" text="Auto-save" />
-                                <TextField fx:id="autoSaveField" layoutX="84.0" layoutY="71.0" prefHeight="25.0" prefWidth="74.0" />
-                                <ComboBox fx:id="autoSaveComboBox" layoutX="165.0" layoutY="71.0" prefHeight="25.0" prefWidth="68.0" />
+                                <TextField fx:id="autoSaveField" layoutX="84.0" layoutY="71.0" prefHeight="25.0" prefWidth="51.0" />
+                                <ComboBox fx:id="autoSaveComboBox" layoutX="141.0" layoutY="71.0" prefHeight="25.0" prefWidth="94.0" />
                                 <CheckBox fx:id="updatesCheckBox" layoutX="14.0" layoutY="107.0" mnemonicParsing="false" text="Check for updates automatic" />
                             </children></AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Server">
+                <Tab closable="false" text="Server">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <CheckBox fx:id="skriptMsgMarkCheck" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Try to mark messages from Skript" />
-                                <CheckBox fx:id="startSrvAfterCreateCheck" layoutX="14.0" layoutY="38.0" mnemonicParsing="false" text="Start server after creating" />
-                                <CheckBox fx:id="clearPrsAfterServerStopCheck" layoutX="14.0" layoutY="64.0" mnemonicParsing="false" text="Clear projects from server after stopping server" />
-                                <Label layoutX="14.0" layoutY="92.0" text="Preset save path:" />
-                                <TextField fx:id="preSetSavePathField" layoutX="128.0" layoutY="87.0" prefHeight="25.0" prefWidth="258.0" />
+                                <CheckBox fx:id="skriptMsgMarkCheck" layoutX="14.0" layoutY="40.0" mnemonicParsing="false" text="Try to mark messages from Skript" />
+                                <CheckBox fx:id="startSrvAfterCreateCheck" layoutX="14.0" layoutY="64.0" mnemonicParsing="false" text="Start server after creating" />
+                                <CheckBox fx:id="clearPrsAfterServerStopCheck" layoutX="14.0" layoutY="90.0" mnemonicParsing="false" text="Clear projects from server after stopping server" />
                                 <Button layoutX="394.0" layoutY="87.0" mnemonicParsing="false" text="Choose" />
-                                <CheckBox fx:id="outputSaveCheck" layoutX="14.0" layoutY="119.0" mnemonicParsing="false" text="Save console output to log" />
+                                <CheckBox fx:id="outputSaveCheck" layoutX="14.0" layoutY="117.0" mnemonicParsing="false" text="Save console output to log" />
+                        <CheckBox fx:id="minifyOutputCheck" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Minify output to output from Skript" />
                             </children></AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Code">
+                <Tab closable="false" text="Code">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <CheckBox layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Use code management" />
+                                <CheckBox fx:id="codeManageCheck" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Use code management" />
                                 <CheckBox fx:id="highlightCheck" layoutX="14.0" layoutY="39.0" mnemonicParsing="false" text="Highlight code" />
                                 <CheckBox fx:id="autoCompleteCheck" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="Use auto-complete" />
-                                <Label layoutX="14.0" layoutY="94.0" text="Settings:" />
-                                <TreeTableView fx:id="settingsTable" layoutX="14.0" layoutY="114.0" prefHeight="308.0" prefWidth="445.0">
+                                <Label layoutX="14.0" layoutY="128.0" text="Settings:" />
+                                <TreeTableView fx:id="settingsTable" layoutX="14.0" layoutY="151.0" prefHeight="271.0" prefWidth="445.0">
                                     <columns>
                                         <TreeTableColumn prefWidth="335.0" text="C1" />
                                         <TreeTableColumn minWidth="0.0" prefWidth="109.0" text="C2" />
                                     </columns>
                                 </TreeTableView>
+                        <CheckBox fx:id="complexeCheck" layoutX="14.0" layoutY="89.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="334.0" text="Use Complexe Highlighting, decrease Performace heavly!" />
                             </children></AnchorPane>
-                    </content>
-                </Tab>
-                <Tab text="Export">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <Label layoutX="14.0" layoutY="7.0" text="Remote Export" />
-                                <Label layoutX="14.0" layoutY="36.0" text="Method" />
-                                <ComboBox fx:id="remoteExportComboBox" layoutX="69.0" layoutY="31.0" prefHeight="25.0" prefWidth="62.0" />
-                                <Label layoutX="157.0" layoutY="35.0" text="Host" />
-                                <TextField fx:id="exportHostField" layoutX="201.0" layoutY="31.0" prefHeight="25.0" prefWidth="241.0" />
-                                <TextField fx:id="exportUsernameField" layoutX="201.0" layoutY="66.0" />
-                                <Label layoutX="130.0" layoutY="71.0" text="Username" />
-                                <Label layoutX="130.0" layoutY="102.0" text="Password" />
-                                <PasswordField fx:id="exportPasswordField" layoutX="201.0" layoutY="97.0" />
-                            </children>
-                        </AnchorPane>
                     </content>
                 </Tab>
             </tabs>
         </TabPane>
-        <ListView fx:id="settingsList" disable="true" layoutX="14.0" layoutY="47.0" prefHeight="427.0" prefWidth="203.0" />
-        <Button fx:id="saveBtn" layoutX="641.0" layoutY="14.0" mnemonicParsing="false" text="Save" />
-        <Button fx:id="cnlBtn" layoutX="575.0" layoutY="14.0" mnemonicParsing="false" text="Cancel" />
-        <Button fx:id="applyBtn" layoutX="517.0" layoutY="14.0" mnemonicParsing="false" text="Apply" />
+        <Button fx:id="saveBtn" layoutX="650.0" layoutY="14.0" mnemonicParsing="false" text="Save" />
+        <Button fx:id="cnlBtn" layoutX="584.0" layoutY="14.0" mnemonicParsing="false" text="Cancel" />
+        <Button fx:id="applyBtn" layoutX="526.0" layoutY="14.0" mnemonicParsing="false" text="Apply" />
+      <ListView fx:id="sList" layoutX="14.0" layoutY="42.0" prefHeight="427.0" prefWidth="185.0" />
     </children>
 </Pane>

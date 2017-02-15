@@ -39,10 +39,19 @@ public class ControlMain {
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
 
         CodeArea finalCode = code;
-        code.richChanges()
-                .filter(ch -> !ch.getInserted().equals(ch.getRemoved())).subscribe(change -> {
-            finalCode.setStyleSpans(0, computeHighlighting(finalCode.getText()));
-                });
+        if(Main.settings.isComplexeAutoComplete()) {
+
+            code.richChanges()
+                    .filter(ch -> !ch.getInserted().equals(ch.getRemoved())).subscribe(change -> {
+                finalCode.setStyleSpans(0, computeHighlightingHeavy(finalCode.getText()));
+            });
+        } else {
+
+            code.richChanges()
+                    .filter(ch -> !ch.getInserted().equals(ch.getRemoved())).subscribe(change -> {
+                finalCode.setStyleSpans(0, computeHighlightingNormal(finalCode.getText()));
+            });
+        }
         code.replaceText(0, 0, saver);
         tab.setContent(code);
         toolTip(code);
@@ -82,7 +91,8 @@ public class ControlMain {
 
 
     }
-    private StyleSpans<Collection<String>> computeHighlighting(String text) {
+
+    private StyleSpans<Collection<String>> computeHighlightingHeavy(String text) {
         Matcher matcher = PATTERN.matcher(text);
         int lastKwEnd = 0;
         StyleSpansBuilder<Collection<String>> spansBuilder
@@ -115,7 +125,35 @@ public class ControlMain {
         spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
         return spansBuilder.create();
     }
+    private StyleSpans<Collection<String>> computeHighlightingNormal(String text) {
+        Matcher matcher = PATTERN.matcher(text);
+        int lastKwEnd = 0;
+        StyleSpansBuilder<Collection<String>> spansBuilder
+                = new StyleSpansBuilder<>();
+        while (matcher.find()) {
 
+            String styleClass =
+
+                                                            matcher.group("SUPERS") != null ? "supers" :
+                                                                    matcher.group("PAREN") != null ? "paren" :
+                                                                            matcher.group("BRACE") != null ? "brace" :
+                                                                                    matcher.group("BRACKET") != null ? "bracket" :
+                                                                                            matcher.group("SEMICOLON") != null ? "semicolon" :
+                                                                                                    matcher.group("STRING") != null ? "string" :
+                                                                                                            matcher.group("COMMENT") != null ? "comment" :
+                                                                                                                    matcher.group("SEARCHED") != null ? "marked" :
+
+                                                                                                                            null; /* never happens */
+            assert styleClass != null;
+            spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
+            spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+            lastKwEnd = matcher.end();
+
+
+        }
+        spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
+        return spansBuilder.create();
+    }
     public String SEARCHED = "";
     private final String[] CONDITIONS = getCons();
     private final String[] EFFECTS = getEffects();

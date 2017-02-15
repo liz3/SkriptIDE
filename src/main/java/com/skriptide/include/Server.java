@@ -4,11 +4,11 @@ import com.skriptide.Main;
 import com.skriptide.config.Config;
 import com.skriptide.gui.controller.IdeGuiController;
 import com.skriptide.util.FileUtils;
+import javafx.scene.control.Alert;
+
 import java.io.*;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -74,8 +74,8 @@ public class Server {
         this.port = port;
         this.configFile = new File(this.folderPath, "SkriptIDE-server.yaml");
         folderFile = folderPath;
-
-
+        serverAddons = new ArrayList<>();
+        this.pluginsPath = new File(this.folderPath, "plugins").getAbsolutePath();
 
     }
 
@@ -89,9 +89,14 @@ public class Server {
         this.folderFile = new File(config.getString("folder-path"));
         this.skript = Main.manager.getSkripts().get(config.getString("sk.name"));
         this.api = Main.manager.getApis().get(config.getString("api.name"));
+        serverAddons = new ArrayList<>();
+        this.pluginsPath = new File(this.folderPath, "plugins").getAbsolutePath();
+        for(String key : config.getAll("addon")) {
+
+            serverAddons.add(Main.manager.getAddons().get(config.getString("addon." + key)));
+        }
 
     }
-
     public void loadConfiguration() {
 
         File props;
@@ -255,8 +260,49 @@ public class Server {
         }
 
     }
+    public void deleteServer() {
+
+        if(Main.runningServer != null) {
+            Main.sceneManager.infoCheck("Error","Failed to delete Server", "A server cannot be deleted while another or the server is running!", Alert.AlertType.ERROR);
+            return;
+        }
+        String folderPath = folderFile.getAbsolutePath();
+        this.folderFile = null;
+        this.skript = null;
+        this.api = null;
+        this.serverAddons = null;
+        this.config = null;
+        System.gc();
+        FileUtils.deleteDirectory(new File(folderPath), true);
+        for(Project pr : Main.manager.getProjects().values()) {
+            if(pr.getServer() == null) {
+                continue;
+            }
+            if(pr.getServer().getName().equals(this.name)) {
+                pr.setServer(null);
+            }
+        }
+        Main.manager.deleteServer(this.name);
+        IdeGuiController.controller.importServers();
+
+    }
     public void updateServer() {
 
+        if(Main.runningServer != null) {
+            Main.sceneManager.infoCheck("Error", "Failed to save Settnigs",
+                    "Could not save the configuration of the server, because another server is running, please stop it before!", Alert.AlertType.ERROR);
+            return;
+        }
+        File pluginsDir = new File(pluginsPath);
+
+        for(File f : pluginsDir.listFiles()) {
+
+            if(f.getName().equals("Skript.jar") || f.getName().equals("Skript")) {
+                continue;
+            }
+
+            f.delete();
+        }
         File props = new File(this.folderPath + "/server.properties");
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(props));
@@ -295,7 +341,23 @@ public class Server {
             pw.flush();
             pw.close();
 
-            //TODO Config und addons
+            this.config.set("name", this.getName());
+            this.config.set("sk.name", this.skript.getPath());
+            this.config.set("api.name", this.api.getPath());
+            this.config.set("args", this.startArgs);
+
+            this.config.save();
+            this.config.remove("addon");
+            for (Addon addon : this.serverAddons) {
+
+                this.config.set("addon." + addon.getName(), addon.getPath());
+                this.config.save();
+
+
+                FileUtils.copyFile(new File(addon.getPath()), new File(pluginsDir, addon.getName() + ".jar"), StandardCopyOption.REPLACE_EXISTING);
+            }
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -389,7 +451,7 @@ public class Server {
             t.start();
         }
     }
-    public void sendCommamd(String message) {
+    public void sendCommand(String message) {
 
         try {
             this.writer.write(message);
@@ -742,5 +804,13 @@ public class Server {
 
     public void setSpawnMonsters(boolean spawnMonsters) {
         this.spawnMonsters = spawnMonsters;
+    }
+
+    public void setServerAddons(List<Addon> serverAddons) {
+        this.serverAddons = serverAddons;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

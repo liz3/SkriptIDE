@@ -11,7 +11,8 @@ public enum GuiType {
     WELCOME,
     MANAGE_VERSIONS,
     EXPORT_SETTING,
-    MANAGE_SERVERS
+    MANAGE_SERVERS,
+    SETTINGS
 
 
 }

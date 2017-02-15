@@ -4,6 +4,8 @@ import com.skriptide.Main;
 import com.skriptide.config.Config;
 import com.skriptide.gui.controller.IdeGuiController;
 import com.skriptide.util.FileUtils;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 
 import java.io.*;
@@ -68,7 +70,8 @@ public class Project {
                 this.server = Main.manager.getServer().get(serverPath);
                 hasServer = true;
             } else {
-                //TODO Error server deleted
+                Platform.runLater(() -> Main.sceneManager.infoCheck("Server not found.", "Message from Project: " + Project.this.getName(),
+                        "The server the project was bound to, could not be found, so the project has no more a default Server!", Alert.AlertType.ERROR));
                 hasServer = false;
             }
         } else {
@@ -85,6 +88,11 @@ public class Project {
     }
 
     public void setServer(Server server) {
+        if(server == null)  {
+
+            this.server = null;
+            return;
+        }
         this.server = server;
         this.hasServer = true;
         this.config.set("server-name", server.getName());

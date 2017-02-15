@@ -54,7 +54,7 @@ public class AutoComplete {
 
                             openFile.getOpenProject().getProject().writeCode(area.getText(), openFile.getProject().getName());
                             openFile.getOpenProject().getProject().copyToOutput(openFile.getProject(), r);
-                            r.sendCommamd("skript reload " + openFile.getProject().getName());
+                            r.sendCommand("skript reload " + openFile.getProject().getName());
 
                         } else {
 
@@ -64,7 +64,7 @@ public class AutoComplete {
                             if(ok) {
                                 openFile.getOpenProject().getProject().writeCode(area.getText(), openFile.getProject().getName());
                                 openFile.getOpenProject().getProject().copyToOutput(openFile.getProject(), r);
-                                r.sendCommamd("skript reload " + openFile.getProject().getName());
+                                r.sendCommand("skript reload " + openFile.getProject().getName());
                             }
                         }
 
@@ -126,8 +126,10 @@ public class AutoComplete {
 
             } else if (isChar(code) && !(event.isAltDown()) && !(event.isControlDown()) && !(event.isShortcutDown()) && code != KeyCode.BACK_SPACE && code != KeyCode.ENTER) {
 
+                if(Main.settings.isAutoComplete()) {
 
-                completeList.chooseList(commandSendBtn, depenencies, area);
+                    completeList.chooseList(commandSendBtn, depenencies, area);
+                }
             }
 
 

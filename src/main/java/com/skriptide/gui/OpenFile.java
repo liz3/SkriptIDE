@@ -49,7 +49,10 @@ public class OpenFile {
         completeList = new CompleteList();
         depenencies = new AddonDepenencies(area, new SkUnityAPI(), dependecieList);
         complete = new AutoComplete();
-        controlMain.controlCode(area, tab, this, true);
+        if(Main.settings.isHighlight()) {
+            controlMain.controlCode(area, tab, this, true);
+        }
+
 
         setEvents();
     }
@@ -92,6 +95,9 @@ public class OpenFile {
     }
     public void resetHighlighting() {
 
+        if(!Main.settings.isHighlight()) {
+            return;
+        }
         controlMain = new ControlMain();
         completeList = new CompleteList();
         depenencies = new AddonDepenencies(area, new SkUnityAPI(), dependecieList);
@@ -99,6 +105,9 @@ public class OpenFile {
         controlMain.controlCode(area, tab, this, true);
     }
     public void setAutoComplete() {
+        if(!Main.settings.isAutoComplete()) {
+            return;
+        }
         complete.setAutoComplete(area, completeList, tabPane, cmdSendBtn, depenencies, this);
 
     }
