@@ -1,6 +1,6 @@
 package com.skriptide.util;
 
-import com.skriptide.guis.SceneManager;
+import com.skriptide.Main;
 
 import java.awt.*;
 import java.io.*;
@@ -25,7 +25,7 @@ public class WebUtils {
 			result.append(line);
 		}
 		rd.close();
-		if(SceneManager.debugMode) {
+		if(Main.debugMode) {
 			System.out.println("Rode website");
 		}
 		return result.toString();
@@ -40,7 +40,7 @@ public class WebUtils {
 				e.printStackTrace();
 			}
 		}
-		if(SceneManager.debugMode) {
+		if(Main.debugMode) {
 			System.out.println("Opened website");
 		}
 	}
@@ -65,7 +65,7 @@ public class WebUtils {
 
 		fis.close();
 		bis.close();
-		if(SceneManager.debugMode) {
+		if(Main.debugMode) {
 			System.out.println("Downloaded file");
 		}
 	}

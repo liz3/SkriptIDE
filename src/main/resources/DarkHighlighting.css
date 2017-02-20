@@ -33,6 +33,7 @@
     -fx-font-weight: bold;
 }
 
+
 .paren {
     -fx-fill: firebrick;
     -fx-font-weight: bold;
@@ -49,7 +50,7 @@
 }
 
 .string {
-    -fx-fill: blue;
+    -fx-fill: #0b8105;
 }
 
 .comment {
@@ -61,7 +62,7 @@
     -fx-font-weight: bold;
 }
 .marked {
-    -fx-fill: #d6030b;
+    -fx-fill: #d64617;
     -fx-background-color: #500710;
     -fx-font-weight: bold;
 }

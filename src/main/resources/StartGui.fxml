@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="342.0" prefWidth="391.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.startgui.StartGuiController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="342.0" prefWidth="397.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.gui.controller.StartGuiController">
     <children>
         <Button fx:id="okBtn" layoutX="332.0" layoutY="303.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="ok" />
         <Button fx:id="cancelBtn" layoutX="260.0" layoutY="303.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Cancel" />
@@ -16,7 +16,7 @@
                 <Font size="25.0" />
             </font>
         </Label>
-        <TextArea layoutX="16.0" layoutY="61.0" prefHeight="136.0" prefWidth="360.0" text="Please notice that this Project is still in developement, so be aware that,&#10;there may be so errors or bugs.&#10;Version: 0.5.4&#10;" />
+        <TextArea layoutX="16.0" layoutY="61.0" prefHeight="136.0" prefWidth="360.0" text="Please notice that this Project is still in developement, so be aware that,&#10;there may be so errors or bugs.&#10;Version: 0.7&#10;" />
         <Label layoutX="16.0" layoutY="197.0" text="Please choose the Folder Were you want to Save Projects!" />
         <TextField fx:id="projectsPathField" layoutX="16.0" layoutY="214.0" prefHeight="25.0" prefWidth="305.0" promptText="Choose path" />
         <Button fx:id="projectsPathBtn" layoutX="332.0" layoutY="214.0" mnemonicParsing="false" text="Choose" />

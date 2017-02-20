@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.exportgui.ExportSettingsGuiController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.gui.controller.ExportSettingsGuiController">
    <children>
       <ListView fx:id="entriesList" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" />
       <Label alignment="CENTER_RIGHT" layoutX="222.0" layoutY="14.0" prefHeight="17.0" prefWidth="60.0" text="Host:" textAlignment="RIGHT" />

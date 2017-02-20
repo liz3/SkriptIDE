@@ -1,5 +1,6 @@
 package com.skriptide.codemanage;
 
+import com.skriptide.gui.OpenFile;
 import javafx.scene.control.Tab;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -16,9 +17,11 @@ import java.util.regex.Pattern;
  */
 public class Search {
 
-    public static void search(Tab tab, String searched) {
+    public static void search(OpenFile openFile, String searched) {
 
-        CodeArea code = (CodeArea) tab.getContent();
+
+        Tab tab = openFile.getTab();
+        CodeArea code = openFile.getArea();
 
 
         String oldText = code.getText();
@@ -40,7 +43,7 @@ public class Search {
         });
         code.replaceText(0, 0, oldText);
         tab.setContent(finalCode);
-
+        openFile.setArea(finalCode);
     }
 
     private static StyleSpans<Collection<String>> computeHighlighting(String text, Pattern pattern) {

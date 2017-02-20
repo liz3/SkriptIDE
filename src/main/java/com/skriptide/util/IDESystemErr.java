@@ -1,8 +1,7 @@
 package com.skriptide.util;
 
-import com.skriptide.guis.SceneManager;
+import com.skriptide.gui.SceneManager;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,9 +25,11 @@ public class IDESystemErr extends PrintStream {
 		if (!msg.startsWith("["))
 			msg = " " + msg;
 		String f = "[" + sdf.format(cal.getTime()) + " | ERROR]" + msg;
-		if (SceneManager.debugArea != null) {
+		//TODO Add the DebugArea to the main class or so
+
+		/*if (SceneManager.debugArea != null) {
 			SceneManager.debugArea.appendText(f + System.getProperty("line.separator"));
-		}
+		} */
 
 
 		erros.add(f);

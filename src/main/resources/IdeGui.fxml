@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="absolutePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="488.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.guis.idegui.IdeGuiController">
+<BorderPane fx:id="absolutePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="488.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skriptide.gui.controller.IdeGuiController">
    <center>
       <BorderPane fx:id="mainBorderPane" BorderPane.alignment="CENTER">
          <center>
@@ -15,9 +15,6 @@
          </center>
       </BorderPane>
    </center>
-   <left>
-      <ListView fx:id="projectsList" prefHeight="351.0" prefWidth="177.0" BorderPane.alignment="CENTER" />
-   </left>
    <top>
       <BorderPane prefHeight="53.0" prefWidth="886.0" BorderPane.alignment="CENTER">
          <top>
@@ -28,7 +25,6 @@
                         <MenuItem fx:id="newProjectMenuPoint" mnemonicParsing="false" text="New Project" />
                         <Menu fx:id="openResentMenu" mnemonicParsing="false" text="Open Recent" />
                         <MenuItem fx:id="saveMenuPoint" mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" text="Save as" />
                         <Menu mnemonicParsing="false" text="Export">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Skript" />
@@ -178,4 +174,7 @@
         </tabs>
       </TabPane>
    </bottom>
+   <left>
+      <TreeView fx:id="projectsList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </left>
 </BorderPane>

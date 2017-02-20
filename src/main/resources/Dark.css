@@ -54,17 +54,27 @@
 .tab-pane .tab-header-area .tab-header-background {
     -fx-background-color: #3b3b48;
 }
+.tree-view .tree-cell{
+    -fx-text-fill: #7a8080;
+    -fx-background-color: #484848;
 
+}
+.tree-view {
+    -fx-border-style: none;
+    -fx-background-color: #484848;
+}
 .code-area {
 
-    -fx-background-color: #2c2c2c;
-    -fx-text-fill: #7a8080;
+    -fx-background-color: #363636;
 
 }
 
 .text-area {
     text-area-background: #5c5c5c;
     -fx-text-fill: #7a8080;
+
+    -fx-border-style: none;
+    -fx-background-color: #5c5c5c;
 }
 
 .text-area .content {
@@ -104,17 +114,12 @@
 
 .menu-bar {
 
-    -fx-background-color: #2c2c2c;
+    -fx-background-color: #3b3b48;
 
 }
 
 .text-field {
 
-    -fx-background-color: #484848;
+    -fx-background-color: #343434;
     -fx-text-fill: #7a8080;
-}
-
-.code-area {
-    -fx-text-fill: white;
-    -fx-fill: white;
 }

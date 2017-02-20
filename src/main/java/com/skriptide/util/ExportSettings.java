@@ -2,6 +2,7 @@ package com.skriptide.util;
 
 import com.jcraft.jsch.*;
 import com.skriptide.config.Config;
+import com.skriptide.include.Project;
 
 import java.io.*;
 import java.util.HashMap;
@@ -150,7 +151,7 @@ public class ExportSettings {
                         e.printStackTrace();
                     }
 
-                    c.put(new FileInputStream(temp), name + ".sk");
+                    c.put(new FileInputStream(temp), name);
 
                     c.exit();
                     session.disconnect();

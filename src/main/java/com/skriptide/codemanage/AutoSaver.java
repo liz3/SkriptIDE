@@ -1,21 +1,19 @@
 package com.skriptide.codemanage;
 
-import com.skriptide.guis.SceneManager;
-import com.skriptide.util.Project;
+import com.skriptide.Main;
+import com.skriptide.gui.OpenFile;
+import com.skriptide.gui.OpenProject;
 import javafx.application.Platform;
-import javafx.scene.control.Tab;
-
-import java.util.LinkedHashMap;
 
 /**
  * Created by yannh on 26.01.2017.
  */
 public class AutoSaver {
 
-    private LinkedHashMap<Project, Tab> openProjects = null;
+
     public AutoSaver() {
 
-        openProjects = new LinkedHashMap<>();
+
         saver();
     }
 
@@ -25,11 +23,21 @@ public class AutoSaver {
 
          while (true) {
 
-             Platform.runLater(() -> SceneManager.mainWindowController.saveOpenProjects());
+             Platform.runLater(() -> {
+
+                 for(OpenProject pr : Main.sceneManager.getOpenFiles()) {
+
+                     for(OpenFile file : pr.getOpenFiles().values()) {
+                         pr.getProject().writeCode(file.getArea().getText(), file.getProject().getName());
+                     }
+                 }
+
+             });
+
 
              System.out.println("saved");
              try {
-                 Thread.sleep(15000);
+                 Thread.sleep(Main.settings.getDelay() * Main.settings.getDelayMultiPlier());
              } catch (InterruptedException e) {
                  e.printStackTrace();
              }
@@ -39,7 +47,5 @@ public class AutoSaver {
         saver.start();
     }
 
-    public LinkedHashMap<Project, Tab> getOpenProjects() {
-        return openProjects;
-    }
+
 }
