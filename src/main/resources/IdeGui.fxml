@@ -86,95 +86,102 @@
          </left>
       </BorderPane>
    </top>
-   <bottom>
-      <TabPane fx:id="lowerTabPane" prefHeight="180.0" prefWidth="950.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-        <tabs>
-          <Tab text="Project">
-               <content>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <left>
-                        <VBox prefHeight="215.0" prefWidth="163.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Label fx:id="prNameLbl" prefHeight="17.0" prefWidth="325.0" text="Name" />
-                              <Label fx:id="prSkVersionLbl" prefHeight="17.0" prefWidth="342.0" text="Skript-Version" />
-                              <Label fx:id="prServerLbl" prefHeight="17.0" prefWidth="524.0" text="Server" />
-                           </children>
-                        </VBox>
-                     </left>
-                     <center>
-                        <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <top>
-                              <Label prefHeight="17.0" prefWidth="694.0" text="Addon dependencies" BorderPane.alignment="CENTER" />
-                           </top>
-                           <center>
-                              <ListView fx:id="prDependList" prefHeight="178.0" prefWidth="742.0" BorderPane.alignment="CENTER" />
-                           </center>
-                        </BorderPane>
-                     </center>
-                     <right>
-                        <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <top>
-                              <Label text="Notes:" BorderPane.alignment="CENTER" />
-                           </top>
-                           <center>
-                              <TextArea fx:id="prNotesArea" editable="false" prefHeight="130.0" prefWidth="208.0" BorderPane.alignment="CENTER" />
-                           </center>
-                        </BorderPane>
-                     </right>
-                  </BorderPane>
-               </content>
-            </Tab>
-            <Tab text="Errors">
-               <content>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <center>
-                        <TableView fx:id="errorTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <columns>
-                              <TableColumn prefWidth="949.0" text="Column X" />
-                           </columns>
-                        </TableView>
-                     </center>
-                  </BorderPane>
-               </content>
-            </Tab>
-          <Tab text="Server">
-               <content>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-
-                     <top>
-                        <BorderPane prefHeight="0.0" prefWidth="950.0" BorderPane.alignment="CENTER">
-                           <left>
-                              <HBox prefHeight="25.0" prefWidth="393.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <TextField fx:id="comandSendTextField" prefHeight="25.0" prefWidth="400.0" />
-                                    <Button fx:id="commandSendBtn" maxHeight="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Send" />
-                                 </children>
-                              </HBox>
-                           </left>
-                           <right>
-                              <HBox prefHeight="25.0" prefWidth="482.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <Label fx:id="runningServerLabel" prefHeight="25.0" prefWidth="54.0" text="Running:" />
-                                    <ComboBox fx:id="serverListComboBox" prefWidth="150.0" />
-                                    <Button fx:id="startServerBtn" mnemonicParsing="false" text="Start!" />
-                                    <Button fx:id="stopServerBtn" mnemonicParsing="false" text="Stop" />
-                                    <Button fx:id="restartServerBtn" mnemonicParsing="false" text="Restart" />
-                                    <ProgressBar fx:id="mainProcessBar" prefHeight="18.0" prefWidth="136.0" progress="0.0" />
-                                 </children>
-                              </HBox>
-                           </right>
-                        </BorderPane>
-                     </top>
-                     <center>
-                        <CodeArea fx:id="consoleOutputTextArea" prefHeight="180.0" prefWidth="950.0" BorderPane.alignment="CENTER" />
-                     </center>
-                  </BorderPane>
-               </content>
-          </Tab>
-        </tabs>
-      </TabPane>
-   </bottom>
    <left>
       <TreeView fx:id="projectsList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </left>
+   <bottom>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <TabPane fx:id="lowerTabPane" prefHeight="230.0" prefWidth="950.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Project">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <left>
+                              <VBox prefHeight="215.0" prefWidth="163.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Label fx:id="prNameLbl" prefHeight="17.0" prefWidth="325.0" text="Name" />
+                                    <Label fx:id="prSkVersionLbl" prefHeight="17.0" prefWidth="342.0" text="Skript-Version" />
+                                    <Label fx:id="prServerLbl" prefHeight="17.0" prefWidth="524.0" text="Server" />
+                                 </children>
+                              </VBox>
+                           </left>
+                           <center>
+                              <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                 <top>
+                                    <Label prefHeight="17.0" prefWidth="694.0" text="Addon dependencies" BorderPane.alignment="CENTER" />
+                                 </top>
+                                 <center>
+                                    <ListView fx:id="prDependList" prefHeight="178.0" prefWidth="742.0" BorderPane.alignment="CENTER" />
+                                 </center>
+                              </BorderPane>
+                           </center>
+                           <right>
+                              <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                 <top>
+                                    <Label text="Notes:" BorderPane.alignment="CENTER" />
+                                 </top>
+                                 <center>
+                                    <TextArea fx:id="prNotesArea" editable="false" prefHeight="130.0" prefWidth="208.0" BorderPane.alignment="CENTER" />
+                                 </center>
+                              </BorderPane>
+                           </right>
+                        </BorderPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Errors">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <center>
+                              <ListView fx:id="errorList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                     </content>
+                  </Tab>
+                <Tab text="Server">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+      
+                           <top>
+                              <BorderPane prefHeight="0.0" prefWidth="950.0" BorderPane.alignment="CENTER">
+                                 <left>
+                                    <HBox prefHeight="25.0" prefWidth="393.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <TextField fx:id="comandSendTextField" prefHeight="25.0" prefWidth="400.0" />
+                                          <Button fx:id="commandSendBtn" maxHeight="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Send" />
+                                       </children>
+                                    </HBox>
+                                 </left>
+                                 <right>
+                                    <HBox prefHeight="25.0" prefWidth="482.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Label fx:id="runningServerLabel" prefHeight="25.0" prefWidth="54.0" text="Running:" />
+                                          <ComboBox fx:id="serverListComboBox" prefWidth="150.0" />
+                                          <Button fx:id="startServerBtn" mnemonicParsing="false" text="Start!" />
+                                          <Button fx:id="stopServerBtn" mnemonicParsing="false" text="Stop" />
+                                          <Button fx:id="restartServerBtn" mnemonicParsing="false" text="Restart" />
+                                       </children>
+                                    </HBox>
+                                 </right>
+                              </BorderPane>
+                           </top>
+                           <center>
+                              <CodeArea fx:id="consoleOutputTextArea" prefHeight="180.0" prefWidth="950.0" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                     </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+            <BorderPane prefHeight="59.0" prefWidth="950.0">
+               <right>
+                  <ProgressBar fx:id="mainProcessBar" prefHeight="18.0" prefWidth="129.0" progress="0.0" BorderPane.alignment="CENTER" />
+               </right>
+               <left>
+                  <Label fx:id="stateLabel" prefHeight="17.0" prefWidth="822.0" text="Label" BorderPane.alignment="CENTER" />
+               </left>
+            </BorderPane>
+         </children>
+      </VBox>
+   </bottom>
 </BorderPane>

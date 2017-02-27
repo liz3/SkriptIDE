@@ -39,6 +39,8 @@ public class ControlMain {
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
 
         CodeArea finalCode = code;
+
+
         if(Main.settings.isComplexeAutoComplete()) {
 
             code.richChanges()
@@ -73,10 +75,10 @@ public class ControlMain {
 
         code.clear();
         code = new CodeArea();
-
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
 
         CodeArea finalCode = code;
+
         if(Main.settings.isComplexeAutoComplete()) {
 
             code.richChanges()

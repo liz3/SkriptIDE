@@ -36,6 +36,9 @@ public class AddonDepenencies {
         list.setOnMouseClicked(event -> {
             String selected = list.getSelectionModel().getSelectedItem();
 
+            if(selected == null) {
+                return;
+            }
             String line = selected.split(" ")[3];
             area.moveTo(Integer.parseInt(line));
             area.requestFocus();

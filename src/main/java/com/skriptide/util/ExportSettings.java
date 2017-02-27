@@ -2,7 +2,9 @@ package com.skriptide.util;
 
 import com.jcraft.jsch.*;
 import com.skriptide.config.Config;
+import com.skriptide.gui.controller.IdeGuiController;
 import com.skriptide.include.Project;
+import javafx.application.Platform;
 
 import java.io.*;
 import java.util.HashMap;
@@ -152,7 +154,21 @@ public class ExportSettings {
                     }
 
                     c.put(new FileInputStream(temp), name);
+                    Platform.runLater(() -> {
+                        IdeGuiController.controller.getStateLabel().setText("Successfully Exported to " + ExportSettings.this.host);
 
+                        new Thread(() -> {
+
+                            try {
+                                Thread.sleep(5000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            Platform.runLater(() -> IdeGuiController.controller.getStateLabel().setText("Ready"));
+
+                        }).start();
+                    });
                     c.exit();
                     session.disconnect();
 

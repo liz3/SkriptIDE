@@ -82,3 +82,6 @@
 .github-blue {
     -fx-fill: dodgerblue;
 }
+.root {
+    -fx-fill: aliceblue;
+}

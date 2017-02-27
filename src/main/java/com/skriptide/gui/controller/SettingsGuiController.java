@@ -1,9 +1,13 @@
 package com.skriptide.gui.controller;
 
 import com.skriptide.Main;
+import com.skriptide.include.Api;
+import com.skriptide.include.Skript;
 import com.skriptide.util.IDESettings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import java.util.HashMap;
 
 /**
  * Created by yannh on 15.02.2017.
@@ -50,12 +54,28 @@ public class SettingsGuiController {
     private TabPane tabPane;
     @FXML
     private CheckBox complexeCheck;
+    @FXML
+    private CheckBox errorSysCheck;
+    @FXML
+    private ComboBox<String> errorSkComboBox;
+    @FXML
+    private ComboBox<String> errorApiComboBox;
+
+    private HashMap<String, Api> apis;
+    private HashMap<String, Skript> skripts;
+
 
     public void init() {
 
+        apis = new HashMap<>();
+        skripts = new HashMap<>();
+
+        errorSkComboBox.getItems().clear();
+        errorApiComboBox.getItems().clear();
+
         styleComboBox.getItems().addAll("Light","Dark");
 
-        sList.getItems().addAll("Main Settings", "Server", "Code");
+        sList.getItems().addAll("Main Settings", "Server", "Code", "Error Handling");
 
         sList.setOnMouseReleased(event -> {
 
@@ -78,6 +98,8 @@ public class SettingsGuiController {
                 break;
 
         }
+
+        errorSysCheck.setSelected(s.isErrorSys());
         styleComboBox.getSelectionModel().select(s.getTheme());
         autoSaveField.setText(String.valueOf(s.getDelay()));
         skriptMsgMarkCheck.setSelected(s.isMarkMessage());
@@ -97,10 +119,30 @@ public class SettingsGuiController {
             saveBtn.getScene().getWindow().hide();
         });
         cnlBtn.setOnAction(event -> saveBtn.getScene().getWindow().hide());
+
+        for(Api api : Main.manager.getApis().values()) {
+
+            errorApiComboBox.getItems().add(api.getName() + " - " + api.getVersion());
+            apis.put(api.getName() + " - " + api.getVersion(), api);
+            if(s.getErrorApi().equalsIgnoreCase(api.getName())) {
+                errorApiComboBox.getSelectionModel().select(api.getName() + " - " + api.getVersion());
+            }
+        }
+        for(Skript api : Main.manager.getSkripts().values()) {
+
+            errorSkComboBox.getItems().add(api.getName() + " - " + api.getVersion());
+            skripts.put(api.getName() + " - " + api.getVersion(), api);
+            if(s.getErrorSkript().equalsIgnoreCase(api.getName())) {
+                errorSkComboBox.getSelectionModel().select(api.getName() + " - " + api.getVersion());
+            }
+        }
     }
 
     private void save() {
 
+        if(s.getTheme() == 0 && styleComboBox.getSelectionModel().getSelectedItem().equals("Dark")) {
+            Main.sceneManager.infoCheck("Info", "Please notice:", "Currently with the Dark Theme, the highlighting will not work during a issue in the Highlighting API", Alert.AlertType.INFORMATION);
+        }
         s.setCodeManagement(codeManageCheck.isSelected());
         s.setHighlight(highlightCheck.isSelected());
         s.setAutoComplete(autoCompleteCheck.isSelected());
@@ -113,6 +155,13 @@ public class SettingsGuiController {
         s.setComplexeAutoComplete(complexeCheck.isSelected());
         s.setTheme(styleComboBox.getSelectionModel().getSelectedIndex());
         String sel = autoSaveComboBox.getSelectionModel().getSelectedItem();
+        s.setErrorSys(errorSysCheck.isSelected());
+        if(errorApiComboBox.getSelectionModel().getSelectedItem() != null) {
+            s.setErrorApi(apis.get(errorApiComboBox.getSelectionModel().getSelectedItem()).getName());
+        }
+        if(errorSkComboBox.getSelectionModel().getSelectedItem() != null) {
+            s.setErrorSkript(skripts.get(errorSkComboBox.getSelectionModel().getSelectedItem()).getName());
+        }
 
         switch (sel) {
 
@@ -128,5 +177,7 @@ public class SettingsGuiController {
         }
 
         s.saveSettings();
+        Main.sceneManager.infoCheck("Info", "Please notice:", "Some changed, need a restart of the IDE!", Alert.AlertType.INFORMATION);
+
     }
 }

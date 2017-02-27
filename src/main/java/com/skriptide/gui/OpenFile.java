@@ -139,4 +139,8 @@ public class OpenFile {
     public ExternWindow getExternWindow() {
         return externWindow;
     }
+
+    public TabPane getTabPane() {
+        return tabPane;
+    }
 }

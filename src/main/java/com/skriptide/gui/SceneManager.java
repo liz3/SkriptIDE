@@ -1,7 +1,10 @@
 package com.skriptide.gui;
 
 import com.skriptide.Main;
+import com.skriptide.codemanage.error.ErrorHandler;
 import com.skriptide.gui.controller.*;
+import com.skriptide.include.Api;
+import com.skriptide.include.Skript;
 import com.skriptide.util.ClientSocket;
 import com.skriptide.util.IDESettings;
 import com.skriptide.util.skunityapi.SkUnityAPI;
@@ -14,12 +17,10 @@ import javafx.concurrent.Worker;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -196,6 +197,8 @@ public class SceneManager extends Application {
         Main.settings = new IDESettings();
         Main.settings.loadIn();
 
+
+
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader();
         Parent parent = null;
@@ -212,14 +215,8 @@ public class SceneManager extends Application {
         stage.sizeToScene();
         stage.setTitle("SkriptIDE");
         stage.centerOnScreen();
-        if(Main.settings.getTheme() == 1) {
-
-            scene.getStylesheets().add("Dark.css");
-            scene.getStylesheets().add("DarkHighlighting.css");
-        } else {
-
-            scene.getStylesheets().add("Highlighting.css");
-        }
+        scene.getStylesheets().clear();
+        setDark(scene);
 
         if (OsUtils.getOS() == OperatingSystemType.LINUX) {
             scene.getStylesheets().add("os_styles/LinuxSheet.css");
@@ -253,9 +250,49 @@ public class SceneManager extends Application {
                 }
 
             }
+            if(Main.errorHandler != null && Main.errorHandler.getErrorServer().isRunning()) {
+                try {
+                    Main.errorHandler.getErrorServer().stop();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             System.exit(0);
         });
         stage.show();
+        if(Main.settings.isErrorSys()) {
+
+            Main.errorHandler = new ErrorHandler();
+
+            if(Main.settings.getErrorSkript() != null && Main.settings.getErrorApi() != null) {
+
+                IdeGuiController.controller.getStateLabel().setText("Loading error Server");
+
+                for(Api api : Main.manager.getApis().values()) {
+
+                    if(api.getName().equalsIgnoreCase(Main.settings.getErrorApi())) {
+
+                        Main.errorHandler.getErrorServer().setApi(api);
+
+                    }
+                }
+
+                for(Skript sk : Main.manager.getSkripts().values()) {
+
+                    if(sk.getName().equalsIgnoreCase(Main.settings.getErrorSkript())) {
+
+                        Main.errorHandler.getErrorServer().setSkript(sk);
+
+                    }
+                }
+
+                Main.errorHandler.getErrorServer().setup();
+
+                IdeGuiController.controller.getStateLabel().setText("Starting error Server");
+                Main.errorHandler.start();
+            }
+        }
+
 
 
         if(isNew) {
@@ -263,6 +300,19 @@ public class SceneManager extends Application {
         }
     }
 
+    private void setDark(Scene scene) {
+
+        if(Main.settings.getTheme() == 1) {
+
+            System.out.println("Adding dark style");
+            scene.getStylesheets().add("ThemeDark.css");
+            scene.getStylesheets().add("DarkHighlighting.css");
+
+        } else {
+
+            scene.getStylesheets().add("Highlighting.css");
+        }
+    }
     public void openCreateProjectGui() {
 
         if(activeGuis.containsKey(GuiType.CREATE_PROJECT)) {
@@ -286,6 +336,9 @@ public class SceneManager extends Application {
         controller.initGui();
         Scene scene = new Scene(root);
 
+        setDark(scene);
+
+
         stage.setScene(scene);
         stage.sizeToScene();
         stage.setTitle("Create Project");
@@ -297,6 +350,22 @@ public class SceneManager extends Application {
 
         activeGuis.put(GuiType.CREATE_PROJECT, new Gui(stage, GuiType.CREATE_PROJECT, loader, controller, root));
     }
+
+    /*
+     *     private void setDarkStyle(Pane pane) {
+
+
+        for(Node t  : pane.getChildren()) {
+
+            if(t instanceof Pane) {
+                setDarkStyle((Pane) t);
+            } else {
+                t.getStyleClass().add(".theme-presets");
+            }
+
+        }
+    }
+     */
     public void openServerProjectGui() {
 
         if(activeGuis.containsKey(GuiType.CREATE_SERVER)) {
@@ -319,6 +388,8 @@ public class SceneManager extends Application {
         CreateServerGuiController controller = loader.getController();
         controller.initGui();
         Scene scene = new Scene(root);
+        setDark(scene);
+
         stage.getIcons().add(new Image(
                 getClass().getResource("/icon.png").toExternalForm()));
         stage.setScene(scene);
@@ -351,6 +422,8 @@ public class SceneManager extends Application {
         StartGuiController controller = loader.getController();
         controller.initGui();
         Scene scene = new Scene(root);
+        setDark(scene);
+
         stage.getIcons().add(new Image(
                 getClass().getResource("/icon.png").toExternalForm()));
         stage.setScene(scene);
@@ -387,6 +460,8 @@ public class SceneManager extends Application {
         ManageAddsGuiController controller = loader.getController();
         controller.setLists();
         Scene scene = new Scene(root);
+        setDark(scene);
+
         stage.getIcons().add(new Image(
                 getClass().getResource("/icon.png").toExternalForm()));
         stage.setScene(scene);
@@ -422,6 +497,8 @@ public class SceneManager extends Application {
         ExportSettingsGuiController controller = loader.getController();
         controller.initGui();
         Scene scene = new Scene(root);
+        setDark(scene);
+
         stage.getIcons().add(new Image(
                 getClass().getResource("/icon.png").toExternalForm()));
         stage.setScene(scene);
@@ -453,6 +530,8 @@ public class SceneManager extends Application {
         SettingsGuiController controller = loader.getController();
         controller.init();
         Scene scene = new Scene(root);
+        setDark(scene);
+
         stage.setScene(scene);
         stage.sizeToScene();
         stage.setTitle("Settings");
@@ -486,6 +565,8 @@ public class SceneManager extends Application {
         ManageTestServerGuiController controller = loader.getController();
         controller.initGui();
         Scene scene = new Scene(root);
+        setDark(scene);
+
         stage.getIcons().add(new Image(
                 getClass().getResource("/icon.png").toExternalForm()));
         stage.setScene(scene);
@@ -517,8 +598,16 @@ public class SceneManager extends Application {
         alert.setResizable(false);
         alert.setGraphic(null);
 
+        if(Main.settings.getTheme() == 1) {
+
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add("ThemeDark.css");
+        }
 
         Optional<ButtonType> result = alert.showAndWait();
+        if(result == null) {
+            return false;
+        }
         return result.get() == ButtonType.OK;
 
     }

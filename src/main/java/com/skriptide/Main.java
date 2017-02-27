@@ -1,6 +1,7 @@
 package com.skriptide;
 
 import com.skriptide.codemanage.AutoSaver;
+import com.skriptide.codemanage.error.ErrorHandler;
 import com.skriptide.gui.SceneManager;
 import com.skriptide.include.Server;
 import com.skriptide.util.ClientSocket;
@@ -22,6 +23,7 @@ public class Main {
     public static Server runningServer;
     public static ClientSocket listener;
     public static String version;
+    public static ErrorHandler errorHandler;
 
     public static void main(String[] args) {
         version = "0.5.5";

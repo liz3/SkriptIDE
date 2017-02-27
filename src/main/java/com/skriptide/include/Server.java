@@ -4,6 +4,7 @@ import com.skriptide.Main;
 import com.skriptide.config.Config;
 import com.skriptide.gui.controller.IdeGuiController;
 import com.skriptide.util.FileUtils;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 import java.io.*;
@@ -369,6 +370,7 @@ public class Server {
         if(Main.runningServer == null) {
 
             Main.runningServer = this;
+            Platform.runLater(() -> IdeGuiController.controller.getStateLabel().setText("Starting server: " + Server.this.getName()));
             Thread t = new Thread(() -> {
 
                 int length = startArgs.split(" ").length;

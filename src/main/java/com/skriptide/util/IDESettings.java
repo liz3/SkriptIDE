@@ -29,6 +29,10 @@ public class IDESettings {
 
     private int theme;
 
+    private boolean errorSys;
+    private String errorApi;
+    private String errorSkript;
+
 
 
 
@@ -51,6 +55,9 @@ public class IDESettings {
             config.set("settings.auto-save-delay", "15");
             config.set("settings.auto-save-delay-interval", "60000");
             config.set("settings.theme", "0");
+            config.set("settings.errsys.use", "true");
+            config.set("settings.errsys.api", "");
+            config.set("settings.errsys.skript", "");
 
             config.save();
         }
@@ -67,6 +74,10 @@ public class IDESettings {
         delay = Long.valueOf(config.getString("settings.auto-save-delay"));
         delayMultiPlier = Long.valueOf(config.getString("settings.auto-save-delay-interval"));
         theme = Integer.valueOf(config.getString("settings.theme"));
+        errorSys = Boolean.valueOf(config.getString("settings.errsys.use"));
+        errorApi = config.getString("settings.errsys.api");
+        errorSkript = config.getString("settings.errsys.skript");
+
 
     }
     public void saveSettings() {
@@ -83,6 +94,9 @@ public class IDESettings {
         config.set("settings.auto-save-delay-interval", String.valueOf(delayMultiPlier));
         config.set("settings.complex-hlt", String.valueOf(complexeAutoComplete));
         config.set("settings.theme", String.valueOf(theme));
+        config.set("settings.errsys.use", String.valueOf(errorSys));
+        config.set("settings.errsys.api", errorApi);
+        config.set("settings.errsys.skript", errorSkript);
         config.save();
     }
 
@@ -180,5 +194,29 @@ public class IDESettings {
 
     public void setTheme(int theme) {
         this.theme = theme;
+    }
+
+    public boolean isErrorSys() {
+        return errorSys;
+    }
+
+    public String getErrorApi() {
+        return errorApi;
+    }
+
+    public String getErrorSkript() {
+        return errorSkript;
+    }
+
+    public void setErrorSkript(String errorSkript) {
+        this.errorSkript = errorSkript;
+    }
+
+    public void setErrorSys(boolean errorSys) {
+        this.errorSys = errorSys;
+    }
+
+    public void setErrorApi(String errorApi) {
+        this.errorApi = errorApi;
     }
 }

@@ -18,10 +18,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import org.fxmisc.richtext.CodeArea;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by yannh on 27.01.2017.
@@ -100,7 +102,7 @@ public class IdeGuiController {
     @FXML
     private TextArea prNotesArea;
     @FXML
-    private TableView errorTable;
+    private ListView<String> errorList;
     @FXML
     private TextField comandSendTextField;
     @FXML
@@ -119,6 +121,8 @@ public class IdeGuiController {
     private ProgressBar mainProcessBar;
     @FXML
     private CodeArea consoleOutputTextArea;
+    @FXML
+    private Label stateLabel;
 
     private ContextMenu menu;
     private ContextMenu tabMenu;
@@ -151,69 +155,67 @@ public class IdeGuiController {
 
 
 
-        runPoint.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        stateLabel.setText("Loading...");
+        runPoint.setOnAction(event -> {
 
-                Tab selected = codeTabPane.getSelectionModel().getSelectedItem();
-                for(OpenProject pr : Main.sceneManager.getOpenFiles()) {
+            Tab selected = codeTabPane.getSelectionModel().getSelectedItem();
+            for(OpenProject pr : Main.sceneManager.getOpenFiles()) {
 
-                    for(OpenFile openFile : pr.getOpenFiles().values()) {
+                for(OpenFile openFile : pr.getOpenFiles().values()) {
 
-                        if(openFile.getTab() != null) {
+                    if(openFile.getTab() != null) {
 
-                            if(openFile.getTab().equals(selected)) {
+                        if(openFile.getTab().equals(selected)) {
 
-                                CodeArea area = openFile.getArea();
-                                if (Main.runningServer == null) {
+                            CodeArea area = openFile.getArea();
+                            if (Main.runningServer == null) {
 
-                                    if(openFile.getOpenProject().getProject().getServer() != null) {
+                                if(openFile.getOpenProject().getProject().getServer() != null) {
+
+                                    openFile.getOpenProject().getProject().writeCode(area.getText(), openFile.getProject().getName());
+
+                                    openFile.getOpenProject().getProject().copyToOutput(openFile.getProject(), openFile.getOpenProject().getProject().getServer());
+
+                                    openFile.getOpenProject().getProject().getServer().startServer();
+
+                                } else {
+                                    Main.sceneManager.infoCheck("Error","Failed to launch project", "Please first set a server to the project or run the the skript trough the: \"Run on\" Menu", Alert.AlertType.ERROR);
+
+                                }
+                            } else {
+
+                                if(openFile.getOpenProject().getProject().getServer() != null) {
+
+                                    Server r = Main.runningServer;
+                                    Server s = openFile.getOpenProject().getProject().getServer();
+
+                                    if(r.getName().equals(s.getName())) {
+
 
                                         openFile.getOpenProject().getProject().writeCode(area.getText(), openFile.getProject().getName());
-
-                                        openFile.getOpenProject().getProject().copyToOutput(openFile.getProject(), openFile.getOpenProject().getProject().getServer());
-
-                                        openFile.getOpenProject().getProject().getServer().startServer();
+                                        openFile.getOpenProject().getProject().copyToOutput(openFile.getProject(), r);
+                                        r.sendCommand("skript reload " + openFile.getProject().getName());
 
                                     } else {
-                                        Main.sceneManager.infoCheck("Error","Failed to launch project", "Please first set a server to the project or run the the skript trough the: \"Run on\" Menu", Alert.AlertType.ERROR);
 
-                                    }
-                                } else {
+                                        boolean ok = Main.sceneManager.infoCheck("Error", "Failed to launch project",
+                                                "The Running server is not the target server of the skript, do you want to start the skript on the current running serveer?", Alert.AlertType.CONFIRMATION);
 
-                                    if(openFile.getOpenProject().getProject().getServer() != null) {
-
-                                        Server r = Main.runningServer;
-                                        Server s = openFile.getOpenProject().getProject().getServer();
-
-                                        if(r.getName().equals(s.getName())) {
-
-
+                                        if(ok) {
                                             openFile.getOpenProject().getProject().writeCode(area.getText(), openFile.getProject().getName());
                                             openFile.getOpenProject().getProject().copyToOutput(openFile.getProject(), r);
                                             r.sendCommand("skript reload " + openFile.getProject().getName());
-
-                                        } else {
-
-                                            boolean ok = Main.sceneManager.infoCheck("Error", "Failed to launch project",
-                                                    "The Running server is not the target server of the skript, do you want to start the skript on the current running serveer?", Alert.AlertType.CONFIRMATION);
-
-                                            if(ok) {
-                                                openFile.getOpenProject().getProject().writeCode(area.getText(), openFile.getProject().getName());
-                                                openFile.getOpenProject().getProject().copyToOutput(openFile.getProject(), r);
-                                                r.sendCommand("skript reload " + openFile.getProject().getName());
-                                            }
                                         }
-
-                                    } else {
-                                        Main.sceneManager.infoCheck("Error","Failed to launch project", "Please first set a server to the project or run the the skript trough the: \"Run on\" Menu", Alert.AlertType.ERROR);
-
                                     }
+
+                                } else {
+                                    Main.sceneManager.infoCheck("Error","Failed to launch project", "Please first set a server to the project or run the the skript trough the: \"Run on\" Menu", Alert.AlertType.ERROR);
 
                                 }
 
-                                break;
                             }
+
+                            break;
                         }
                     }
                 }
@@ -272,6 +274,17 @@ public class IdeGuiController {
                 tabMenu.hide();
             }
 
+        });
+        errorList.setOnMouseClicked(event -> {
+
+            if(errorList.getSelectionModel().getSelectedItems() != null) {
+
+                if(Main.errorHandler.getErrorServer().isReady()) {
+
+                    Main.errorHandler.triggerClicked(errorList.getSelectionModel().getSelectedItem());
+                }
+
+            }
         });
         ideSettingsPoint.setOnAction(event -> Main.sceneManager.openSettingsGui());
         createServerMenuPoint.setOnAction(event -> Main.sceneManager.openServerProjectGui());
@@ -590,6 +603,7 @@ public class IdeGuiController {
                 }
             }
         });
+        stateLabel.setText("Ready");
     }
 
     public void openFile(String path) {
@@ -615,5 +629,15 @@ public class IdeGuiController {
 
     public CodeArea getConsoleOutputTextArea() {
         return consoleOutputTextArea;
+    }
+
+    public Label getStateLabel() {
+        return stateLabel;
+    }
+
+
+
+    public ListView<String> getErrorList() {
+        return errorList;
     }
 }

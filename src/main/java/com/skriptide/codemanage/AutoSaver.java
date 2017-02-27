@@ -3,6 +3,7 @@ package com.skriptide.codemanage;
 import com.skriptide.Main;
 import com.skriptide.gui.OpenFile;
 import com.skriptide.gui.OpenProject;
+import com.skriptide.gui.controller.IdeGuiController;
 import javafx.application.Platform;
 
 /**
@@ -32,7 +33,19 @@ public class AutoSaver {
                      }
                  }
 
+                 IdeGuiController.controller.getStateLabel().setText("Saved all open projects(AutoSave).");
+
+                 new Thread(() -> {
+
+                     try {
+                         Thread.sleep(7500);
+                     } catch (InterruptedException e) {
+                         e.printStackTrace();
+                     }
+                     Platform.runLater(() -> IdeGuiController.controller.getStateLabel().setText("Ready."));
+                 }).start();
              });
+
 
 
              System.out.println("saved");
