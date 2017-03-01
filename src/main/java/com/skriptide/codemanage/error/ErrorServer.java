@@ -1,8 +1,10 @@
 package com.skriptide.codemanage.error;
 
+import com.skriptide.gui.controller.IdeGuiController;
 import com.skriptide.include.Api;
 import com.skriptide.include.Skript;
 import com.skriptide.util.FileUtils;
+import javafx.application.Platform;
 
 import java.io.*;
 import java.nio.file.StandardCopyOption;
@@ -37,7 +39,7 @@ public class ErrorServer {
             return;
         }
         File f = new File("errsrv");
-        pluginFolder = new File(f, "Plugins");
+        pluginFolder = new File(f, "plugins");
         if (!f.exists()) {
 
             if (!f.mkdir()) {
@@ -155,8 +157,12 @@ public class ErrorServer {
     }
 
     public void start() {
-        if (!running && !ready)
+        if (!running && !ready && api != null && skript != null) {
             t.start();
+        } else {
+            Platform.runLater(() -> IdeGuiController.controller.getStateLabel().setText("Ready."));
+        }
+
     }
 
     public void stop() throws IOException {

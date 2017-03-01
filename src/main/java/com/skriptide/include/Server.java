@@ -494,6 +494,27 @@ public class Server {
 
                         FileUtils.copyFile(this.skript.getPath(), this.pluginsPath + "/Skript.jar", StandardCopyOption.REPLACE_EXISTING);
 
+                        File eula = new File(this.folderPath, "eula.txt");
+
+                        if (!eula.exists()) {
+
+                            try {
+                                if (eula.createNewFile()) {
+
+                                    PrintWriter writer = new PrintWriter(new FileWriter(eula));
+
+                                    writer.println("#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).\n" +
+                                            "#Wed Feb 15 00:38:27 CET 2017\n" +
+                                            "eula=true\n");
+                                    writer.flush();
+                                    writer.close();
+
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
 
                         this.configured = true;
                     }

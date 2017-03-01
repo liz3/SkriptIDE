@@ -1,5 +1,6 @@
 package com.skriptide.util;
 
+import com.skriptide.Main;
 import com.skriptide.gui.controller.IdeGuiController;
 import javafx.application.Platform;
 
@@ -45,6 +46,7 @@ public class ClientSocket {
                             reader.close();
                             writer.close();
                             cl.close();
+                            Platform.runLater(() -> IdeGuiController.controller.getStateLabel().getScene().getWindow().requestFocus());
                             break;
                         } else if(line.startsWith("-file")) {
 

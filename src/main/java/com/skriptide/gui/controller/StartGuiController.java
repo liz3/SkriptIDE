@@ -4,6 +4,7 @@ import com.skriptide.Main;
 import com.skriptide.util.systemutils.OperatingSystemType;
 import com.skriptide.util.systemutils.OsUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -119,6 +120,12 @@ public class StartGuiController {
         Stage stage = (Stage) okBtn.getScene().getWindow();
 
         stage.close();
+
+        Main.sceneManager.infoCheck("Info", "Please read exactly", "Hey, to support the Development of SkriptIDE, " +
+                "errors are reported to the SkriptIDE Api server. Trough this is a open-source Project. You can prove your self," +
+                " we are only sharing your operating system name and the error." +
+                "If you are sure you dont want that, please disable it in the config." +
+                "Regards Liz3(SkriptIDE Author)", Alert.AlertType.INFORMATION);
 
     }
 }

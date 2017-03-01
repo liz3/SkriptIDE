@@ -151,7 +151,7 @@ public class ErrorHandler {
 
 
                     } else {
-                        System.out.println("failed to reload");
+                        System.out.println("failed to delete: " + s.getName());
                     }
 
                 }
@@ -196,7 +196,7 @@ public class ErrorHandler {
                 if (projects.size() == 0) {
                     System.out.println("No projects, continuing");
                     errors.clear();
-                    IdeGuiController.controller.getErrorList().getItems().clear();
+                    Platform.runLater(() -> IdeGuiController.controller.getErrorList().getItems().clear());
                     toRemove.clear();
                     continue;
                 }

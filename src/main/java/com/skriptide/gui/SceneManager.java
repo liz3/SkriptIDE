@@ -7,6 +7,7 @@ import com.skriptide.include.Api;
 import com.skriptide.include.Skript;
 import com.skriptide.util.ClientSocket;
 import com.skriptide.util.IDESettings;
+import com.skriptide.util.IDESystemErr;
 import com.skriptide.util.skunityapi.SkUnityAPI;
 import com.skriptide.util.systemutils.OperatingSystemType;
 import com.skriptide.util.systemutils.OsUtils;
@@ -197,8 +198,10 @@ public class SceneManager extends Application {
         Main.settings = new IDESettings();
         Main.settings.loadIn();
 
+        if(Main.settings.isShareErrors()) {
 
-
+            System.setErr(new IDESystemErr());
+        }
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader();
         Parent parent = null;

@@ -22,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import org.fxmisc.richtext.CodeArea;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -234,6 +235,27 @@ public class IdeGuiController {
                 System.exit(0);
             }
 
+        });
+        closeMenuPoint.setOnAction(event -> {
+            if(Main.saver != null) {
+                Main.saver = null;
+            }
+
+            for(OpenProject pr : Main.sceneManager.getOpenFiles()) {
+
+                for(OpenFile file : pr.getOpenFiles().values()) {
+                    pr.getProject().writeCode(file.getArea().getText(), file.getProject().getName());
+                }
+
+            }
+            if(Main.errorHandler != null && Main.errorHandler.getErrorServer().isRunning()) {
+                try {
+                    Main.errorHandler.getErrorServer().stop();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.exit(0);
         });
         manageServerMenuItem.setOnAction(event -> Main.sceneManager.openManageServer());
         codeTabPane.setOnMouseClicked(event -> {

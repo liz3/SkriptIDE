@@ -173,7 +173,21 @@ public class ExportSettings {
                     session.disconnect();
 
                 } catch (JSchException | SftpException | FileNotFoundException e) {
-                    e.printStackTrace();
+                    Platform.runLater(() -> {
+                        IdeGuiController.controller.getStateLabel().setText("Failed export to " + ExportSettings.this.host);
+
+                        new Thread(() -> {
+
+                            try {
+                                Thread.sleep(10000);
+                            } catch (InterruptedException x) {
+                                x.printStackTrace();
+                            }
+
+                            Platform.runLater(() -> IdeGuiController.controller.getStateLabel().setText("Ready"));
+
+                        }).start();
+                    });
                 }
 
             }

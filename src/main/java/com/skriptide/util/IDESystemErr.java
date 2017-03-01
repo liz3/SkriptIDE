@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- * Created by Liz3ga on 04.09.2016.
+ * Created by Liz3 on 04.09.2016.
  */
 public class IDESystemErr extends PrintStream {
 
-	public static ArrayList<String> erros = new ArrayList<>();
-
+	String err = "";
+	boolean recording = false;
 	public IDESystemErr() {
 		super(System.err);
 	}
@@ -30,9 +30,26 @@ public class IDESystemErr extends PrintStream {
 		/*if (SceneManager.debugArea != null) {
 			SceneManager.debugArea.appendText(f + System.getProperty("line.separator"));
 		} */
+		err += f + "\n";
+		if(!recording) {
 
+			recording = true;
 
-		erros.add(f);
+			new Thread(() -> {
+
+				try {
+					Thread.sleep(750);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				ErrorReport.reportError(err);
+                recording = false;
+                err = "";
+
+            }).start();
+
+		}
+
 		super.println(f);
 
 	}

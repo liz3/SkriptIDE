@@ -33,6 +33,8 @@ public class IDESettings {
     private String errorApi;
     private String errorSkript;
 
+    private boolean shareErrors;
+
 
 
 
@@ -58,6 +60,7 @@ public class IDESettings {
             config.set("settings.errsys.use", "true");
             config.set("settings.errsys.api", "");
             config.set("settings.errsys.skript", "");
+            config.set("settings.share", "true");
 
             config.save();
         }
@@ -77,6 +80,7 @@ public class IDESettings {
         errorSys = Boolean.valueOf(config.getString("settings.errsys.use"));
         errorApi = config.getString("settings.errsys.api");
         errorSkript = config.getString("settings.errsys.skript");
+        shareErrors = Boolean.valueOf(config.getString("settings.share"));
 
 
     }
@@ -97,6 +101,7 @@ public class IDESettings {
         config.set("settings.errsys.use", String.valueOf(errorSys));
         config.set("settings.errsys.api", errorApi);
         config.set("settings.errsys.skript", errorSkript);
+
         config.save();
     }
 
@@ -218,5 +223,13 @@ public class IDESettings {
 
     public void setErrorApi(String errorApi) {
         this.errorApi = errorApi;
+    }
+
+    public boolean isShareErrors() {
+        return shareErrors;
+    }
+
+    public void setShareErrors(boolean shareErrors) {
+        this.shareErrors = shareErrors;
     }
 }
