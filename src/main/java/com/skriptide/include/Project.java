@@ -56,7 +56,7 @@ public class Project {
     private boolean hasServer;
     public Project(Config config, File f) {
 
-        this.config = config;
+        this.config = new Config(f.getAbsolutePath());
         this.skFiles = new HashMap<>();
         this.confFile = f;
         this.name = config.getString("name");
@@ -92,8 +92,12 @@ public class Project {
             this.server = null;
             return;
         }
+        System.out.println(server.getName());
         this.server = server;
         this.hasServer = true;
+        if(config == null) {
+            System.out.println("Config is null");
+        }
         this.config.set("server-name", server.getName());
         this.config.save();
     }

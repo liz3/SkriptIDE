@@ -120,10 +120,18 @@ public class CreateServerGuiController {
 
             IdeGuiController.controller.getServerListComboBox().getItems().add(server.getName());
 
+            scriptVersionComboBox.getScene().getWindow().hide();
             if(Main.settings.isStartAfterCreate() && Main.runningServer == null) {
 
                 IdeGuiController.controller.getServerListComboBox().getSelectionModel().select(server.getName());
                 server.startServer();
+            } else {
+
+                if(Main.sceneManager.infoCheck("Start","Start server", "Should SkriptIDE start the Server?", Alert.AlertType.CONFIRMATION)) {
+
+                    IdeGuiController.controller.getServerListComboBox().getSelectionModel().select(server.getName());
+                    server.startServer();
+                }
             }
         });
     }
@@ -138,7 +146,17 @@ public class CreateServerGuiController {
         if(serverCustomFile == null) {
             return;
         }
-        Api newApi = new Api(serverCustomFile.getName().replace(".", "-"), VersionReader.getVersionOfServer(serverCustomFile), serverCustomFile.getPath());
+        String version = null;
+        try {
+            version = VersionReader.getVersionOfServer(serverCustomFile);
+        }catch (Exception e) {
+            Main.sceneManager.infoCheck("Error", "Failed to read Version",
+                    "The read of the Version was not successful, please make sure its a valid bukkit or spigot version!", Alert.AlertType.ERROR);
+            return;
+        }
+
+
+        Api newApi = new Api(serverCustomFile.getName().replace(".", "-"), version, serverCustomFile.getPath());
         Main.manager.addApi(newApi);
 
         serverVersionComboBox.getItems().clear();
@@ -166,7 +184,24 @@ public class CreateServerGuiController {
         }
 
 
-        Skript newSkript = new Skript(serverCustomFile.getName().replace(".", "-"), VersionReader.getVersionOfPlugin(serverCustomFile), serverCustomFile.getPath());
+        String version;
+
+        try {
+            version = VersionReader.getVersionOfPlugin(scriptPluginVersionFile);
+        }catch (Exception e) {
+            Main.sceneManager.infoCheck("Error", "Failed to read Version",
+                    "The read of the Version was not successful, please make sure its a valid plugin with a plugin.yml", Alert.AlertType.ERROR);
+            return;
+        }
+
+        if(version == null) {
+
+            Main.sceneManager.infoCheck("Error", "Failed to read Version",
+                    "The read of the Version was not successful, please make sure its a valid plugin with a plugin.yml", Alert.AlertType.ERROR);
+            return;
+        }
+
+        Skript newSkript = new Skript(scriptPluginVersionFile.getName().replace(".", "-"), version, scriptPluginVersionFile.getPath());
         Main.manager.addSkript(newSkript);
 
         scriptVersionComboBox.getItems().clear();
@@ -175,7 +210,7 @@ public class CreateServerGuiController {
 
             scriptVersionComboBox.getItems().add(skript.getName() + " - " + skript.getVersion());
         }
-        serverVersionComboBox.getSelectionModel().select(newSkript.getName() + " - " + newSkript.getVersion());
+        scriptVersionComboBox.getSelectionModel().select(newSkript.getName() + " - " + newSkript.getVersion());
         if(Main.debugMode) {
 
             System.out.println("custom skript version");

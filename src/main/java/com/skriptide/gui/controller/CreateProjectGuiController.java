@@ -49,6 +49,7 @@ public class CreateProjectGuiController {
 
             pluginVersionComboBox.getItems().add(sk.getName() + " - " + sk.getVersion());
         }
+        loadOnServerComboBox.getItems().clear();
         loadOnServerComboBox.getItems().addAll(Main.manager.getServer().keySet());
         projectNameTxTField.setOnKeyReleased(event -> updatePath());
         savePathTxTField.setText(truePath);
@@ -82,11 +83,12 @@ public class CreateProjectGuiController {
                 project.setNotes(notesTextArea.getText());
             }
 
-            if(loadOnServerComboBox.getSelectionModel().getSelectedItem() != null)  {
-                project.setServer(Main.manager.getServer().get(loadOnServerComboBox.getSelectionModel().getSelectedItem()));
-            }
+
             if(!project.exsits()) {
                 project.createProject();
+            }
+            if(loadOnServerComboBox.getSelectionModel().getSelectedItem() != null)  {
+                project.setServer(Main.manager.getServer().get(loadOnServerComboBox.getSelectionModel().getSelectedItem()));
             }
             IdeGuiController.controller.addProject(project);
             Stage stage = (Stage) cancelBtn.getScene().getWindow();

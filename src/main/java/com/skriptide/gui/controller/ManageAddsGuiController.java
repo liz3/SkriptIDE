@@ -173,6 +173,7 @@ public class ManageAddsGuiController {
 
     private void setServerVersions() {
 
+        serverTable.getItems().clear();
         //MC-Server Vrsionen
         TableColumn<Api, String> nameColum = new TableColumn<>("Name");
         nameColum.setMinWidth(450);
@@ -197,6 +198,7 @@ public class ManageAddsGuiController {
 
     private void setSkriptVersions() {
 
+        scriptTable.getItems().clear();
         //MC-Server Vrsionen
         TableColumn<Skript, String> nameColum = new TableColumn<>("Name");
         nameColum.setMinWidth(450);
@@ -222,6 +224,7 @@ public class ManageAddsGuiController {
 
     private void setSkriptAddons() {
 
+        addonsTable.getItems().clear();
         //MC-Server Vrsionen
         TableColumn<Addon, String> nameColum = new TableColumn<>("Name");
         nameColum.setMinWidth(450);
