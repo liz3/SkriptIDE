@@ -2,7 +2,6 @@ package com.skriptide.util;
 
 import com.skriptide.Main;
 import com.skriptide.config.Config;
-import com.skriptide.theme.ThemeImpl;
 
 /**
  * Created by yannh on 15.02.2017.
@@ -28,7 +27,7 @@ public class IDESettings {
     private long delay;
     private long delayMultiPlier;
 
-    private ThemeImpl theme;
+    private int theme;
 
     private boolean errorSys;
     private String errorApi;
@@ -41,8 +40,11 @@ public class IDESettings {
 
 
     public void loadIn() {
+
         this.config = Main.manager.getSettingsConf();
         if(!config.contains("settings.use-code-management")) {
+
+
             config.set("settings.use-code-management", "true");
             config.set("settings.use-highlighting", "true");
             config.set("settings.use-autocomplete", "true");
@@ -54,13 +56,15 @@ public class IDESettings {
             config.set("settings.complex-hlt", "false");
             config.set("settings.auto-save-delay", "15");
             config.set("settings.auto-save-delay-interval", "60000");
-            config.set("settings.theme", "Light");
+            config.set("settings.theme", "0");
             config.set("settings.errsys.use", "true");
             config.set("settings.errsys.api", "");
             config.set("settings.errsys.skript", "");
             config.set("settings.share", "true");
+
             config.save();
         }
+
         codeManagement = Boolean.valueOf(config.getString("settings.use-code-management"));
         highlight = Boolean.valueOf(config.getString("settings.use-highlighting"));
         autoComplete = Boolean.valueOf(config.getString("settings.use-autocomplete"));
@@ -72,14 +76,16 @@ public class IDESettings {
         complexeAutoComplete = Boolean.valueOf(config.getString("settings.complex-hlt"));
         delay = Long.valueOf(config.getString("settings.auto-save-delay"));
         delayMultiPlier = Long.valueOf(config.getString("settings.auto-save-delay-interval"));
-        theme = (ThemeImpl) new ThemeImpl().load(config.getString("settings.theme"));
+        theme = Integer.valueOf(config.getString("settings.theme"));
         errorSys = Boolean.valueOf(config.getString("settings.errsys.use"));
         errorApi = config.getString("settings.errsys.api");
         errorSkript = config.getString("settings.errsys.skript");
         shareErrors = Boolean.valueOf(config.getString("settings.share"));
-    }
 
+
+    }
     public void saveSettings() {
+
         config.set("settings.use-code-management", String.valueOf(codeManagement));
         config.set("settings.use-highlighting", String.valueOf(highlight));
         config.set("settings.use-autocomplete", String.valueOf(autoComplete));
@@ -91,10 +97,11 @@ public class IDESettings {
         config.set("settings.auto-save-delay", String.valueOf(delay));
         config.set("settings.auto-save-delay-interval", String.valueOf(delayMultiPlier));
         config.set("settings.complex-hlt", String.valueOf(complexeAutoComplete));
-        config.set("settings.theme", theme.getName());
+        config.set("settings.theme", String.valueOf(theme));
         config.set("settings.errsys.use", String.valueOf(errorSys));
         config.set("settings.errsys.api", errorApi);
         config.set("settings.errsys.skript", errorSkript);
+
         config.save();
     }
 
@@ -186,6 +193,14 @@ public class IDESettings {
         this.complexeAutoComplete = complexeAutoComplete;
     }
 
+    public int getTheme() {
+        return theme;
+    }
+
+    public void setTheme(int theme) {
+        this.theme = theme;
+    }
+
     public boolean isErrorSys() {
         return errorSys;
     }
@@ -216,13 +231,5 @@ public class IDESettings {
 
     public void setShareErrors(boolean shareErrors) {
         this.shareErrors = shareErrors;
-    }
-
-    public ThemeImpl getTheme() {
-        return theme;
-    }
-
-    public void setTheme(ThemeImpl theme){
-        this.theme=theme;
     }
 }

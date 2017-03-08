@@ -29,7 +29,6 @@ public class Config extends BaseConfig implements ConfigSection {
         return (String) getValues().get(path);
     }
 
-
     @Override
     public boolean getBoolean(String path) {
         return Boolean.valueOf((String) getValues().get(path));

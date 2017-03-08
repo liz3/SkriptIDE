@@ -1,11 +1,9 @@
 package com.skriptide.gui.controller;
 
 import com.skriptide.util.ExportSettings;
+import com.skriptide.util.ExportType;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.util.HashMap;
 
@@ -34,13 +32,17 @@ public class ExportSettingsGuiController {
     private Button saveNewBtn;
     @FXML
     private TextField customPath;
+    @FXML
+    private ComboBox<String> typeBox;
 
     public void initGui() {
 
 
+        typeBox.getItems().clear();
+        typeBox.getItems().addAll("FTP", "SFTP");
         HashMap<String, ExportSettings> all = ExportSettings.getAll();
 
-
+        typeBox.getSelectionModel().select(0);
         entriesList.getItems().clear();
         entriesList.getItems().addAll(all.keySet());
 
@@ -58,10 +60,10 @@ public class ExportSettingsGuiController {
             if(!wantedName.equals("")) {
 
 
-                ExportSettings.addEntry(new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()), customPath.getText());
+                ExportSettings.addEntry(new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText(), ExportType.valueOf(typeBox.getSelectionModel().getSelectedItem())), customPath.getText());
                 entriesList.getItems().add(customPath.getText());
 
-                all.put(customPath.getText(), new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()));
+                all.put(customPath.getText(), new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText(),  ExportType.valueOf(typeBox.getSelectionModel().getSelectedItem())));
                 customPath.clear();
             }
         });
@@ -100,8 +102,8 @@ public class ExportSettingsGuiController {
             ExportSettings.removeEntry(truePath);
             all.remove(truePath);
 
-            ExportSettings.addEntry(new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()), truePath);
-            all.put(truePath, new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText()));
+            ExportSettings.addEntry(new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText(),  ExportType.valueOf(typeBox.getSelectionModel().getSelectedItem())), truePath);
+            all.put(truePath, new ExportSettings(hostField.getText(), nameField.getText(), passField.getText(), pathField.getText(),  ExportType.valueOf(typeBox.getSelectionModel().getSelectedItem())));
 
 
         });
@@ -119,6 +121,7 @@ public class ExportSettingsGuiController {
                     nameField.setText(settings.getUsername());
                     passField.setText(settings.getPassword());
                     pathField.setText(settings.getExportPath());
+                    typeBox.getSelectionModel().select(settings.getType().toString());
 
 
                 }

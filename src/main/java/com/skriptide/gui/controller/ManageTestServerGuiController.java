@@ -239,6 +239,9 @@ public class ManageTestServerGuiController {
         serversList.setOnMouseReleased(event -> {
 
 
+            if(serversList.getSelectionModel().getSelectedItem() == null) {
+                return;
+            }
             String selection = serversList.getSelectionModel().getSelectedItem();
             Server srv = Main.manager.getServer().get(selection);
             srv.loadConfiguration();

@@ -1,5 +1,6 @@
 package com.skriptide.gui;
 
+import com.skriptide.Main;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
@@ -52,7 +53,7 @@ public class ExternWindow {
         stage.setScene(new Scene(pane));
         stage.setTitle("SkriptIDE " + project.getProject().getName());
         stage.centerOnScreen();
-        stage.getScene().getStylesheets().add("/Highlighting.css");
+        setTheme(stage.getScene());
         stage.show();
 
 
@@ -64,6 +65,19 @@ public class ExternWindow {
 
         stage.setOnCloseRequest(event -> project.reAttach());
 
+    }
+    private void setTheme(Scene scene) {
+
+        if(Main.settings.getTheme() == 1) {
+
+            System.out.println("Adding dark style");
+            scene.getStylesheets().add("ThemeDark.css");
+            scene.getStylesheets().add("DarkHighlighting.css");
+
+        } else {
+
+            scene.getStylesheets().add("Highlighting.css");
+        }
     }
     private void setShortCuts() {
 

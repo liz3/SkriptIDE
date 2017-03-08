@@ -90,7 +90,7 @@
       <TreeView fx:id="projectsList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </left>
    <bottom>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="47.0" prefWidth="951.0" BorderPane.alignment="CENTER">
          <children>
             <TabPane fx:id="lowerTabPane" prefHeight="230.0" prefWidth="950.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
               <tabs>

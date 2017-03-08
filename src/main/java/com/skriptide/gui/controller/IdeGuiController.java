@@ -12,6 +12,7 @@ import com.skriptide.include.Project;
 import com.skriptide.include.Server;
 import com.skriptide.util.DragResizer;
 import com.skriptide.util.ExportSettings;
+import com.skriptide.util.ExportType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -337,7 +338,11 @@ public class IdeGuiController {
             openFile(Main.sceneManager.getFromExt());
         }
         startServerBtn.setOnAction(event -> {
+            if(serverListComboBox.getSelectionModel().getSelectedItem() == null) {
+                return;
+            }
             consoleOutputTextArea.clear();
+
             String selected = serverListComboBox.getSelectionModel().getSelectedItem();
 
             Server server = Main.manager.getServer().get(selected);
@@ -549,7 +554,12 @@ public class IdeGuiController {
 
                     ExportSettings settings = all.get(s);
 
-                    settings.deploy(area.getText(), active.getText());
+                    if(settings.getType() == ExportType.SFTP) {
+                        settings.sftpDeploy(area.getText(), active.getText());
+                    }
+                    if(settings.getType() == ExportType.FTP) {
+                        settings.ftpDeploy(area.getText(), active.getText());
+                    }
                 });
                 exportPoint.getItems().add(item);
             }

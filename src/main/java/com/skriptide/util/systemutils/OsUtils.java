@@ -9,18 +9,15 @@ public class OsUtils {
 
         String os = System.getProperty("os.name").toLowerCase();
 
-        if(os.contains("windows")) {
+        if (os.contains("windows")) {
             return OperatingSystemType.WINDOWS;
         }
-        if(os.contains("linux") || os.contains("unix")) {
+        if (os.contains("linux") || os.contains("unix")) {
             return OperatingSystemType.LINUX;
         }
-        if(os.contains("osx") || os.contains("mac") || os.contains("ios")) {
+        if (os.contains("osx") || os.contains("mac") || os.contains("ios")) {
             return OperatingSystemType.OSX;
         }
-
-
-
 
         return null;
     }

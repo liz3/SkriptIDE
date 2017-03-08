@@ -80,6 +80,9 @@ public class CreateServerGuiController {
             String args = startParameterTextField.getText();
             String api = serverVersionComboBox.getSelectionModel().getSelectedItem();
             String skript = scriptVersionComboBox.getSelectionModel().getSelectedItem();
+            if(serverPortTextField.getText().equals("")) {
+                return;
+            }
             int port = Integer.parseInt(serverPortTextField.getText());
 
             Api apii = null;

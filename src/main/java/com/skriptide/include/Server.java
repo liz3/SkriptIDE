@@ -413,7 +413,7 @@ public class Server {
 
                                 if (!Objects.equals(finalLine, "")) {
 
-                                    javafx.application.Platform.runLater(() -> {
+                                    Platform.runLater(() -> {
                                         IdeGuiController.controller.getConsoleOutputTextArea().appendText(finalLine + System.getProperty("line.separator"));
                                         if (finalLine.contains("[Skript]")) {
                                             IdeGuiController.controller.getConsoleOutputTextArea().setStyleClass(IdeGuiController.controller.getConsoleOutputTextArea().getText().length() - finalLine.length(), IdeGuiController.controller.getConsoleOutputTextArea().getText().length(), "console");
