@@ -154,7 +154,7 @@ public class SettingsGuiController {
         s.setSaveOutput(outputSaveCheck.isSelected());
         s.setDelay(Long.parseLong(autoSaveField.getText()));
         s.setComplexeAutoComplete(complexeCheck.isSelected());
-        s.setTheme((ThemeImpl) new ThemeImpl().load(styleComboBox.getSelectionModel().getSelectedItem().toString()));
+        s.setTheme((ThemeImpl) new ThemeImpl().load("Dark"));
         String sel = autoSaveComboBox.getSelectionModel().getSelectedItem();
         s.setErrorSys(errorSysCheck.isSelected());
         if(errorApiComboBox.getSelectionModel().getSelectedItem() != null) {

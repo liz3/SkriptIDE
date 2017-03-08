@@ -19,8 +19,8 @@ public class ThemeImpl implements Theme {
     }
 
     public Theme load(String name) {
-
-        this.name = file.getName().split(".yml")[0];
+        this.name = name;
+        // this.name = file.getName().split(".yml")[0];
         return this;
     }
     @Override
