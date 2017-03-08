@@ -5,6 +5,7 @@ import com.skriptide.codemanage.error.ErrorHandler;
 import com.skriptide.gui.controller.*;
 import com.skriptide.include.Api;
 import com.skriptide.include.Skript;
+import com.skriptide.theme.Theme;
 import com.skriptide.util.ClientSocket;
 import com.skriptide.util.IDESettings;
 import com.skriptide.util.IDESystemErr;
@@ -18,7 +19,6 @@ import javafx.concurrent.Worker;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -34,10 +34,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by yannh on 27.01.2017.
@@ -303,16 +300,19 @@ public class SceneManager extends Application {
         }
     }
 
+    private  void setTheme(Theme theme) {
+
+
+    }
+
     private void setDark(Scene scene) {
 
-        if(Main.settings.getTheme() == 1) {
+        if(Main.settings.getTheme().getName().equals("Dark")) {
 
             System.out.println("Adding dark style");
             scene.getStylesheets().add("ThemeDark.css");
             scene.getStylesheets().add("DarkHighlighting.css");
-
         } else {
-
             scene.getStylesheets().add("Highlighting.css");
         }
     }
@@ -601,7 +601,7 @@ public class SceneManager extends Application {
         alert.setResizable(false);
         alert.setGraphic(null);
 
-        if(Main.settings.getTheme() == 1) {
+        if(Main.settings.getTheme().getName().equals("Dark")) {
 
             DialogPane dialogPane = alert.getDialogPane();
             dialogPane.getStylesheets().add("ThemeDark.css");

@@ -3,6 +3,7 @@ package com.skriptide.gui.controller;
 import com.skriptide.Main;
 import com.skriptide.include.Api;
 import com.skriptide.include.Skript;
+import com.skriptide.theme.ThemeImpl;
 import com.skriptide.util.IDESettings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -140,7 +141,7 @@ public class SettingsGuiController {
 
     private void save() {
 
-        if(s.getTheme() == 0 && styleComboBox.getSelectionModel().getSelectedItem().equals("Dark")) {
+        if(s.getTheme().getName().equals("Light") && styleComboBox.getSelectionModel().getSelectedItem().equals("Dark")) {
             Main.sceneManager.infoCheck("Info", "Please notice:", "Currently with the Dark Theme, the highlighting will not work during a issue in the Highlighting API", Alert.AlertType.INFORMATION);
         }
         s.setCodeManagement(codeManageCheck.isSelected());
@@ -153,7 +154,7 @@ public class SettingsGuiController {
         s.setSaveOutput(outputSaveCheck.isSelected());
         s.setDelay(Long.parseLong(autoSaveField.getText()));
         s.setComplexeAutoComplete(complexeCheck.isSelected());
-        s.setTheme(styleComboBox.getSelectionModel().getSelectedIndex());
+        s.setTheme((ThemeImpl) new ThemeImpl().load(styleComboBox.getSelectionModel().getSelectedItem().toString()));
         String sel = autoSaveComboBox.getSelectionModel().getSelectedItem();
         s.setErrorSys(errorSysCheck.isSelected());
         if(errorApiComboBox.getSelectionModel().getSelectedItem() != null) {
