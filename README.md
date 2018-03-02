@@ -1,6 +1,3 @@
-## MOVED TO OWN GIT!
-[Moved!](https://git.liz3.de/Liz3/SkriptIDE)
-
 # SkriptIDE
 An IDE for Bukkit Skript written in Java.
 
